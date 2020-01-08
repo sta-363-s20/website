@@ -1,0 +1,22 @@
+---
+title: "Reading Week 01"
+output: 
+  html_document: 
+    theme: yeti
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Due
+
+Thursday, Aug 27
+
+## Required:
+
+- Data Visualization: A Practical Introduction by Kieran Healy - Section [A.1.1 How to read an R help page](https://socviz.co/appendix.html#a-little-more-about-r)
+
+## Optional:
+
+- [Teacup giraffes and statistics: Intro to R](https://tinystats.github.io/teacups-giraffes-and-statistics/01_introToR.html)

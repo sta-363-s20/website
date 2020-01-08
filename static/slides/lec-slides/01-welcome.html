@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Welcome to Statistical Models</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. D’Agostino McGowan" />
+    <meta name="date" content="2019-08-27" />
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Welcome to Statistical Models
+### Dr. D’Agostino McGowan
+### 2019-08-27
+
+---
+
+
+
+
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+  &lt;span&gt;
+  Dr. Lucy D'Agostino McGowan
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+
+
+## 👋
+
+##  Lucy D'Agostino McGowan
+
+&lt;i class="fa fa-envelope"&gt;&lt;/i&gt; &amp;nbsp; [mcgowald@wfu.edu](mailto:mcgowald@wfu.edu) &lt;br&gt;
+&lt;i class="fa fa-university"&gt;&lt;/i&gt; &amp;nbsp; Manchester 342 &lt;br&gt;
+&lt;i class="fa fa-calendar"&gt;&lt;/i&gt; &amp;nbsp; Wed 10:00-11:00a, Thu 10:00-11:00a
+
+---
+
+class: middle, center
+
+Everything you will need will be posted at:
+
+# [bit.ly/sta-212-f19](http://bit.ly/sta-212-f19)
+
+---
+class: center, middle
+
+### "truth … is much too complicated to allow anything but approximations" - John von Neumann
+
+&lt;img src = "https://farkasdilemma.files.wordpress.com/2013/01/vonneumann.png" height = "350"&gt; &lt;/img&gt;
+&lt;font size = "2"&gt;
+John von Neumann, wearer of funny hats via &lt;a href = "https://farkasdilemma.wordpress.com/2013/01/04/john-von-neumannm-wearer-of-funny-hats/"&gt; farkasdilemma.wordpress.com&lt;/a&gt; &lt;/font&gt;
+
+---
+
+class: center, middle
+
+### "Statistics is using data and knowledge about randomness to condense, communicate, and contextualize information and provide insight into the setting from which the data came." - Jo Hardin
+
+&lt;img src = "https://research.pomona.edu/johardin/files/2012/08/jo_headshot3-3.png" height = "270"&gt; &lt;/img&gt;
+
+&lt;font size = "2"&gt;
+Jo Hardin &lt;a href = "https://research.pomona.edu/johardin/files/2012/08/jo_headshot3-3.png"&gt; https://research.pomona.edu/johardin/&lt;/a&gt; &lt;/font&gt;
+
+---
+class: center, middle
+
+### "All models are wrong, but some are useful" - George Box
+
+&lt;img height="400" alt="GeorgeEPBox" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/GeorgeEPBox.jpg/256px-GeorgeEPBox.jpg"&gt;&lt;/img&gt;
+&lt;font size = "2"&gt;
+DavidMCEddy at en.wikipedia &lt;a href = "https://creativecommons.org/licenses/by-sa/3.0"&gt; CC BY-SA 3.0 &lt;/a&gt;, via Wikimedia Commons &lt;/font&gt;
+
+---
+
+class: center, middle
+
+.question[
+# data = model + error
+]
+
+---
+
+class: center, middle
+
+.question[
+ $$ 
+ \LARGE y = f(\mathbf{X}) + \epsilon 
+ $$
+]
+
+# 🗣 math speak 
+
+---
+
+class: center, middle
+
+.question[
+ $$ 
+ \LARGE y = \color{blue}{f(\mathbf{X})} + \epsilon 
+ $$
+]
+
+# model
+
+---
+
+class: center, middle
+
+.question[
+ $$ 
+ \LARGE y = f(\color{blue}{\mathbf{X}}) + \epsilon 
+ $$
+]
+
+# data (to build the model)
+
+---
+
+class: center, middle
+
+.question[
+ $$ 
+ \LARGE \color{blue}y = f(\mathbf{X}) + \epsilon 
+ $$
+]
+
+# data (outcome)
+
+---
+
+class: center, middle
+
+.question[
+ $$ 
+ \LARGE \color{blue}y = f(\color{blue}{\mathbf{X}}) + \epsilon 
+ $$
+]
+
+## 1. Thinking about, visualizing, and wrangling data
+
+---
+
+class: center, middle
+
+.question[
+ $$ 
+ \LARGE y = \color{blue}{\beta_0 + \beta_1X
+ }+ \epsilon 
+ $$
+]
+
+# 2. Simple Linear Regression
+
+---
+
+class: center, middle
+
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
+
+&lt;font size = "2"&gt; Bob at Easel from  &lt;a href = "https://en.wikipedia.org/wiki/File:Bob_at_Easel.jpg"&gt;Wikipedia&lt;/a&gt;&lt;/font&gt;
+---
+
+.pull-left[
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
+
+]
+.pull-right[
+![](01-welcome_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+]
+
+### Data: [FiveThirtyEight](https://fivethirtyeight.com/features/a-statistical-analysis-of-the-work-of-bob-ross/)
+
+---
+
+.pull-left[
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
+
+]
+.pull-right[
+![](01-welcome_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+]
+---
+
+.pull-left[
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
+
+]
+.pull-right[
+![](01-welcome_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+]
+
+.question[
+ $$ 
+ \LARGE y = \color{blue}{\beta_0 + \beta_1X
+ }+ \epsilon 
+ $$
+]
+
+---
+
+.pull-left[
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
+
+]
+.pull-right[
+![](01-welcome_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+]
+
+.question[
+ $$ 
+ \text{# of paintings with clouds} = \color{blue}{\beta_0 + \beta_1 season
+ }+ \epsilon 
+ $$
+]
+---
+
+.pull-left[
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
+
+]
+.pull-right[
+![](01-welcome_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+]
+
+.question[
+ $$ 
+ \text{# of paintings with clouds} = \color{blue}{\beta_0 + \beta_1 season
+ }+ \epsilon 
+ $$
+]
+---
+
+.pull-left[
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
+
+]
+.pull-right[
+![](01-welcome_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+]
+
+.question[
+ $$ 
+ \text{# of paintings with clouds} = \color{blue}{\beta_0 + \beta_1 f(season)
+ }+ \epsilon 
+ $$
+]
+---
+
+class: center, middle
+
+.question[
+ $$ 
+ \LARGE y = \color{blue}{\beta_0 + \beta_1X_1 + \beta_2X_2+...
+ }+ \epsilon 
+ $$
+]
+
+# 3. Multiple Linear Regression
+
+---
+
+class: center, middle
+
+.question[
+ $$ 
+ \LARGE \color{blue}{f(y)} = \beta_0 + \beta_1X_1 + \beta_2X_2+...+ \epsilon 
+ $$
+]
+
+# 4. Logistic Regression
+
+---
+
+class: center, middle
+
+.question[
+ $$ 
+ \LARGE \color{blue}{logit(y)} = \beta_0 + \beta_1X_1 + \beta_2X_2+...+ \epsilon 
+ $$
+]
+
+# 4. Logistic Regression
+
+---
+
+# Plan
+
+- Thinking about, visualizing, and wrangling data
+- Simple Linear Regression
+- Multiple Linear Regression
+- Logistic Regression
+- Data Science-ing
+
+---
+
+class: center, middle
+
+# Let's go!
+
+---
+
+## Join RStudio.cloud
+
+Go to [bit.ly/sta-212-f19-rstudio-join](http://bit.ly/sta-212-f19-rstudio-join) and sign up.
+
+&lt;font color="#E34132"&gt;
+Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
+&lt;/font&gt;
+.my-footer[
+  &lt;font size="2"&gt; Slides adapted from &lt;a href="https://github.com/Sta199-S18/website" target="_blank"&gt;Dr. Mine Çetinkaya-Rundel&lt;/a&gt; by Dr. Lucy D'Agostino McGowan&lt;/font&gt;
+]
+---
+
+## &lt;i class="fas fa-laptop"&gt;&lt;/i&gt; Create your first data visualization
+
+- Once you log on to RStudio Cloud, click on this course's workspace "STA 212 - Fall 19" then click "Projects"
+- You should see a project called `UN Votes`, click it.
+- In the Files pane in the bottom right corner, spot the file called `un-votes.Rmd`. Open it, and then click on the "Knit" button. *You will likely see an pop-up error, click "Try Again"*
+- Go back to the file and change your name on top (in the `yaml` -- we'll talk about what this means later) and knit again.
+- Then, change the country names to those you're interested in. Your spelling and capitalization should match how the countries appear in the data, so take a peek at the Appendix to confirm spelling. Knit again &amp; voila, your first data visualization!
+
+&lt;font color="#E34132"&gt;
+Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
+&lt;/font&gt;
+.my-footer[
+  &lt;font size="2"&gt; Slides adapted from &lt;a href="https://github.com/Sta199-S18/website" target="_blank"&gt;Dr. Mine Çetinkaya-Rundel&lt;/a&gt; by Dr. Lucy D'Agostino McGowan&lt;/font&gt;
+]
+---
+
+## Join Campuswire
+
+Go to [bit.ly/sta-212-f19-discuss-join](http://bit.ly/sta-212-f19-discuss-join) and sign up.
+
+&lt;font color="#E34132"&gt;
+Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
+&lt;/font&gt;
+.my-footer[
+  &lt;font size="2"&gt; Slides adapted from &lt;a href="https://github.com/Sta199-S18/website" target="_blank"&gt;Dr. Mine Çetinkaya-Rundel&lt;/a&gt; by Dr. Lucy D'Agostino McGowan&lt;/font&gt;
+]
+---
+
+## &lt;i class="fas fa-laptop"&gt;&lt;/i&gt; Practice answering a question or posting in a channel
+
+- Click on "Class feed" on the top left. You should see a post from me titled `Hello!` 
+- Practice responding to this post, up-voting it, etc.
+- Click on "Rooms" then `#general`
+- Practice posting here - post a fun fact about your self, respond with an emoji 👍, etc
+
+&lt;font color="#E34132"&gt;
+Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
+&lt;/font&gt;
+.my-footer[
+  &lt;font size="2"&gt; Slides adapted from &lt;a href="https://github.com/Sta199-S18/website" target="_blank"&gt;Dr. Mine Çetinkaya-Rundel&lt;/a&gt; by Dr. Lucy D'Agostino McGowan&lt;/font&gt;
+]
+---
+
+## Let's take a tour - class website
+
+.center[
+![](img/demo.png)
+]
+
+- Concepts introduced:
+  - How to find slides
+  - How to find assignments
+  - How to find RStudio Cloud
+  - How to get help
+  - How to find policies
+---
+
+class: center, middle
+
+# Course structure and policies
+---
+
+## Class meetings
+
+- Interactive
+- Some lectures, lots of learn-by-doing
+- Bring your laptop to class every day
+
+---
+
+## Diversity &amp; Inclusiveness:
+
+- Intent: Students from all diverse backgrounds and perspectives be well-served by this course, that students' learning needs be addressed both in and out of class, and that the diversity that the students bring to this class be viewed as a resource, strength and benefit. It is my intent to present materials and activities that are respectful of diversity: gender identity, sexuality, disability, age, socioeconomic status, ethnicity, race, nationality, religion, and culture. Let me know ways to improve the effectiveness of the course for you personally, or for other students or student groups.
+- If you have a name and/or set of pronouns that differ from those that appear in your official Wake Forest records, please let me know!
+
+---
+
+## Diversity &amp; Inclusiveness: 
+
+- If you feel like your performance in the class is being impacted by your experiences outside of class, please don't hesitate to come and talk with me. I want to be a resource for you. If you prefer to speak with someone outside of the course, your academic dean is an excellent resource. 
+- I (like many people) am still in the process of learning about diverse perspectives and identities. If something was said in class (by anyone) that made you feel uncomfortable, please talk to me about it.
+
+---
+
+## Disability Policy
+
+Students with disabilities who believe that they may need accommodations in the class are encouraged to contact Learning Assistance Center &amp; Disability Services at 336-758-5929 or [lacds@wfu.edu](mailto:lacds@wfu.edu) as soon as possible to better ensure that such accommodations are implemented in a timely fashion. 
+
+---
+
+## How to get help
+
+All course discussion will be via Campuswire: [bit.ly/sta-212-f19-help](https://bit.ly/sta-212-f19-discuss) ([Sign up](https://bit.ly/sta-212-f19-discuss-join)). 
+    
+- See course policies for tips on posting questions.
+- For personal and grade related questions, use email.
+
+---
+
+## How to get help
+
+#### Math &amp; Stats center
+
+* Located in Kirby Hall 117
+* Study sessions: (beginning Sept 3) Monday 7-9pm
+* Make an appointment: (beginning Sept 10) [https://mathandstatscenter.wfu.edu/](https://mathandstatscenter.wfu.edu/)
+
+---
+
+## Academic integrity
+
+Adhere to the Wake Forest Honor Code. Academic dishonesty will not be tolerated.
+
+---
+
+## Sharing/reusing code
+
+* There are many online resources for sharing code (for example, StackOverflow) - you **may** use these resources but **must explicitly cite** where you have obtained code (both code you used directly and "paraphrased" code / code used as inspiration). Any reused code that is not explicitly cited will be treated as plagiarism.
+* You **may** discuss the content of assignments with others in this class. If you do so, please acknowledge your collaborator(s) at the top of your assignment, for example: "Collaborators: Gertrude Cox, Florence Nightingale David". Failure to acknowledge collaborators will result in a grade of 0. You **may not** copy code and/or answers **directly** from another student. If you copy someone else's work, both parties will receive a grade of 0.
+* Rather than copying someone else's work, ask for help. You are not alone in this course!
+
+---
+
+## Course components:
+
+
+- Application exercises: Usually start in class and finish in teams by the next class period, check/no check
+- In class quizzes: unannounced, ~10 minutes, no make-ups, lowest two will be dropped
+- Homework: lowest score dropped
+- Lab: start in class, lowest score dropped
+- Exams: 2 in class midterms
+- Final project: Presentations during the last week of class, you must participate in the project and be in class to present to pass this class
+- Self paced tutorials: Individual, check/no check, extra credit
+
+---
+
+## Grading
+
+
+Component             | Weight
+----------------------|----------------
+Participation &amp; application exercises       | 5%
+Quizzes               | 10%
+Homework              | 15%
+Labs                  | 10%
+Midterm exam 1        | 20%
+Midterm exam 2        | 20%
+Final project         | 20%
+
+- Class attendance is a firm expectation; frequent absences or tardiness 
+will be considered a legitimate cause for grade reduction.
+
+---
+
+## Late/missed work policy
+
+
+- Late work policy for homework assignments:
+    - late, but within 24 hours of due date/time: -50%
+    - any later: no credit
+- Late work will not be accepted the final project.
+- You must complete the final project and be in class to present it in order to pass this course.
+
+---
+
+## Other policies
+
+- Please refrain from texting or using your computer for anything other than coursework during class.
+- You must be in class on a day when you're scheduled to present, there are no make ups for presentations.
+- Regrade requests must be made within 1 week of when the assignment is returned.
+
+---
+
+class: center, middle
+
+a quick survey
+
+
+# [bit.ly/sta-212-f19-form](https://bit.ly/sta-212-f19-form)
+
+
+
+---
+
+## Intros
+
+- name
+- major / intended major
+- what you hope to get out of this class OR fun fact
+
+---
+
+## RStudio Cloud
+
+- If you had issues creating your RStudio Cloud account, opening the project, or running the analysis, stick around to try it again.
+    - Go to [bit.ly/sta-212-f19-rstudio-join](http://bit.ly/sta-212-f19-rstudio-join) and sign up.
+- If RStudio Cloud worked for you and you were able to run the analysis, you're free to leave.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

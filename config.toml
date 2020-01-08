@@ -1,0 +1,77 @@
+baseurl = "/"
+languageCode = "en-us"
+defaultContentLanguage = "en-us"
+title = "STA 363"
+theme = "material"
+#disqusShortname = ""
+# googleAnalytics = ""
+paginate = 7
+relativeurls = true
+publishDir = "public"
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+
+
+[permalinks]
+  post = "/:year/:month/:slug/"
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+  archive = "archives"
+
+[author]
+  name = "Lucy D'Agostino McGowan"
+  bio = ""
+  job = "Assistant Professor"
+  location = "Wake Forest University"
+  gravatarEmail = "mcgowald@wfu.edu"
+  # Your profile picture
+#  picture = ""
+  twitter = "lucystats"
+ 
+# Menu Configuration
+[[menu.main]]
+  weight = 1
+  identifier = "home"
+  name = "Home"
+  pre = "<i class=\"sidebar-button-icon fa fa-lg fa-home\"></i>"
+  url = "/"
+[[menu.main]]
+  weight = 2
+  identifier = "syllabus"
+  name = "Syllabus"
+  pre = "<i class=\"material-icons\">date_range</i>"
+  url = "/syllabus"
+[[menu.main]]
+  weight = 3
+  identifier = "policies"
+  name = "Policies"
+  pre = "<i class=\"material-icons\">gavel</i>"
+  url = "/policies"
+[[menu.main]]
+  weight = 4
+  identifier = "rstudio"
+  name = "RStudio"
+  pre = "<i class=\"material-icons\">cloud_queue</i>"
+  url = "https://rstudio.cloud"
+[[menu.main]]
+  weight = 5
+  identifier = "help"
+  name = "Help"
+  pre = "<i class=\"material-icons\">help</i>"
+  url = "https://github.com/Sta363-S20/community"
+
+
+[[menu.footer]]
+  weight = 1
+  identifier = "Wake Forest"
+  name = "Wake Forest Department of Mathematics and Statistics"
+  pre = "<i class=\"button-icon fa fa-2x fa-map-marker\"></i>"
+  url = "http://college.wfu.edu/math/"
+[[menu.footer]]
+
+
+[params]
+  dateFormat = "January 2, 2006"
+  background = "img/header.jpg"
+  favicon = "img/favicon.ico"

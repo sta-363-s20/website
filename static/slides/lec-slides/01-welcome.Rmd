@@ -1,0 +1,574 @@
+---
+title: "Welcome to Statistical Models"
+author: "Dr. D'Agostino McGowan"
+date: "2019-08-27"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+  <span>
+  Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+## `r emo::ji("wave")`
+
+##  Lucy D'Agostino McGowan
+
+<i class="fa fa-envelope"></i> &nbsp; [mcgowald@wfu.edu](mailto:mcgowald@wfu.edu) <br>
+<i class="fa fa-university"></i> &nbsp; Manchester 342 <br>
+<i class="fa fa-calendar"></i> &nbsp; Wed 10:00-11:00a, Thu 10:00-11:00a
+
+---
+
+class: middle, center
+
+Everything you will need will be posted at:
+
+# [bit.ly/sta-212-f19](http://bit.ly/sta-212-f19)
+
+---
+class: center, middle
+
+### "truth … is much too complicated to allow anything but approximations" - John von Neumann
+
+<img src = "https://farkasdilemma.files.wordpress.com/2013/01/vonneumann.png" height = "350"> </img>
+<font size = "2">
+John von Neumann, wearer of funny hats via <a href = "https://farkasdilemma.wordpress.com/2013/01/04/john-von-neumannm-wearer-of-funny-hats/"> farkasdilemma.wordpress.com</a> </font>
+
+---
+
+class: center, middle
+
+### "Statistics is using data and knowledge about randomness to condense, communicate, and contextualize information and provide insight into the setting from which the data came." - Jo Hardin
+
+<img src = "https://research.pomona.edu/johardin/files/2012/08/jo_headshot3-3.png" height = "270"> </img>
+
+<font size = "2">
+Jo Hardin <a href = "https://research.pomona.edu/johardin/files/2012/08/jo_headshot3-3.png"> https://research.pomona.edu/johardin/</a> </font>
+
+---
+class: center, middle
+
+### "All models are wrong, but some are useful" - George Box
+
+<img height="400" alt="GeorgeEPBox" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/GeorgeEPBox.jpg/256px-GeorgeEPBox.jpg"></img>
+<font size = "2">
+DavidMCEddy at en.wikipedia <a href = "https://creativecommons.org/licenses/by-sa/3.0"> CC BY-SA 3.0 </a>, via Wikimedia Commons </font>
+
+---
+
+class: center, middle
+
+.question[
+# data = model + error
+]
+
+---
+
+class: center, middle
+
+.question[
+ $$ 
+ \LARGE y = f(\mathbf{X}) + \epsilon 
+ $$
+]
+
+# `r emo::ji("speaking_head")` math speak 
+
+---
+
+class: center, middle
+
+.question[
+ $$ 
+ \LARGE y = \color{blue}{f(\mathbf{X})} + \epsilon 
+ $$
+]
+
+# model
+
+---
+
+class: center, middle
+
+.question[
+ $$ 
+ \LARGE y = f(\color{blue}{\mathbf{X}}) + \epsilon 
+ $$
+]
+
+# data (to build the model)
+
+---
+
+class: center, middle
+
+.question[
+ $$ 
+ \LARGE \color{blue}y = f(\mathbf{X}) + \epsilon 
+ $$
+]
+
+# data (outcome)
+
+---
+
+class: center, middle
+
+.question[
+ $$ 
+ \LARGE \color{blue}y = f(\color{blue}{\mathbf{X}}) + \epsilon 
+ $$
+]
+
+## 1. Thinking about, visualizing, and wrangling data
+
+---
+
+class: center, middle
+
+.question[
+ $$ 
+ \LARGE y = \color{blue}{\beta_0 + \beta_1X
+ }+ \epsilon 
+ $$
+]
+
+# 2. Simple Linear Regression
+
+---
+
+class: center, middle
+
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
+
+<font size = "2"> Bob at Easel from  <a href = "https://en.wikipedia.org/wiki/File:Bob_at_Easel.jpg">Wikipedia</a></font>
+---
+
+.pull-left[
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
+
+]
+.pull-right[
+```{r, message = FALSE, warning = FALSE, echo = FALSE, fig.height = 6}
+library(fivethirtyeight)
+
+bob_ross %>%
+  filter(season < 15) %>%
+  group_by(season) %>%
+  summarise(clouds = sum(clouds)) %>%
+  ggplot(mapping = aes(season, clouds)) + 
+  geom_point() + 
+  scale_y_continuous("# of paintings with clouds", limits = c(4, 12)) + 
+  theme_classic()
+```
+]
+
+### Data: [FiveThirtyEight](https://fivethirtyeight.com/features/a-statistical-analysis-of-the-work-of-bob-ross/)
+
+---
+
+.pull-left[
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
+
+]
+.pull-right[
+```{r, message = FALSE, warning = FALSE, echo = FALSE, fig.height = 6}
+bob_ross %>%
+  filter(season < 15) %>%
+  group_by(season) %>%
+  summarise(clouds = sum(clouds)) %>%
+  ggplot(mapping = aes(season, clouds)) + 
+  geom_point() + 
+  scale_y_continuous("# of paintings with clouds", limits = c(4, 12)) + 
+  geom_smooth(method = "lm") +
+  theme_classic()
+```
+]
+---
+
+.pull-left[
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
+
+]
+.pull-right[
+```{r, message = FALSE, warning = FALSE, echo = FALSE, fig.height = 6}
+bob_ross %>%
+  filter(season < 15) %>%
+  group_by(season) %>%
+  summarise(clouds = sum(clouds)) %>%
+  ggplot(mapping = aes(season, clouds)) + 
+  geom_point() + 
+  scale_y_continuous("# of paintings with clouds", limits = c(4, 12)) + 
+  geom_smooth(method = "lm") +
+  theme_classic()
+```
+]
+
+.question[
+ $$ 
+ \LARGE y = \color{blue}{\beta_0 + \beta_1X
+ }+ \epsilon 
+ $$
+]
+
+---
+
+.pull-left[
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
+
+]
+.pull-right[
+```{r, message = FALSE, warning = FALSE, echo = FALSE, fig.height = 6}
+bob_ross %>%
+  filter(season < 15) %>%
+  group_by(season) %>%
+  summarise(clouds = sum(clouds)) %>%
+  ggplot(mapping = aes(season, clouds)) + 
+  geom_point() + 
+  scale_y_continuous("# of paintings with clouds", limits = c(4, 12)) + 
+  geom_smooth(method = "lm") +
+  theme_classic()
+```
+]
+
+.question[
+ $$ 
+ \text{# of paintings with clouds} = \color{blue}{\beta_0 + \beta_1 season
+ }+ \epsilon 
+ $$
+]
+---
+
+.pull-left[
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
+
+]
+.pull-right[
+```{r, message = FALSE, warning = FALSE, echo = FALSE, fig.height = 6}
+bob_ross %>%
+  group_by(season) %>%
+  summarise(clouds = sum(clouds)) %>%
+  ggplot(mapping = aes(season, clouds)) + 
+  geom_point() + 
+  scale_y_continuous("# of paintings with clouds", limits = c(2, 12)) + 
+  theme_classic()
+```
+]
+
+.question[
+ $$ 
+ \text{# of paintings with clouds} = \color{blue}{\beta_0 + \beta_1 season
+ }+ \epsilon 
+ $$
+]
+---
+
+.pull-left[
+![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
+
+]
+.pull-right[
+```{r, message = FALSE, warning = FALSE, echo = FALSE, fig.height = 6}
+bob_ross %>%
+  group_by(season) %>%
+  summarise(clouds = sum(clouds)) %>%
+  ggplot(mapping = aes(season, clouds)) + 
+  geom_point() + 
+  scale_y_continuous("# of paintings with clouds", limits = c(2, 12)) + 
+  geom_smooth(method = "loess") +
+  theme_classic()
+```
+]
+
+.question[
+ $$ 
+ \text{# of paintings with clouds} = \color{blue}{\beta_0 + \beta_1 f(season)
+ }+ \epsilon 
+ $$
+]
+---
+
+class: center, middle
+
+.question[
+ $$ 
+ \LARGE y = \color{blue}{\beta_0 + \beta_1X_1 + \beta_2X_2+...
+ }+ \epsilon 
+ $$
+]
+
+# 3. Multiple Linear Regression
+
+---
+
+class: center, middle
+
+.question[
+ $$ 
+ \LARGE \color{blue}{f(y)} = \beta_0 + \beta_1X_1 + \beta_2X_2+...+ \epsilon 
+ $$
+]
+
+# 4. Logistic Regression
+
+---
+
+class: center, middle
+
+.question[
+ $$ 
+ \LARGE \color{blue}{logit(y)} = \beta_0 + \beta_1X_1 + \beta_2X_2+...+ \epsilon 
+ $$
+]
+
+# 4. Logistic Regression
+
+---
+
+# Plan
+
+- Thinking about, visualizing, and wrangling data
+- Simple Linear Regression
+- Multiple Linear Regression
+- Logistic Regression
+- Data Science-ing
+
+---
+
+class: center, middle
+
+# Let's go!
+
+---
+
+## Join RStudio.cloud
+
+Go to [bit.ly/sta-212-f19-rstudio-join](http://bit.ly/sta-212-f19-rstudio-join) and sign up.
+
+<font color="#E34132">
+Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
+</font>
+.my-footer[
+  <font size="2"> Slides adapted from <a href="https://github.com/Sta199-S18/website" target="_blank">Dr. Mine Çetinkaya-Rundel</a> by Dr. Lucy D'Agostino McGowan</font>
+]
+---
+
+## <i class="fas fa-laptop"></i> Create your first data visualization
+
+- Once you log on to RStudio Cloud, click on this course's workspace "STA 212 - Fall 19" then click "Projects"
+- You should see a project called `UN Votes`, click it.
+- In the Files pane in the bottom right corner, spot the file called `un-votes.Rmd`. Open it, and then click on the "Knit" button. *You will likely see an pop-up error, click "Try Again"*
+- Go back to the file and change your name on top (in the `yaml` -- we'll talk about what this means later) and knit again.
+- Then, change the country names to those you're interested in. Your spelling and capitalization should match how the countries appear in the data, so take a peek at the Appendix to confirm spelling. Knit again & voila, your first data visualization!
+
+<font color="#E34132">
+Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
+</font>
+.my-footer[
+  <font size="2"> Slides adapted from <a href="https://github.com/Sta199-S18/website" target="_blank">Dr. Mine Çetinkaya-Rundel</a> by Dr. Lucy D'Agostino McGowan</font>
+]
+---
+
+## Join Campuswire
+
+Go to [bit.ly/sta-212-f19-discuss-join](http://bit.ly/sta-212-f19-discuss-join) and sign up.
+
+<font color="#E34132">
+Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
+</font>
+.my-footer[
+  <font size="2"> Slides adapted from <a href="https://github.com/Sta199-S18/website" target="_blank">Dr. Mine Çetinkaya-Rundel</a> by Dr. Lucy D'Agostino McGowan</font>
+]
+---
+
+## <i class="fas fa-laptop"></i> Practice answering a question or posting in a channel
+
+- Click on "Class feed" on the top left. You should see a post from me titled `Hello!` 
+- Practice responding to this post, up-voting it, etc.
+- Click on "Rooms" then `#general`
+- Practice posting here - post a fun fact about your self, respond with an emoji `r emo::ji("+1")`, etc
+
+<font color="#E34132">
+Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
+</font>
+.my-footer[
+  <font size="2"> Slides adapted from <a href="https://github.com/Sta199-S18/website" target="_blank">Dr. Mine Çetinkaya-Rundel</a> by Dr. Lucy D'Agostino McGowan</font>
+]
+---
+
+## Let's take a tour - class website
+
+.center[
+![](img/demo.png)
+]
+
+- Concepts introduced:
+  - How to find slides
+  - How to find assignments
+  - How to find RStudio Cloud
+  - How to get help
+  - How to find policies
+---
+
+class: center, middle
+
+# Course structure and policies
+---
+
+## Class meetings
+
+- Interactive
+- Some lectures, lots of learn-by-doing
+- Bring your laptop to class every day
+
+---
+
+## Diversity & Inclusiveness:
+
+- Intent: Students from all diverse backgrounds and perspectives be well-served by this course, that students' learning needs be addressed both in and out of class, and that the diversity that the students bring to this class be viewed as a resource, strength and benefit. It is my intent to present materials and activities that are respectful of diversity: gender identity, sexuality, disability, age, socioeconomic status, ethnicity, race, nationality, religion, and culture. Let me know ways to improve the effectiveness of the course for you personally, or for other students or student groups.
+- If you have a name and/or set of pronouns that differ from those that appear in your official Wake Forest records, please let me know!
+
+---
+
+## Diversity & Inclusiveness: 
+
+- If you feel like your performance in the class is being impacted by your experiences outside of class, please don't hesitate to come and talk with me. I want to be a resource for you. If you prefer to speak with someone outside of the course, your academic dean is an excellent resource. 
+- I (like many people) am still in the process of learning about diverse perspectives and identities. If something was said in class (by anyone) that made you feel uncomfortable, please talk to me about it.
+
+---
+
+## Disability Policy
+
+Students with disabilities who believe that they may need accommodations in the class are encouraged to contact Learning Assistance Center & Disability Services at 336-758-5929 or [lacds@wfu.edu](mailto:lacds@wfu.edu) as soon as possible to better ensure that such accommodations are implemented in a timely fashion. 
+
+---
+
+## How to get help
+
+All course discussion will be via Campuswire: [bit.ly/sta-212-f19-help](https://bit.ly/sta-212-f19-discuss) ([Sign up](https://bit.ly/sta-212-f19-discuss-join)). 
+    
+- See course policies for tips on posting questions.
+- For personal and grade related questions, use email.
+
+---
+
+## How to get help
+
+#### Math & Stats center
+
+* Located in Kirby Hall 117
+* Study sessions: (beginning Sept 3) Monday 7-9pm
+* Make an appointment: (beginning Sept 10) [https://mathandstatscenter.wfu.edu/](https://mathandstatscenter.wfu.edu/)
+
+---
+
+## Academic integrity
+
+Adhere to the Wake Forest Honor Code. Academic dishonesty will not be tolerated.
+
+---
+
+## Sharing/reusing code
+
+* There are many online resources for sharing code (for example, StackOverflow) - you **may** use these resources but **must explicitly cite** where you have obtained code (both code you used directly and "paraphrased" code / code used as inspiration). Any reused code that is not explicitly cited will be treated as plagiarism.
+* You **may** discuss the content of assignments with others in this class. If you do so, please acknowledge your collaborator(s) at the top of your assignment, for example: "Collaborators: Gertrude Cox, Florence Nightingale David". Failure to acknowledge collaborators will result in a grade of 0. You **may not** copy code and/or answers **directly** from another student. If you copy someone else's work, both parties will receive a grade of 0.
+* Rather than copying someone else's work, ask for help. You are not alone in this course!
+
+---
+
+## Course components:
+
+
+- Application exercises: Usually start in class and finish in teams by the next class period, check/no check
+- In class quizzes: unannounced, ~10 minutes, no make-ups, lowest two will be dropped
+- Homework: lowest score dropped
+- Lab: start in class, lowest score dropped
+- Exams: 2 in class midterms
+- Final project: Presentations during the last week of class, you must participate in the project and be in class to present to pass this class
+- Self paced tutorials: Individual, check/no check, extra credit
+
+---
+
+## Grading
+
+
+Component             | Weight
+----------------------|----------------
+Participation & application exercises       | 5%
+Quizzes               | 10%
+Homework              | 15%
+Labs                  | 10%
+Midterm exam 1        | 20%
+Midterm exam 2        | 20%
+Final project         | 20%
+
+- Class attendance is a firm expectation; frequent absences or tardiness 
+will be considered a legitimate cause for grade reduction.
+
+---
+
+## Late/missed work policy
+
+
+- Late work policy for homework assignments:
+    - late, but within 24 hours of due date/time: -50%
+    - any later: no credit
+- Late work will not be accepted the final project.
+- You must complete the final project and be in class to present it in order to pass this course.
+
+---
+
+## Other policies
+
+- Please refrain from texting or using your computer for anything other than coursework during class.
+- You must be in class on a day when you're scheduled to present, there are no make ups for presentations.
+- Regrade requests must be made within 1 week of when the assignment is returned.
+
+---
+
+class: center, middle
+
+a quick survey
+
+
+# [bit.ly/sta-212-f19-form](https://bit.ly/sta-212-f19-form)
+
+
+
+---
+
+## Intros
+
+- name
+- major / intended major
+- what you hope to get out of this class OR fun fact
+
+---
+
+## RStudio Cloud
+
+- If you had issues creating your RStudio Cloud account, opening the project, or running the analysis, stick around to try it again.
+    - Go to [bit.ly/sta-212-f19-rstudio-join](http://bit.ly/sta-212-f19-rstudio-join) and sign up.
+- If RStudio Cloud worked for you and you were able to run the analysis, you're free to leave.
