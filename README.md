@@ -14,7 +14,7 @@ Course website is live at https://sta-363-s20.netlify.com.
   - [MST256 by Nicole Dalzell](https://sites.google.com/view/mst256/schedule?authuser=0)
   - MST256 by Rob Erhardt
 
-- The header image is a compilation of an image from [rawpixel](rawpixel.com) and a hex designed by Lucy D'Agostino McGowan
+- The header image is a compilation of an image from [rawpixel](https://www.rawpixel.com/image/397155/free-illustration-image-background-communication-computer) and a hex designed by Lucy D'Agostino McGowan
 
 # Notes for building the website:
 
