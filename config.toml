@@ -73,5 +73,5 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
 [params]
   dateFormat = "January 2, 2006"
-  background = "img/header.png"
+  background = "img/header.jpg"
   favicon = "img/favicon.ico"
