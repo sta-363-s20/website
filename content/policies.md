@@ -26,7 +26,7 @@ Students with disabilities who believe that they may need accommodations in the 
 
 #### Discussion:
 
-All course discussion will be via GitHub on the [Sta363-S20/community](https://github.com/Sta363-S20/community) repository.
+All course discussion will be via GitHub on the [Sta363-S20/community](https://github.com/sta-363-s20/community) repository.
 
 Guidelines for posting questions:
 
