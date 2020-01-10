@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Welcome to Statistical Learning</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. D’Agostino McGowan" />
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Welcome to Statistical Learning
+### Dr. D’Agostino McGowan
+
+---
+
+
+
+
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+  &lt;span&gt;
+  Dr. Lucy D'Agostino McGowan
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+
+
+## 👋
+
+##  Lucy D'Agostino McGowan
+
+&lt;i class="fa fa-envelope"&gt;&lt;/i&gt; &amp;nbsp; [mcgowald@wfu.edu](mailto:mcgowald@wfu.edu) &lt;br&gt;
+&lt;i class="fa fa-university"&gt;&lt;/i&gt; &amp;nbsp; Manchester 342 &lt;br&gt;
+&lt;i class="fa fa-calendar"&gt;&lt;/i&gt; &amp;nbsp; Wed 10:00-11:00a, Thu 10:00-11:00a
+
+---
+
+class: middle, center
+
+Everything you will need will be posted at:
+
+# [bit.ly/sta-363-s20](http://bit.ly/sta-363-s20)
+
+---
+
+# Statistical Learning Problems
+
+.pull-left[
+* Identify risk factors for breast cancer
+]
+
+.pull-right[
+![](img/01/breast-cancer.jpg)
+]
+
+.my-footer[.small[Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie &amp; Tibshirani_
+]]
+
+---
+
+# Statistical Learning Problems
+
+.pull-left[
+&lt;font color="grey"&gt;
+* Identify risk factors for breast cancer
+&lt;/font&gt;
+* Customize an email spam detection system
+]
+
+.pull-right[
+* **Data**: 4601 labeled emails sent to _George_ who works at _HP Labs_ 
+* **Input features**: frequencies of words and punctuation
+]
+
+| george | you | hp | free | ! | edu | remove
+--|-----|-----|----|-----|-----|----|------
+**spam** | 0.00 | 2.26 | 0.02 | 0.52 | 0.51 | 0.01 | 0.28
+**email** | 2.27 | 1.27 | 0.90 | 0.07 | 0.11 | 0.29 | 0.01
+
+.my-footer[.small[Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie &amp; Tibshirani_
+]]
+
+---
+
+
+# Statistical Learning Problems
+
+.pull-left[
+&lt;font color="grey"&gt;
+* Identify risk factors for breast cancer
+* Customize an email spam detection system
+&lt;/font&gt;
+* Identify numbers in handwritten zip code
+]
+
+.pull-right[
+![](img/01/zipcode.png)
+]
+
+.my-footer[.small[Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie &amp; Tibshirani_
+]]
+
+---
+
+# Statistical Learning Problems
+
+.pull-left[
+&lt;font color="grey"&gt;
+* Identify risk factors for breast cancer
+* Customize an email spam detection system
+* Identify numbers in handwritten zip code
+&lt;/font&gt;
+* Establish the relationship between variables in population survey data
+]
+
+.pull-right[
+Income survey data for males from the central Atlantic region of US, 2009
+
+&lt;img src = "img/01/wage1.png" height = 350&gt;&lt;/img&gt;
+
+]
+
+.my-footer[.small[Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie &amp; Tibshirani_
+]]
+
+---
+
+# Statistical Learning Problems
+
+.pull-left[
+&lt;font color="grey"&gt;
+* Identify risk factors for breast cancer
+* Customize an email spam detection system
+* Identify numbers in handwritten zip code
+* Establish the relationship between variables in population survey data
+&lt;/font&gt;
+* Classify pixels of an image
+]
+
+
+.pull-right[
+&lt;img src = "img/01/land-use.png" height = 300&gt;&lt;/img&gt;
+.small[
+Usage `\(\in\)` {red soil, cotton, vegetation stubble, mixture, gray soil, damp
+gray soil}
+]
+]
+
+.my-footer[.small[Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie &amp; Tibshirani_
+]]
+
+---
+
+## ✌️ types of statistical learning
+
+.large[
+* Supervised Learning
+* Unsupervised Learning
+]
+---
+
+## Supervised Learning
+
+.my-footer[.small[Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie &amp; Tibshirani_
+]]
+
+* **outcome variable**: `\(Y\)`, (dependent variable,
+response, target)
+--
+
+* **predictors**: vector of `\(p\)` predictors, `\(X\)`, (inputs,
+regressors, covariates, features, independent variables)
+--
+
+* In the **regression problem**, `\(Y\)` is quantitative (e.g price,
+blood pressure)
+--
+
+* In the **classification** problem, `\(Y\)` takes values in a finite,
+unordered set (survived/died, digit 0-9, cancer class of
+tissue sample)
+--
+
+* We have **training data** `\((x_1, y_1), \dots, (x_N, y_N)\)`. These are
+observations (examples, instances) of these measurements
+
+---
+
+## Supervised Learning
+
+.question[
+What do you think are some objectives here?
+]
+
+--
+
+### Objectives
+
+* Accurately predict unseen test cases
+* Understand which inputs affect the outcome, and how
+* Assess the quality of our predictions and inferences
+
+.my-footer[.small[Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie &amp; Tibshirani_
+]]
+---
+
+## Unsupervised Learning
+
+.my-footer[.small[Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie &amp; Tibshirani_
+]]
+
+* No outcome variable, just a set of predictors (features)
+measured on a set of samples
+--
+
+* objective is more fuzzy -- find groups of samples that
+behave similarly, find features that behave similarly, find
+linear combinations of features with the most variation
+--
+
+* difficult to know how well your are doing
+--
+
+* different from supervised learning, but can be useful as a
+pre-processing step for supervised learning
+
+
+---
+class: center, middle
+
+# Let's go!
+
+---
+
+## Create a GitHub account
+
+Go to https://github.com/, and create an account (unless you already have one). Tips for selecting a username:&lt;sup&gt;1&lt;/sup&gt;
+
+.small[
+- Incorporate your actual name! People like to know who they’re dealing with. Also makes your username easier for people to guess or remember.
+- Reuse your username from other contexts if you can, e.g., Twitter or Slack.
+- Pick a username you will be comfortable revealing to your future boss.
+- Shorter is better than longer.
+- Be as unique as possible in as few characters as possible. In some settings GitHub auto-completes or suggests usernames.
+- Make it timeless. Don’t highlight your current university, employer, or place of residence.
+- Avoid words laden with special meaning in programming, like `NA`.
+]
+
+.footnote[ [1] Source: [Happy git with R](http://happygitwithr.com/github-acct.html#username-advice) by Jenny Bryan.]
+
+&lt;font color="#E34132"&gt;
+Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
+&lt;/font&gt;
+
+---
+
+## Join RStudio.cloud
+
+Go to [bit.ly/sta-363-s20-rstudio-join](http://bit.ly/sta-363-s20-rstudio-join) and sign up.
+
+&lt;font color="#E34132"&gt;
+Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
+&lt;/font&gt;
+.my-footer[
+  &lt;font size="2"&gt; Slides adapted from &lt;a href="https://github.com/Sta199-S18/website" target="_blank"&gt;Dr. Mine Çetinkaya-Rundel&lt;/a&gt; by Dr. Lucy D'Agostino McGowan&lt;/font&gt;
+]
+---
+
+## &lt;i class="fas fa-laptop"&gt;&lt;/i&gt; Create a classification model
+
+- Once you log on to RStudio Cloud, click on this course's workspace "STA 363 - S20" then click "Projects"
+- You should see a project called `zipcode`, click it.
+- In the Files pane in the bottom right corner, spot the file called `zipcode.Rmd`. Open it, and then click on the "Knit" button. *You will likely see an pop-up error, click "Try Again"*
+- Go back to the file and change your name on top (in the `yaml` -- we'll talk about what this means later) and knit again.
+- Then, scroll to the `recipe` chunk, below **First we create a recipe**. Instead of creating a model to classify whether the number is **0** or not, create a model to predict whether the number is **1**. Knit again &amp; voila!
+
+&lt;font color="#E34132"&gt;
+Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
+&lt;/font&gt;
+
+---
+
+## Let's take a tour - class website
+
+.center[
+![](img/demo.png)
+]
+
+- Concepts introduced:
+  - How to find slides
+  - How to find assignments
+  - How to find RStudio Cloud
+  - How to get help
+  - How to find policies
+---
+
+class: center, middle
+
+# Course structure and policies
+---
+
+## Class meetings
+
+- Interactive
+- Some lectures, lots of learn-by-doing
+- Bring your laptop to class every day
+
+---
+
+## Diversity &amp; Inclusiveness:
+
+- Intent: Students from all diverse backgrounds and perspectives be well-served by this course, that students' learning needs be addressed both in and out of class, and that the diversity that the students bring to this class be viewed as a resource, strength and benefit. It is my intent to present materials and activities that are respectful of diversity: gender identity, sexuality, disability, age, socioeconomic status, ethnicity, race, nationality, religion, and culture. Let me know ways to improve the effectiveness of the course for you personally, or for other students or student groups.
+- If you have a name and/or set of pronouns that differ from those that appear in your official Wake Forest records, please let me know!
+
+---
+
+## Diversity &amp; Inclusiveness: 
+
+- If you feel like your performance in the class is being impacted by your experiences outside of class, please don't hesitate to come and talk with me. I want to be a resource for you. If you prefer to speak with someone outside of the course, your academic dean is an excellent resource. 
+- I (like many people) am still in the process of learning about diverse perspectives and identities. If something was said in class (by anyone) that made you feel uncomfortable, please talk to me about it.
+
+---
+
+## Disability Policy
+
+Students with disabilities who believe that they may need accommodations in the class are encouraged to contact Learning Assistance Center &amp; Disability Services at 336-758-5929 or [lacds@wfu.edu](mailto:lacds@wfu.edu) as soon as possible to better ensure that such accommodations are implemented in a timely fashion. 
+
+---
+
+## How to get help
+
+All course discussion will be via GitHub: [sta-363-s20/community](https://github.com/sta-363-s20/community) 
+    
+- See course policies for tips on posting questions.
+- For personal and grade related questions, use email.
+
+---
+## How to get help 
+
+- Go to https://github.com/sta-363-s20/community and bookmark this page.
+- In the issues tab find the issue created by Dr. D'Agostino McGowan (`@LucyMcGowan`) and click on it to view it.
+- Respond to it with a hello, or something else. Feel free to add some code formatted text, inline surrounded by a single backtick or on a new line surrounded by three backtics, or a hyperlink. Or try bolding or italicizing. You could also tag someone if you know their GitHub username. Your post doesn't have to be meaningful.
+- Hit Comment when you're done.
+- Read the "How to get help" section on the course policies page.
+
+---
+
+## How to get help
+
+#### Math &amp; Stats center
+
+* Located in Kirby Hall 117
+* Make an appointment:  [https://mathandstatscenter.wfu.edu/](https://mathandstatscenter.wfu.edu/)
+
+---
+
+## Academic integrity
+
+Adhere to the Wake Forest Honor Code. Academic dishonesty will not be tolerated.
+
+---
+
+## Sharing/reusing code
+
+* There are many online resources for sharing code (for example, StackOverflow) - you **may** use these resources but **must explicitly cite** where you have obtained code (both code you used directly and "paraphrased" code / code used as inspiration). Any reused code that is not explicitly cited will be treated as plagiarism.
+* You **may** discuss the content of assignments with others in this class. If you do so, please acknowledge your collaborator(s) at the top of your assignment, for example: "Collaborators: Gertrude Cox, Florence Nightingale David". Failure to acknowledge collaborators will result in a grade of 0. You **may not** copy code and/or answers **directly** from another student. If you copy someone else's work, both parties will receive a grade of 0.
+* Rather than copying someone else's work, ask for help. You are not alone in this course!
+
+---
+
+## Course components:
+
+
+- Application exercises: Usually start in class and finish in teams by the next class period, check/no check
+- Reading assessments: no make-ups, lowest two will be dropped
+- Homework: on your own, lowest score dropped
+- Lab: start in class, lowest score dropped
+- Exams: 2 in class midterms, 1 take home midterm
+
+---
+
+## Grading
+
+
+Component             | Weight
+----------------------|----------------
+Participation &amp; application exercises  | 5%
+Reading assessments   | 10%
+Homework              | 10%
+Labs                  | 10%
+Midterm exam 1        | 25%
+Midterm exam 2        | 25%
+Midterm exam 3        | 15%
+
+- Class attendance is a firm expectation; frequent absences or tardiness 
+will be considered a legitimate cause for grade reduction.
+
+---
+
+## Late/missed work policy
+
+
+- Late work policy for homework and lab assignments:
+    - late, but within 24 hours of due date/time: -50%
+    - any later: no credit
+- Late work will not be accepted for the take-home Midterm exam 3.
+
+---
+
+## Other policies
+
+- Please refrain from texting or using your computer for anything other than coursework during class.
+- You must be in class on a day when you're scheduled to present, there are no make ups for presentations.
+- Regrade requests must be made within 1 week of when the assignment is returned.
+
+---
+
+## Intros
+
+- name
+- major / intended major
+- what you hope to get out of this class OR fun fact
+
+---
+
+## RStudio Cloud
+
+- If you had issues creating your RStudio Cloud account, opening the project, or running the analysis, stick around to try it again.
+    - Go to [bit.ly/sta-363-s20-rstudio-join](http://bit.ly/sta-363-s20-rstudio-join) and sign up.
+- If RStudio Cloud worked for you and you were able to run the analysis, you're free to leave.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
