@@ -1,7 +1,6 @@
 ---
-title: "Welcome to Statistical Models"
+title: "Welcome to Statistical Learning"
 author: "Dr. D'Agostino McGowan"
-date: "2019-08-27"
 output:
   xaringan::moon_reader:
     css: "slides.css"
@@ -45,327 +44,220 @@ class: middle, center
 
 Everything you will need will be posted at:
 
-# [bit.ly/sta-212-f19](http://bit.ly/sta-212-f19)
-
----
-class: center, middle
-
-### "truth … is much too complicated to allow anything but approximations" - John von Neumann
-
-<img src = "https://farkasdilemma.files.wordpress.com/2013/01/vonneumann.png" height = "350"> </img>
-<font size = "2">
-John von Neumann, wearer of funny hats via <a href = "https://farkasdilemma.wordpress.com/2013/01/04/john-von-neumannm-wearer-of-funny-hats/"> farkasdilemma.wordpress.com</a> </font>
+# [bit.ly/sta-363-s20](http://bit.ly/sta-363-s20)
 
 ---
 
-class: center, middle
-
-### "Statistics is using data and knowledge about randomness to condense, communicate, and contextualize information and provide insight into the setting from which the data came." - Jo Hardin
-
-<img src = "https://research.pomona.edu/johardin/files/2012/08/jo_headshot3-3.png" height = "270"> </img>
-
-<font size = "2">
-Jo Hardin <a href = "https://research.pomona.edu/johardin/files/2012/08/jo_headshot3-3.png"> https://research.pomona.edu/johardin/</a> </font>
-
----
-class: center, middle
-
-### "All models are wrong, but some are useful" - George Box
-
-<img height="400" alt="GeorgeEPBox" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/GeorgeEPBox.jpg/256px-GeorgeEPBox.jpg"></img>
-<font size = "2">
-DavidMCEddy at en.wikipedia <a href = "https://creativecommons.org/licenses/by-sa/3.0"> CC BY-SA 3.0 </a>, via Wikimedia Commons </font>
-
----
-
-class: center, middle
-
-.question[
-# data = model + error
-]
-
----
-
-class: center, middle
-
-.question[
- $$ 
- \LARGE y = f(\mathbf{X}) + \epsilon 
- $$
-]
-
-# `r emo::ji("speaking_head")` math speak 
-
----
-
-class: center, middle
-
-.question[
- $$ 
- \LARGE y = \color{blue}{f(\mathbf{X})} + \epsilon 
- $$
-]
-
-# model
-
----
-
-class: center, middle
-
-.question[
- $$ 
- \LARGE y = f(\color{blue}{\mathbf{X}}) + \epsilon 
- $$
-]
-
-# data (to build the model)
-
----
-
-class: center, middle
-
-.question[
- $$ 
- \LARGE \color{blue}y = f(\mathbf{X}) + \epsilon 
- $$
-]
-
-# data (outcome)
-
----
-
-class: center, middle
-
-.question[
- $$ 
- \LARGE \color{blue}y = f(\color{blue}{\mathbf{X}}) + \epsilon 
- $$
-]
-
-## 1. Thinking about, visualizing, and wrangling data
-
----
-
-class: center, middle
-
-.question[
- $$ 
- \LARGE y = \color{blue}{\beta_0 + \beta_1X
- }+ \epsilon 
- $$
-]
-
-# 2. Simple Linear Regression
-
----
-
-class: center, middle
-
-![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
-
-<font size = "2"> Bob at Easel from  <a href = "https://en.wikipedia.org/wiki/File:Bob_at_Easel.jpg">Wikipedia</a></font>
----
+# Statistical Learning Problems
 
 .pull-left[
-![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
-
+* Identify risk factors for breast cancer
 ]
+
 .pull-right[
-```{r, message = FALSE, warning = FALSE, echo = FALSE, fig.height = 6}
-library(fivethirtyeight)
-
-bob_ross %>%
-  filter(season < 15) %>%
-  group_by(season) %>%
-  summarise(clouds = sum(clouds)) %>%
-  ggplot(mapping = aes(season, clouds)) + 
-  geom_point() + 
-  scale_y_continuous("# of paintings with clouds", limits = c(4, 12)) + 
-  theme_classic()
-```
+![](img/01/breast-cancer.jpg)
 ]
 
-### Data: [FiveThirtyEight](https://fivethirtyeight.com/features/a-statistical-analysis-of-the-work-of-bob-ross/)
+.my-footer[.small[Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie & Tibshirani_
+]]
 
 ---
+
+# Statistical Learning Problems
 
 .pull-left[
-![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
+<font color="grey">
+* Identify risk factors for breast cancer
+</font>
+* Customize an email spam detection system
+]
 
-]
 .pull-right[
-```{r, message = FALSE, warning = FALSE, echo = FALSE, fig.height = 6}
-bob_ross %>%
-  filter(season < 15) %>%
-  group_by(season) %>%
-  summarise(clouds = sum(clouds)) %>%
-  ggplot(mapping = aes(season, clouds)) + 
-  geom_point() + 
-  scale_y_continuous("# of paintings with clouds", limits = c(4, 12)) + 
-  geom_smooth(method = "lm") +
-  theme_classic()
-```
+* **Data**: 4601 labeled emails sent to _George_ who works at _HP Labs_ 
+* **Input features**: frequencies of words and punctuation
 ]
+
+| george | you | hp | free | ! | edu | remove
+--|-----|-----|----|-----|-----|----|------
+**spam** | 0.00 | 2.26 | 0.02 | 0.52 | 0.51 | 0.01 | 0.28
+**email** | 2.27 | 1.27 | 0.90 | 0.07 | 0.11 | 0.29 | 0.01
+
+.my-footer[.small[Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie & Tibshirani_
+]]
+
 ---
+
+
+# Statistical Learning Problems
 
 .pull-left[
-![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
-
+<font color="grey">
+* Identify risk factors for breast cancer
+* Customize an email spam detection system
+</font>
+* Identify numbers in handwritten zip code
 ]
+
 .pull-right[
-```{r, message = FALSE, warning = FALSE, echo = FALSE, fig.height = 6}
-bob_ross %>%
-  filter(season < 15) %>%
-  group_by(season) %>%
-  summarise(clouds = sum(clouds)) %>%
-  ggplot(mapping = aes(season, clouds)) + 
-  geom_point() + 
-  scale_y_continuous("# of paintings with clouds", limits = c(4, 12)) + 
-  geom_smooth(method = "lm") +
-  theme_classic()
-```
+![](img/01/zipcode.png)
 ]
 
-.question[
- $$ 
- \LARGE y = \color{blue}{\beta_0 + \beta_1X
- }+ \epsilon 
- $$
-]
+.my-footer[.small[Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie & Tibshirani_
+]]
 
 ---
+
+# Statistical Learning Problems
 
 .pull-left[
-![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
-
+<font color="grey">
+* Identify risk factors for breast cancer
+* Customize an email spam detection system
+* Identify numbers in handwritten zip code
+</font>
+* Establish the relationship between variables in population survey data
 ]
+
 .pull-right[
-```{r, message = FALSE, warning = FALSE, echo = FALSE, fig.height = 6}
-bob_ross %>%
-  filter(season < 15) %>%
-  group_by(season) %>%
-  summarise(clouds = sum(clouds)) %>%
-  ggplot(mapping = aes(season, clouds)) + 
-  geom_point() + 
-  scale_y_continuous("# of paintings with clouds", limits = c(4, 12)) + 
-  geom_smooth(method = "lm") +
-  theme_classic()
-```
+Income survey data for males from the central Atlantic region of US, 2009
+
+<img src = "img/01/wage1.png" height = 350></img>
+
 ]
 
-.question[
- $$ 
- \text{# of paintings with clouds} = \color{blue}{\beta_0 + \beta_1 season
- }+ \epsilon 
- $$
-]
+.my-footer[.small[Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie & Tibshirani_
+]]
+
 ---
+
+# Statistical Learning Problems
 
 .pull-left[
-![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
-
+<font color="grey">
+* Identify risk factors for breast cancer
+* Customize an email spam detection system
+* Identify numbers in handwritten zip code
+* Establish the relationship between variables in population survey data
+</font>
+* Classify pixels of an image
 ]
+
+
 .pull-right[
-```{r, message = FALSE, warning = FALSE, echo = FALSE, fig.height = 6}
-bob_ross %>%
-  group_by(season) %>%
-  summarise(clouds = sum(clouds)) %>%
-  ggplot(mapping = aes(season, clouds)) + 
-  geom_point() + 
-  scale_y_continuous("# of paintings with clouds", limits = c(2, 12)) + 
-  theme_classic()
-```
+<img src = "img/01/land-use.png" height = 300></img>
+.small[
+Usage $\in$ {red soil, cotton, vegetation stubble, mixture, gray soil, damp
+gray soil}
 ]
+]
+
+.my-footer[.small[Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie & Tibshirani_
+]]
+
+---
+
+## `r emo::ji("v")` types of statistical learning
+
+.large[
+* Supervised Learning
+* Unsupervised Learning
+]
+---
+
+## Supervised Learning
+
+* **outcome variable**: $Y$, (dependent variable,
+response, target)
+--
+
+* **predictors**: vector of $p$ predictors, $X$, (inputs,
+regressors, covariates, features, independent variables)
+--
+
+* In the **regression problem**, $Y$ is quantitative (e.g price,
+blood pressure)
+--
+
+* In the **classification** problem, $Y$ takes values in a finite,
+unordered set (survived/died, digit 0-9, cancer class of
+tissue sample)
+--
+
+* We have **training data** $(x_1, y_1), \dots, (x_N, y_N)$. These are
+observations (examples, instances) of these measurements
+
+.my-footer[.small[Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie & Tibshirani_
+]]
+---
+
+## Supervised Learning
 
 .question[
- $$ 
- \text{# of paintings with clouds} = \color{blue}{\beta_0 + \beta_1 season
- }+ \epsilon 
- $$
+What do you think are some objectives here?
 ]
+
+--
+
+### Objectives
+
+* Accurately predict unseen test cases
+* Understand which inputs affect the outcome, and how
+* Assess the quality of our predictions and inferences
+
+.my-footer[.small[Dr. Lucy D'Agostino McGowan _adapted from slides by Hastie & Tibshirani_
+]]
 ---
 
-.pull-left[
-![](https://upload.wikimedia.org/wikipedia/en/7/70/Bob_at_Easel.jpg)
+## Unsupervised Learning
 
-]
-.pull-right[
-```{r, message = FALSE, warning = FALSE, echo = FALSE, fig.height = 6}
-bob_ross %>%
-  group_by(season) %>%
-  summarise(clouds = sum(clouds)) %>%
-  ggplot(mapping = aes(season, clouds)) + 
-  geom_point() + 
-  scale_y_continuous("# of paintings with clouds", limits = c(2, 12)) + 
-  geom_smooth(method = "loess") +
-  theme_classic()
-```
-]
+* No outcome variable, just a set of predictors (features)
+measured on a set of samples
+--
 
-.question[
- $$ 
- \text{# of paintings with clouds} = \color{blue}{\beta_0 + \beta_1 f(season)
- }+ \epsilon 
- $$
-]
----
+* objective is more fuzzy -- find groups of samples that
+behave similarly, find features that behave similarly, find
+linear combinations of features with the most variation
+--
 
-class: center, middle
+* difficult to know how well your are doing
+--
 
-.question[
- $$ 
- \LARGE y = \color{blue}{\beta_0 + \beta_1X_1 + \beta_2X_2+...
- }+ \epsilon 
- $$
-]
+* different from supervised learning, but can be useful as a
+pre-processing step for supervised learning
 
-# 3. Multiple Linear Regression
 
 ---
-
-class: center, middle
-
-.question[
- $$ 
- \LARGE \color{blue}{f(y)} = \beta_0 + \beta_1X_1 + \beta_2X_2+...+ \epsilon 
- $$
-]
-
-# 4. Logistic Regression
-
----
-
-class: center, middle
-
-.question[
- $$ 
- \LARGE \color{blue}{logit(y)} = \beta_0 + \beta_1X_1 + \beta_2X_2+...+ \epsilon 
- $$
-]
-
-# 4. Logistic Regression
-
----
-
-# Plan
-
-- Thinking about, visualizing, and wrangling data
-- Simple Linear Regression
-- Multiple Linear Regression
-- Logistic Regression
-- Data Science-ing
-
----
-
 class: center, middle
 
 # Let's go!
 
 ---
 
+## Create a GitHub account
+
+Go to https://github.com/, and create an account (unless you already have one). Tips for selecting a username:<sup>1</sup>
+
+.small[
+- Incorporate your actual name! People like to know who they’re dealing with. Also makes your username easier for people to guess or remember.
+- Reuse your username from other contexts if you can, e.g., Twitter or Slack.
+- Pick a username you will be comfortable revealing to your future boss.
+- Shorter is better than longer.
+- Be as unique as possible in as few characters as possible. In some settings GitHub auto-completes or suggests usernames.
+- Make it timeless. Don’t highlight your current university, employer, or place of residence.
+- Avoid words laden with special meaning in programming, like `NA`.
+]
+
+.footnote[ [1] Source: [Happy git with R](http://happygitwithr.com/github-acct.html#username-advice) by Jenny Bryan.]
+
+<font color="#E34132">
+Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
+</font>
+
+---
+
 ## Join RStudio.cloud
 
-Go to [bit.ly/sta-212-f19-rstudio-join](http://bit.ly/sta-212-f19-rstudio-join) and sign up.
+Go to [bit.ly/sta-363-s20-rstudio-join](http://bit.ly/sta-363-s20-rstudio-join) and sign up.
 
 <font color="#E34132">
 Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
@@ -375,47 +267,18 @@ Once done, place a green sticky on your laptop. If you have questions, place a p
 ]
 ---
 
-## <i class="fas fa-laptop"></i> Create your first data visualization
+## <i class="fas fa-laptop"></i> Create a classification model
 
-- Once you log on to RStudio Cloud, click on this course's workspace "STA 212 - Fall 19" then click "Projects"
-- You should see a project called `UN Votes`, click it.
-- In the Files pane in the bottom right corner, spot the file called `un-votes.Rmd`. Open it, and then click on the "Knit" button. *You will likely see an pop-up error, click "Try Again"*
+- Once you log on to RStudio Cloud, click on this course's workspace "STA 363 - S20" then click "Projects"
+- You should see a project called `zipcode`, click it.
+- In the Files pane in the bottom right corner, spot the file called `zipcode.Rmd`. Open it, and then click on the "Knit" button. *You will likely see an pop-up error, click "Try Again"*
 - Go back to the file and change your name on top (in the `yaml` -- we'll talk about what this means later) and knit again.
-- Then, change the country names to those you're interested in. Your spelling and capitalization should match how the countries appear in the data, so take a peek at the Appendix to confirm spelling. Knit again & voila, your first data visualization!
+- Then, scroll to the `recipe` chunk, below **First we create a recipe**. Instead of creating a model to classify whether the number is **0** or not, create a model to predict whether the number is **1**. Knit again & voila!
 
 <font color="#E34132">
 Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
 </font>
-.my-footer[
-  <font size="2"> Slides adapted from <a href="https://github.com/Sta199-S18/website" target="_blank">Dr. Mine Çetinkaya-Rundel</a> by Dr. Lucy D'Agostino McGowan</font>
-]
----
 
-## Join Campuswire
-
-Go to [bit.ly/sta-212-f19-discuss-join](http://bit.ly/sta-212-f19-discuss-join) and sign up.
-
-<font color="#E34132">
-Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
-</font>
-.my-footer[
-  <font size="2"> Slides adapted from <a href="https://github.com/Sta199-S18/website" target="_blank">Dr. Mine Çetinkaya-Rundel</a> by Dr. Lucy D'Agostino McGowan</font>
-]
----
-
-## <i class="fas fa-laptop"></i> Practice answering a question or posting in a channel
-
-- Click on "Class feed" on the top left. You should see a post from me titled `Hello!` 
-- Practice responding to this post, up-voting it, etc.
-- Click on "Rooms" then `#general`
-- Practice posting here - post a fun fact about your self, respond with an emoji `r emo::ji("+1")`, etc
-
-<font color="#E34132">
-Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
-</font>
-.my-footer[
-  <font size="2"> Slides adapted from <a href="https://github.com/Sta199-S18/website" target="_blank">Dr. Mine Çetinkaya-Rundel</a> by Dr. Lucy D'Agostino McGowan</font>
-]
 ---
 
 ## Let's take a tour - class website
@@ -467,7 +330,7 @@ Students with disabilities who believe that they may need accommodations in the 
 
 ## How to get help
 
-All course discussion will be via Campuswire: [bit.ly/sta-212-f19-help](https://bit.ly/sta-212-f19-discuss) ([Sign up](https://bit.ly/sta-212-f19-discuss-join)). 
+All course discussion will be via GitHub: [sta-363-s20/community](https://github.com/sta-363-s20/community) 
     
 - See course policies for tips on posting questions.
 - For personal and grade related questions, use email.
@@ -479,8 +342,7 @@ All course discussion will be via Campuswire: [bit.ly/sta-212-f19-help](https://
 #### Math & Stats center
 
 * Located in Kirby Hall 117
-* Study sessions: (beginning Sept 3) Monday 7-9pm
-* Make an appointment: (beginning Sept 10) [https://mathandstatscenter.wfu.edu/](https://mathandstatscenter.wfu.edu/)
+* Make an appointment:  [https://mathandstatscenter.wfu.edu/](https://mathandstatscenter.wfu.edu/)
 
 ---
 
@@ -502,7 +364,7 @@ Adhere to the Wake Forest Honor Code. Academic dishonesty will not be tolerated.
 
 
 - Application exercises: Usually start in class and finish in teams by the next class period, check/no check
-- In class quizzes: unannounced, ~10 minutes, no make-ups, lowest two will be dropped
+- Reading assessments: no make-ups, lowest two will be dropped
 - Homework: lowest score dropped
 - Lab: start in class, lowest score dropped
 - Exams: 2 in class midterms
@@ -517,12 +379,12 @@ Adhere to the Wake Forest Honor Code. Academic dishonesty will not be tolerated.
 Component             | Weight
 ----------------------|----------------
 Participation & application exercises       | 5%
-Quizzes               | 10%
-Homework              | 15%
+Reading assessments               | 5%
+Homework              | 10%
 Labs                  | 10%
-Midterm exam 1        | 20%
-Midterm exam 2        | 20%
-Final project         | 20%
+Midterm exam 1        | 25%
+Midterm exam 2        | 30%
+Final project         | 15%
 
 - Class attendance is a firm expectation; frequent absences or tardiness 
 will be considered a legitimate cause for grade reduction.
@@ -545,17 +407,6 @@ will be considered a legitimate cause for grade reduction.
 - Please refrain from texting or using your computer for anything other than coursework during class.
 - You must be in class on a day when you're scheduled to present, there are no make ups for presentations.
 - Regrade requests must be made within 1 week of when the assignment is returned.
-
----
-
-class: center, middle
-
-a quick survey
-
-
-# [bit.ly/sta-212-f19-form](https://bit.ly/sta-212-f19-form)
-
-
 
 ---
 
