@@ -365,11 +365,9 @@ Adhere to the Wake Forest Honor Code. Academic dishonesty will not be tolerated.
 
 - Application exercises: Usually start in class and finish in teams by the next class period, check/no check
 - Reading assessments: no make-ups, lowest two will be dropped
-- Homework: lowest score dropped
+- Homework: on your own, lowest score dropped
 - Lab: start in class, lowest score dropped
-- Exams: 2 in class midterms
-- Final project: Presentations during the last week of class, you must participate in the project and be in class to present to pass this class
-- Self paced tutorials: Individual, check/no check, extra credit
+- Exams: 2 in class midterms, 1 take home midterm
 
 ---
 
@@ -379,12 +377,12 @@ Adhere to the Wake Forest Honor Code. Academic dishonesty will not be tolerated.
 Component             | Weight
 ----------------------|----------------
 Participation & application exercises  | 5%
-Reading assessments   | 5%
+Reading assessments   | 10%
+Homework              | 10%
 Labs                  | 10%
-Midterm exam 1        | 20%
+Midterm exam 1        | 25%
 Midterm exam 2        | 25%
-Midterm exam 3        | 25%
-Final project         | 15%
+Midterm exam 3        | 15%
 
 - Class attendance is a firm expectation; frequent absences or tardiness 
 will be considered a legitimate cause for grade reduction.
@@ -394,11 +392,10 @@ will be considered a legitimate cause for grade reduction.
 ## Late/missed work policy
 
 
-- Late work policy for homework assignments:
+- Late work policy for homework and lab assignments:
     - late, but within 24 hours of due date/time: -50%
     - any later: no credit
-- Late work will not be accepted the final project.
-- You must complete the final project and be in class to present it in order to pass this course.
+- Late work will not be accepted for the take-home Midterm exam 3.
 
 ---
 

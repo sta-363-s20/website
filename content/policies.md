@@ -37,7 +37,7 @@ Guidelines for posting questions:
 * Format your questions nicely using markdown and code formatting. 
 * Preview your issue prior to posting.
 * Where appropriate, provide links to specific files, or even lines within them, in the body of your issue. This will help your helper understand your question. Note that only the teaching team will have access to private repos.
-* (Optional) Tag someone or some group of people. Start by typing the @ symbol and GitHub will generate some good suggestions. You can also type or paste in the GitHub username yourself. Examples: to tag Dr. D'Agostino McGowan, use `@LucyMcGowan`; to tag the entire teaching team tag `@Sta363-S20/owners`, to tag a class/team mate use their GitHub username.
+* (Optional) Tag someone or some group of people. Start by typing the @ symbol and GitHub will generate some good suggestions. You can also type or paste in the GitHub username yourself. Examples: to tag Dr. D'Agostino McGowan, use `@LucyMcGowan`; to tag the entire teaching team tag `@sta-363-s20/owners`, to tag a class/team mate use their GitHub username.
 * Hit "Submit new issue" when you're ready to post.
  
 ####  Math & Stats Center:
@@ -71,21 +71,13 @@ Homework with the lowest score for each student will be dropped.
 
 #### Labs
 
-The objective of the labs is to give you hands on experience with data analysis using modern statistical software. The labs will also provide you with tools that you will need to complete the project successfully.
+The objective of the labs is to give you hands on experience with data analysis using modern statistical software. You are welcome to work on these with other members of this class. If you do so, please acknowledge your collaborator(s) at the top of your assignment, for example: "Collaborators: Gertrude Cox, Florence Nightingale David". Failure to acknowledge collaborators will result in a grade of 0. You **may not** copy answers **directly** from another student. If you copy someone else's work, both parties will receive a grade of 0.
 
 The lab with the lowest score for each student will be dropped.
 
 #### Reading Assessments
 
 We will periodically have reading assessments.  These assessments cannot be made up. It is expected that you may miss a one due to missing class a time or two; to account for this, two assessments for each student will be dropped.
-
-#### Final Project
-
-For the Final project, you will be responsible for the completion of an open ended project. You may work with one or two classmates on the final project, if you choose. Additional details on the projects will be provided as the course progresses.
-
-#### Interactive tutorials
-
-These are self-paced interactive tutorials that will be assigned intermittently throughout the semester. They will be graded on a check/no check basis (though you'll receive feedback on the way as you complete them) and they will count towards extra credit.
 
 ### Grading
 
@@ -95,12 +87,12 @@ Your final grade will be comprised of the following:
  <span></span>        | <span></span>
 ----------------------|----------------
 Participation & application exercises  | 5%
-Reading assessments   | 5%
+Reading assessments   | 10%
+Homeworks             | 10%
 Labs                  | 10%
-Midterm exam 1        | 20%
+Midterm exam 1        | 25%
 Midterm exam 2        | 25%
-Midterm exam 3        | 25%
-Final project         | 15%
+Midterm exam 3        | 15%
 
 Grades conversion: 
 
@@ -129,11 +121,9 @@ Class attendance in lecture and lab is a firm expectation; frequent absences or 
     - late, but within 24 hours of due date/time: -50%
     - any later: no credit
     
-- Late work will not be accepted for exams or projects.
+- Late work will not be accepted for the take home exam.
 
 - No make-up reading assessments will be given.
-
-- You must complete the final project and be in class to present it in order to pass this course.
 
 - All regrade requests must be discussed with the professor within one week of receiving your grade. There will be no grade changes after the final project.
 
