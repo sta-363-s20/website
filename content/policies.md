@@ -96,10 +96,10 @@ Your final grade will be comprised of the following:
 ----------------------|----------------
 Participation & application exercises  | 5%
 Reading assessments   | 5%
-Homework              | 10%
 Labs                  | 10%
-Midterm exam 1        | 25%
-Midterm exam 2        | 30%
+Midterm exam 1        | 20%
+Midterm exam 2        | 25%
+Midterm exam 3        | 25%
 Final project         | 15%
 
 Grades conversion: 
