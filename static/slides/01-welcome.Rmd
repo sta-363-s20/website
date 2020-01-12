@@ -259,6 +259,16 @@ Once done, place a green sticky on your laptop. If you have questions, place a p
 
 ---
 
+## Let me know your GitHub name
+
+# [bit.ly/sta-363-s20-ghsurvey](https://bit.ly/sta-363-s20-ghsurvey)
+
+
+<font color="#E34132">
+Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
+</font>
+---
+
 ## Join RStudio.cloud
 
 Go to [bit.ly/sta-363-s20-rstudio-join](http://bit.ly/sta-363-s20-rstudio-join) and sign up.
