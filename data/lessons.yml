@@ -11,7 +11,7 @@ lessons:
   - title: "Week 02"
   - date: "Tues, Jan 21"
     title: "Trade-offs: Accuracy and interpretability, bias and variance"
-
+    reading: "01-reading.html"
   - date: "Thur, Jan 23"
     title: "Linear Regression and Logistic Regression Review"
   - title: "Week 03"
