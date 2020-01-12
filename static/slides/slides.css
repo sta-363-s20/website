@@ -9,18 +9,18 @@ body {
 h2 {
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: bold;
-  color: #6CA0DC;
+  color: #6B5876;
   font-size: 12px;
   margin: 0.25em 0 0.5em 0;
 }
 h1, h3 {
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: bold;
-  color: #6CA0DC;
+  color: #6B5876;
 }
 a, a > code {
   font-family: 'Source Sans Pro', sans-serif;
-  color: #6CA0DC;
+  color: #6B5876;
   text-decoration: none;
 }
 
@@ -32,7 +32,7 @@ a, a > code {
 }
 
 .inverse {
-  background-color: #6CA0DC;
+  background-color: #6B5876;
   color: #ffffff;
   /* text-shadow: 0 0 20px #333; */
 }
@@ -81,8 +81,8 @@ a, a > code {
 }
 /* Custom boxes */
 .definition {
-  border-left: solid 5px #6CA0DC;
-  background-color: #6CA0DC50;
+  border-left: solid 5px #6B5876;
+  background-color: #6B587650;
   padding: 1px 16px;
   margin-top: 12px;
   margin-bottom: 12px;
