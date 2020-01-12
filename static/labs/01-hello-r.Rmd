@@ -38,7 +38,7 @@ As the labs progress, you are encouraged to explore beyond what the labs dictate
 
 # Getting started
 
-Each of your assignments will begin with the following steps. You saw these once in class yesterday, they're outlined in detail here again. Going forward each lab will start with a "Getting started" section but details will be a bit more sparse than this. You can always refer back to this lab for a detailed list of the steps involved for getting started with an assignment.
+Each of your assignments will begin with the following steps. You saw these once in class, they're outlined in detail here again. Going forward each lab will start with a "Getting started" section but details will be a bit more sparse than this. You can always refer back to this lab for a detailed list of the steps involved for getting started with an assignment.
 
 The following screencast also walks you through these steps:
 
