@@ -262,7 +262,7 @@ summary(rec)
 
 Let's prep this recipe and then fit the model. You don't need to explain this part, just copy this code to your Rmd file.
 
-```{r,eval=FALSE}
+```{r}
 prepped <- rec %>%
   prep(retain = TRUE)
 train <- prepped %>%
@@ -281,6 +281,7 @@ fit %>%
   tidy()
 ```
 
+*This is a good place to pause, commit changes with the commit message "Added answer for Ex 5", and push.*
 
 You're done with the data analysis exercises, but we'd like you to do two more things:
 
