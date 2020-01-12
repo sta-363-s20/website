@@ -178,7 +178,6 @@ For which of the above steps (changing project name, making updates to the docum
 
 # Data
 
-
 The data frame we will be working with today is called `Auto` and it's in the `ISLR` package. 
 
 To find out more about the dataset, type the following in your Console: `?Auto`. A question mark before the name of an object will always bring up its help file. This command must be ran in the Console. You can also use the `glimpse()` function to learn more about the dataset. Run `glimpse(Auto)` in the Console.
@@ -223,17 +222,17 @@ ford_data %>%
 
 Below is the code you will need to complete this exercise. Again, the answer is already given, but you need to include relevant bits in your Rmd document and successfully knit it and view the results.
 
-Start with the `Auto` dataset and pipe it into the `mutate` function to create a new variable called `cylinders` that is a factor variable. Store the resulting filtered data frame as a new data frame called `Auto`.
+Start with the `Auto` dataset and pipe it into the `mutate` function to create a new variable called `cylinders` that is a factor variable. Store the resulting filtered data frame as a new data frame called `auto_new`.
 
 ```{r}
-Auto <- Auto %>%
+auto_new <- Auto %>%
   mutate(cylinders = as.factor(cylinders))
 ```
 
 Now let's create a visualization We will use the `ggplot` function for this. Its first argument is the data you're visualizing. Next we define the `aes`thetic mappings. In other words, the columns of the data that get mapped to certain aesthetic features of the plot, e.g. the `x` axis will represent the variable called `cylinders` and the `y` axis will represent the variable called `mpg`. Then, we add another layer to this plot where we define which `geom`etric shapes we want to use to represent each observation in the data. In this case we want these to be a boxplot, hence `geom_boxplot`.
 
 ```{r fig.fullwidth=TRUE}
-ggplot(data = Auto, mapping = aes(x = cylinders, y = mpg)) +
+ggplot(data = auto_new, mapping = aes(x = cylinders, y = mpg)) +
   geom_boxplot()
 ```
 
@@ -245,28 +244,41 @@ If this seems like a lot, it is. And you will learn about the philosophy of buil
 
 *This is another good place to pause, commit changes with the commit message "Added answer for Ex 4", and push.*
 
-5. Let's fit a model. This may be a new way to fit models, again the code is going to be provided, but see if you can follow along. We are going to fit a model predicting miles per gallon from the number of cylinders and the origin of the car. 
+5. Let's fit a model. This may be a new way to fit models, again the code is going to be provided, but see if you can follow along. We are going to fit a model predicting miles per gallon from the variables in the `Auto` data frame, excluding the `name` column. Copy the code below into your Rmd file. Try to explain what each line of the "recipe" code is doing.
 
-First, let's set up how we will fit this model. We will use the `recipe()` function to dictate the model and the data. This will set the outcome and predictors.
+First, let's set up how we will fit this model. We will use the `recipe()` function to dictate the model and the data. It may not seem clear now why these steps are helpful, but as the class goes on you will see how setting up these "recipies" can ultimately save a lot of time. Try to explain what each line of this code is doing. Finally, explain how the `weight` variable is related to `mpg`.
 
 ```{r}
-rec <- recipe(mpg ~ cylinders + origin, data = Auto)
+rec <- Auto %>%
+  recipe() %>%
+  update_role(everything(), new_role = "predictor") %>%
+  update_role(mpg, new_role = "outcome") %>%
+  step_mutate(cylinders = as.factor(cylinders),
+              origin = as.factor(origin)) %>% 
+  step_dummy(cylinders, origin) %>%
+  step_rm(name)
 summary(rec)
 ```
 
-Let's prep this recipe and then fit the model.
+Let's prep this recipe and then fit the model. You don't need to explain this part, just copy this code to your Rmd file.
 
 ```{r,eval=FALSE}
-prep <- prep(rec)
-fit(
-  linear_reg,
-  formula = formula(rec)
-)
+prepped <- rec %>%
+  prep(retain = TRUE)
+train <- prepped %>%
+  juice()
+fit <- fit(
+    linear_reg(),
+    formula = formula(prepped),
+    data = train,
+    engine = "lm")
 ```
 
+Here is the output from our model. How is the `weight` variable related to `mpg`?
 
 ```{r}
-
+fit %>%
+  tidy()
 ```
 
 
