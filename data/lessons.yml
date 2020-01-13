@@ -14,6 +14,7 @@ lessons:
     reading: "01-reading.html"
   - date: "Thur, Jan 23"
     title: "Linear Regression and Logistic Regression Review"
+    reading: "02-reading.html"
   - title: "Week 03"
   - date: "Tues, Jan 28"
     title: "Bayes' Theorem, Linear Discriminant Analysis, Quadratic Discriminant Analysis"

@@ -45,6 +45,10 @@ Guidelines for posting questions:
 * Located in Kirby Hall 117
 * Make an appointment: [https://mathandstatscenter.wfu.edu/](https://mathandstatscenter.wfu.edu/)
 
+#### Study Sessions
+
+* Our TA will host study sessions on Monday evenings
+
 Please also make use of my office hours - I am here to help you learn! 
 
 ### Honor code

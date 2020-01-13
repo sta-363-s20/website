@@ -182,13 +182,13 @@ The data frame we will be working with today is called `Auto` and it's in the `I
 
 To find out more about the dataset, type the following in your Console: `?Auto`. A question mark before the name of an object will always bring up its help file. This command must be ran in the Console. You can also use the `glimpse()` function to learn more about the dataset. Run `glimpse(Auto)` in the Console.
 
-1. Based on the help function, how many rows and how many columns does the `Auto` file have? What are the variables included in the data frame? Add your responses to your lab report. When you're done, commit your changes with the commit message "Added answer for Ex 1", and push.
+1. Based on the help function, how many rows (n) and how many columns (p) does the `Auto` file have? What are the variables included in the data frame? Add your responses to your lab report. When you're done, commit your changes with the commit message "Added answer for Ex 1", and push.
 
 ```{marginfigure}
 This dataset was taken from the StatLib library which is maintained at Carnegie Mellon University. The dataset was used in the 1983 American Statistical Association Exposition.
 ```
 
-# Subset
+# Subset and summarize
 
 2. Create a data frame with only "Ford" cars. What is the average `mpg` for Ford cars in this data frame?
 
