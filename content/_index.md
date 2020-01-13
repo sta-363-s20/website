@@ -35,12 +35,13 @@ The main text book is:
 
 A free pdf is available at the website linked above.
 
-We will supplement this with text freely available online:
+We will supplement this with these textbooks freely available online:
 
 {.table .table-condensed .table-striped .text-left}
  <span></span>     | <span></span> | <span></span> 
 -----------|---------------------------------|----------------------------------
-[R for Data Science](http://r4ds.had.co.nz/) | Grolemund, Wickham | O'Reilly, 1st edition, 2016
+[Elements of Statistical Learning](https://web.stanford.edu/~hastie/ElemStatLearn/printings/ESLII_print12.pdf) | Hastie, Tibshirani, Friedman | 
+[R for Data Science](http://r4ds.had.co.nz/) | Grolemund, Wickham | Springer, 2nd edition, 2017
 
 ### Materials
 
