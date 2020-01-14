@@ -41,9 +41,9 @@ class: center, middle
 
 ---
 
-## Let's talk about burritos!
+## Let's talk about the Oscar nominations!
 
-<iframe src="https://giphy.com/embed/6587R2Pda6iFW" width="853" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/burrito-6587R2Pda6iFW">via GIPHY</a></p>
+<iframe src="https://giphy.com/embed/THYfPIXGqMp3cblgkR" width="480" height="247" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/oscars-THYfPIXGqMp3cblgkR">via GIPHY</a></p>
 
 ---
 
@@ -52,7 +52,7 @@ class: center, middle
 - Locate a repository on **GitHub**
 - Clone and open the project in **RStudio**
 - Run the analysis using **R Markdown**
-- Edit the analysis to exclude reviews from "Other" reviewers using **R** syntax
+- Edit the analysis to exclude movie titles
 - Re-run the analysis using **R Markdown**
 
 ---
