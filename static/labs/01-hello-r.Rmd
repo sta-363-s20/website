@@ -69,13 +69,12 @@ knitr::include_graphics("img/01/paste-gh-repo-url.png")
 
 # Packages
 
-In this lab we will work with three packages: `ISLR` which is a package that accomponies your textbook, `tidyverse` which is a collection of packages for doing data analysis in a "tidy" way, and `tidymodels` which is a collection of packages for modeling and statistical analyses.
+In this lab we will work with two packages: `ISLR` which is a package that accomponies your textbook and `tidyverse` which is a collection of packages for doing data analysis in a "tidy" way.
 
 Install these packages by running the following in the console.
 
 ```{r eval = FALSE}
 install.packages("tidyverse")
-install.packages("tidymodels")
 install.packages("ISLR")
 ```
 
@@ -85,7 +84,6 @@ If you'd like to run your code in the Console as well you'll also need to load t
 
 ```{r eval = FALSE}
 library(tidyverse) 
-library(tidymodels)
 library(ISLR)
 ```
 
@@ -179,110 +177,114 @@ For which of the above steps (changing project name, making updates to the docum
 
 # Data
 
-The data frame we will be working with today is called `Auto` and it's in the `ISLR` package. 
+The data frame we will be working with today is called `Smarket` and it's in the `ISLR` package. 
 
-To find out more about the dataset, type the following in your Console: `?Auto`. A question mark before the name of an object will always bring up its help file. This command must be ran in the Console. You can also use the `glimpse()` function to learn more about the dataset. Run `glimpse(Auto)` in the Console.
-
-1. Based on the help function, how many rows (n) and how many columns (p) does the `Auto` file have? What are the variables included in the data frame? Add your responses to your lab report. When you're done, commit your changes with the commit message "Added answer for Ex 1", and push.
+To find out more about the dataset, type the following in your Console: `?Smarket`. A question mark before the name of an object will always bring up its help file. This command must be ran in the Console. You can also use the `glimpse()` function to learn more about the dataset. Run `glimpse(Smarket)` in the Console.
 
 ```{marginfigure}
-This dataset was taken from the StatLib library which is maintained at Carnegie Mellon University. The dataset was used in the 1983 American Statistical Association Exposition.
+Remember: The Console is at the bottom of your RStudio workspace. Things you type in the Console will not be in your final report. This is a good place to peek at data (using the `glimpse()` funtion for example) and look at help files with the `?`. 
 ```
 
-# Subset and summarize
+1. Based on the help function, how many rows (n) and how many columns (p) does the `Smarket` file have? What are the variables included in the data frame? Add your responses to your lab report. When you're done, commit your changes with the commit message "Added answer for Ex 1", and push.
 
-2. Create a data frame with only "Ford" cars. What is the average `mpg` for Ford cars in this data frame?
+```{marginfigure}
+This dataset contains daily percentage returns for the S&P 500 stock index between 2001 and 2005.
+```
 
-Below is the code you will need to complete this exercises. Basically, the answer is already given, but you need to include relevant bits in your Rmd document and successfully knit it and view the results.
+# Add a variable
 
-Start with the `Auto` dataset and pipe it into the `filter` function to filter for observations where we detect the "ford" string in the `name` column. Store the resulting filtered data frame as a new data frame called `ford_data`.
+2. Add a variable called `day` to the `Smarket` data. This variable will range from 1 to `n()` within each `Year` where `n` is the number of observations in the given year.
+
+Start with the `Smarket` dataset and pipe it into the `group_by` function to group by Year. Then pipe this into the `mutate` function to create a new variable called `day`. Overwrite the `Smarket` data frame with this new data frame that includes the added variable.
 
 ```{r}
-ford_data <- Auto %>%
-  filter(str_detect(name, "ford"))
+Smarket <- Smarket %>%
+  group_by(Year) %>%
+  mutate(day = 1:n())
 ```
 
 There is a lot going on here, so let's slow down and unpack it a bit. 
 
-First, the pipe operator: `%>%`, takes what comes before it and sends it as the first argument to what comes after it. So here, we're saying `filter` the `Auto` data frame for observations where we detect the string "ford" in the `name` column, `str_detect(name, "ford")`.
+First, the pipe operator: `%>%`, takes what comes before it and sends it as the first argument to what comes after it. So here, we're saying take the `Smarket` data frame and `group_by` `Year`. Then take that output and `mutate` it to add a column called `day` that ranges from `1:n()` for each year.
 
-Second, the assignment operator: `<-`, assigns the name `ford_data` to the filtered data frame.
+Second, the assignment operator: `<-`, assigns the name `Smarket` to the updated data frame.
 
-Next, we use the `summarize()` function to take the `mean()` of the `mpg` variable. We have named this new variable `avg_mpg`.
-
-```{r, eval = FALSE}
-ford_data %>%
-  summarize(avg_mpg = mean(mpg))
+```{marginfigure}
+Run this code in your Console and then run `Smarket` to see the new data frame.
 ```
 
 *This is a good place to pause, commit changes with the commit message "Added answer for Ex 2", and push.*
 
 # Data visualization
 
-3. Return to the original `Auto` data frame. Update this data frame so that `cylinders` is a factor. Create a boxplot of `mpg` by `cylinders` for this new data frame.
+3. Plot `Volume` versus `day` for the `Year` 2001. Then calculate the average `Volume` in 2001.
 
-Below is the code you will need to complete this exercise. Again, the answer is already given, but you need to include relevant bits in your Rmd document and successfully knit it and view the results.
+Below is the code you will need to complete this exercise. Basically, the answer is already given, but you need to include relevant bits in your Rmd document and successfully knit it and view the results. Be sure to write a full sentence with the answer to the question (i.e. The average volume in 2001 is...), do not _only_ output the R code.
 
-Start with the `Auto` dataset and pipe it into the `mutate` function to create a new variable called `cylinders` that is a factor variable. Store the resulting filtered data frame as a new data frame called `auto_new`.
+Start with the `Smarket` dataset and pipe it into the `filter` function to filter for observations where the `Year` column is equal to 2001. Store the resulting filtered data frame as a new data frame called `smarket_2001`.
 
 ```{r}
-auto_new <- Auto %>%
-  mutate(cylinders = as.factor(cylinders))
+smarket_2001 <- Smarket %>%
+  filter(Year == 2001)
 ```
 
-Now let's create a visualization We will use the `ggplot` function for this. Its first argument is the data you're visualizing. Next we define the `aes`thetic mappings. In other words, the columns of the data that get mapped to certain aesthetic features of the plot, e.g. the `x` axis will represent the variable called `cylinders` and the `y` axis will represent the variable called `mpg`. Then, we add another layer to this plot where we define which `geom`etric shapes we want to use to represent each observation in the data. In this case we want these to be a boxplot, hence `geom_boxplot`.
+Again, the pipe operator: `%>%`, takes what comes before it and sends it as the first argument to what comes after it. So here, we're saying `filter` the `Smarket` data frame for observations where the column `Year` is equal to 2001.
+
+```{marginfigure}
+Notice we used `==` to check whether the year was equal to 2001. In your Console run `?Comparison` to see other relational operators that R uses.
+```
+
+Then the assignment operator: `<-`, assigns the name `smarket_2001` to the filtered data frame.
+
+Now let's create a visualization We will use the `ggplot` function for this. Its first argument is the data you're visualizing. Next we define the `aes`thetic mappings. In other words, the columns of the data that get mapped to certain aesthetic features of the plot, e.g. the `x` axis will represent the variable called `day` and the `y` axis will represent the variable called `Volume`. Then, we add another layer to this plot where we define which `geom`etric shapes we want to use to represent each observation in the data. In this case we want these to be points, hence `geom_point`.
 
 ```{r fig.fullwidth=TRUE}
-ggplot(data = auto_new, mapping = aes(x = cylinders, y = mpg)) +
-  geom_boxplot()
+ggplot(data = smarket_2001, mapping = aes(x = day, y = Volume)) +
+  geom_point() + 
+  labs(title = "Volume for 2001")
 ```
 
 If this seems like a lot, it is. And you will learn about the philosophy of building data visualizations in layer in detail next week. For now, follow along with the code that is provided.
 
+Finally, we use the `summarize()` function to take the `mean()` of the `Volume` variable. We have named this new variable `avg_volume`.
+
+```{r, eval = FALSE}
+smarket_2001 %>%
+  summarize(avg_volume = mean(Volume))
+```
+
 *This is a good place to pause, commit changes with the commit message "Added answer for Ex 3", and push.*
 
-4. Using the `Auto` data frame, make the `origin` variable a factor. Create a boxplot of `mpg` by `cylinders` for this new data frame. You can (and should) reuse code we introduced above, just replace the dataset name with the desired dataset. What do the values of `origin` stand for (hint: check `?Auto` for the data dictionary).
+4. Plot `Volume` vs. `day` for the the year 2002. Calculate the average `Volume` in 2002. You can (and should) reuse code we introduced above, just replace the year with the desired year. How does this plot compare to 2001?
 
 *This is another good place to pause, commit changes with the commit message "Added answer for Ex 4", and push.*
 
-5. Let's fit a model. This may be a new way to fit models, again the code is going to be provided, but see if you can follow along. We are going to fit a model predicting miles per gallon from the variables in the `Auto` data frame, excluding the `name` column. Copy the code below into your Rmd file. Try to explain what each line of the "recipe" code is doing.
+5. Plot `Volume` vs. `day` for the the year 2005. You can (and should) reuse code we introduced above, just replace the year with the desired year. How does this plot compare to the 2001 and 2002?
 
-First, let's set up how we will fit this model. We will use the `recipe()` function to dictate the model and the data. It may not seem clear now why these steps are helpful, but as the class goes on you will see how setting up these "recipies" can ultimately save a lot of time. Try to explain what each line of this code is doing. Finally, explain how the `weight` variable is related to `mpg`.
+*This is another good place to pause, commit changes with the commit message "Added answer for Ex 5", and push.*
 
-```{r}
-rec <- Auto %>%
-  recipe() %>%
-  update_role(everything(), new_role = "predictor") %>%
-  update_role(mpg, new_role = "outcome") %>%
-  step_mutate(cylinders = as.factor(cylinders),
-              origin = as.factor(origin)) %>% 
-  step_dummy(cylinders, origin) %>%
-  step_rm(name)
-summary(rec)
+6. Finally, let's look at all the years at once. In order to create this plot we will make use of facetting. How do the plots compare to each other across years? How does the average `Volume` compare across years? 
+
+```{r, eval = FALSE}
+ggplot(Smarket, aes(x = day, y = Volume, color = Year)) + 
+  geom_point() + 
+  facet_wrap(~ Year, ncol = 2) + 
+  theme(legend.position = "none")
 ```
 
-Let's prep this recipe and then fit the model. You don't need to explain this part, just copy this code to your Rmd file.
-
-```{r}
-prepped <- rec %>%
-  prep(retain = TRUE)
-train <- prepped %>%
-  juice()
-fit <- fit(
-    linear_reg(),
-    formula = formula(prepped),
-    data = train,
-    engine = "lm")
+```{marginfigure}
+Facet by the `Year` variable, placing the plots in a 2 column grid, and don’t add a legend.
 ```
 
-Here is the output from our model. How is the `weight` variable related to `mpg`?
+And we can use the `group_by()` function to generate the average `Volume` by `Year`.
 
 ```{r}
-fit %>%
-  tidy()
+Smarket %>%
+  group_by(Year) %>%
+  summarise(avg_volume = mean(Volume))
 ```
 
-*This is a good place to pause, commit changes with the commit message "Added answer for Ex 5", and push.*
+*This is another good place to pause, commit changes with the commit message "Added answer for Ex 6", and push.*
 
 You're done with the data analysis exercises, but we'd like you to do two more things:
 
