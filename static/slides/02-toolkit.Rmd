@@ -24,6 +24,12 @@ layout: true
 
 ---
 
+class: middle, center
+
+# `r emo::ji("envelope")` Accept your GitHub invitation
+
+---
+
 ## Agenda
 
 - Demo: A reproducible data analysis
@@ -43,7 +49,7 @@ class: center, middle
 
 ## Let's talk about the Oscar nominations!
 
-<iframe src="https://giphy.com/embed/THYfPIXGqMp3cblgkR" width="480" height="247" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/oscars-THYfPIXGqMp3cblgkR">via GIPHY</a></p>
+![](https://media.giphy.com/media/THYfPIXGqMp3cblgkR/giphy.gif)
 
 ---
 
@@ -225,7 +231,7 @@ Markdown Quick Reference
 Remember this, and expect it to bite you a few times as you're learning to work 
 with R Markdown: The workspace of your R Markdown document is separate from the Console!
 
-- Run the following in the console
+- If I run the following in the console
 
 .small[
 ```{r eval = FALSE}
@@ -241,7 +247,7 @@ All looks good, eh?
 
 --
 
-- Then, add the following chunk in your R Markdown document
+- Then, if I add the following chunk in my R Markdown document
 
 .small[
 ```{r eval = FALSE}
@@ -351,5 +357,3 @@ Can you answer these questions?
 - What is version control, and why do we care?
 - What is R vs RStudio?
 - What is git vs GitHub (and do I need to care)?
-
----
