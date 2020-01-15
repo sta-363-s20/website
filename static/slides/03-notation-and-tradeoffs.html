@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Trade-offs: Accuracy and interpretability, bias and variance</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. D’Agostino McGowan" />
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Trade-offs: Accuracy and interpretability, bias and variance
+### Dr. D’Agostino McGowan
+
+---
+
+
+
+
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+  &lt;span&gt;
+  Dr. Lucy D'Agostino McGowan &lt;i&gt;adapted from slides by Hastie &amp; Tibshirani&lt;/i&gt;
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+
+
+## Regression and Classification
+
+* Regression: quantitative response
+* Classification: qualitative (categorical) response
+
+---
+
+## Regression and Classification
+
+.question[
+What would be an example of a **regression** problem?
+]
+
+* Regression: quantitative response
+* Classification: qualitative (categorical) response
+
+---
+
+
+## Regression and Classification
+
+.question[
+What would be an example of a **classification** problem?
+]
+
+* Regression: quantitative response
+* Classification: qualitative (categorical) response
+
+---
+
+## Auto data
+
+
+![](03-notation-and-tradeoffs_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+
+Above are `mpg` vs `horsepower`, `weight`, and `acceleration`, with a blue linear-regression line fit separately to each. Can we predict `mpg` using these three?
+
+--
+
+Maybe we can do better using a model:
+
+`\(\texttt{mpg} \approx f(\texttt{horsepower}, \texttt{weight}, \texttt{acceleration})\)`
+
+---
+
+## Notation
+
+* `mpg` is the **response** variable, the **outcome** variable, we refer to this as `\(Y\)`
+* `horsepower` is a **feature**, **input**, **predictor**, we refer to this as `\(X_1\)`
+* `weight` is `\(X_2\)`
+* `acceleration` is `\(X_3\)`
+--
+
+* Our **input vector** is
+
+`$$X = \begin{bmatrix} X_1 \\X_2 \\X_3\end{bmatrix}$$`
+--
+
+* Our **model** is
+
+`$$Y = f(X) + \epsilon$$`
+* `\(\epsilon\)` is our error
+
+---
+
+## Why do we care about `\(f(X)\)`?
+
+* We can use `\(f(X)\)` to make predictions of `\(Y\)` for new values of `\(X = x\)`
+--
+
+* We can gain a better understanding of which components of `\(X = (X_1, X_2, \dots, X_p)\)` are important for explaining `\(Y\)`
+--
+
+* Depending on how complex `\(f\)` is, maybe we can understand how each component ( `\(X_j\)` ) of `\(X\)` affects `\(Y\)`
+
+---
+
+![](03-notation-and-tradeoffs_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+ How do we choose `\(f(X)\)`? What is a good value for
+`\(f(X)\)` at any selected value of `\(X\)`, say `\(X = 100\)`? There can be many `\(Y\)` values at `\(X = 100\)`. 
+--
+
+A good value is
+
+`$$f(100) = E(Y|X = 100)$$`
+
+--
+
+`\(E(Y|X = 100)\)` means **expected value** (average) of `\(Y\)` given `\(X = 100\)`
+
+--
+
+This ideal `\(f(x) = E(Y | X = x)\)` is called the **regression function**
+
+---
+
+## Regression function, `\(f(X)\)`
+
+* Also works or a vector, `\(X\)`, for example,
+
+`$$f(x) = f(x_1, x_2, x_3) = E[Y | X_1 = x_1, X_2 = x_2, X_3 = x_3]$$`
+
+* This is the **optimal** predictor of `\(Y\)` in terms of **mean-squared prediction error**
+--
+
+.definition[
+`\(f(x) = E(Y|X = x)\)` is the function that **minimizes** `\(E[(Y - g(X))^2 |X = x]\)` over all
+functions `\(g\)` at all points `\(X = x\)`
+]
+
+--
+* `\(\epsilon = Y - f(x)\)` is the **irreducible error** 
+* even if we knew `\(f(x)\)`, we would still make errors in prediction, since at each `\(X = x\)` there is typically a distribution of possible `\(Y\)` values
+
+---
+
+![](03-notation-and-tradeoffs_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+---
+
+![](03-notation-and-tradeoffs_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+
+
+.question[
+Using these points, how would I calculate the **regression function**?
+]
+
+--
+* Take the average! `\(f(100) = E[\texttt{mpg}|\texttt{horsepower} = 100] = 19.6\)`
+
+---
+
+![](03-notation-and-tradeoffs_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+.question[
+This point has a `\(Y\)` value of 32.9. What is `\(\epsilon\)`?
+]
+--
+
+* `\(\epsilon = Y - f(X) = 32.9 - 19.6 = \color{red}{13.3}\)`
+
+---
+
+## The error
+
+For any estimate, `\(\hat{f}(x)\)`, of `\(f(x)\)`, we have
+
+`$$E[(Y - \hat{f}(x))^2 | X = x] = \underbrace{[f(x) - \hat{f}(x)]^2}_{\textrm{reducible error}} + \underbrace{Var(\epsilon)}_{\textrm{irreducible error}}$$`
+
+---
+
+## Estimating `\(f\)`
+
+* Typically we have very few (if any!) data points at `\(X=x\)` exactly, so we cannot compute `\(E[Y|X=x]\)`
+--
+
+* For example, what if we were interested in estimating miles per gallon when horsepower was 104.
+
+![](03-notation-and-tradeoffs_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+--
+
+💡 We can _relax_ the definition and let
+
+`$$\hat{f}(x) = E[Y | X\in \mathcal{N}(x)]$$`
+
+---
+
+## Estimating `\(f\)`
+
+* Typically we have very few (if any!) data points at `\(X=x\)` exactly, so we cannot compute `\(E[Y|X=x]\)`
+* For example, what if we were interested in estimating miles per gallon when horsepower was 104.
+
+![](03-notation-and-tradeoffs_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+
+💡 We can _relax_ the definition and let
+
+`$$\hat{f}(x) = E[Y | X\in \mathcal{N}(x)]$$`
+
+* Where `\(\mathcal{N}(x)\)` is some **neighborhood** of `\(x\)`
+
+---
+
+## Notation pause!
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+`$$\hat{f}(x) = \underbrace{E}_{\textrm{The expectation}}[\underbrace{Y}_{\textrm{of Y}} \underbrace{|}_{\textrm{given}} \underbrace{X\in \mathcal{N}(x)}_{\textrm{X is in the neighborhood of x}}]$$`
+--
+
+.alert[
+If you need a notation pause at any point during this class, please let me know! 
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
