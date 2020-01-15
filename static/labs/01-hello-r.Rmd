@@ -42,7 +42,7 @@ Each of your assignments will begin with the following steps. You saw these once
 
 The following screencast also walks you through these steps:
 
-<div style="position:relative;height:0;padding-bottom:40%"><iframe width="600" height="320" src="https://www.youtube.com/embed/8Ta_SJq3MrU" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>
+<div style="position:relative;height:0;padding-bottom:40%"><iframe width="600" height="320" src="https://youtu.be/h0-yrRSpRUo" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>
 
 - Go to our class's GitHub organization [sta-363-s20](https://github.com/sta-363-s20)
 - Find the GitHub repository (which we'll refer to as "repo" going forward) for this lab, `lab-01-hello-r-YOUR-GITHUB-HANDLE`. This repo contains a template you can build on to complete your assignment.
