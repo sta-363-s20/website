@@ -56,6 +56,12 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
   url = "https://rstudio.cloud"
 [[menu.main]]
   weight = 5
+  identifier = "github"
+  name = "GitHub"
+  pre = "<i class='fab fa-github fa-lg'></i>"
+  url = "https://github.com/sta-363-s20"
+[[menu.main]]
+  weight = 6
   identifier = "help"
   name = "Help"
   pre = "<i class=\"material-icons\">help</i>"

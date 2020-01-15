@@ -615,6 +615,7 @@ color: #333333;
 <ol start="2" style="list-style-type: decimal">
 <li>Add a variable called <code>day</code> to the <code>Smarket</code> data. This variable will range from 1 to <code>n()</code> within each <code>Year</code> where <code>n</code> is the number of observations in the given year.</li>
 </ol>
+<p>Below is the code you will need to complete this exercise. Basically, the answer is already given, but you need to include relevant bits in your Rmd document and successfully knit it and view the results.</p>
 <p>Start with the <code>Smarket</code> dataset and pipe it into the <code>group_by</code> function to group by Year. Then pipe this into the <code>mutate</code> function to create a new variable called <code>day</code>. Overwrite the <code>Smarket</code> data frame with this new data frame that includes the added variable.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">Smarket &lt;-<span class="st"> </span>Smarket <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw">group_by</span>(Year) <span class="op">%&gt;%</span></a>
@@ -671,14 +672,6 @@ color: #333333;
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">Smarket <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw">group_by</span>(Year) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb11-3" data-line-number="3"><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">avg_volume =</span> <span class="kw">mean</span>(Volume))</a></code></pre></div>
-<pre><code>## # A tibble: 5 x 2
-##    Year avg_volume
-##   &lt;dbl&gt;      &lt;dbl&gt;
-## 1  2001       1.23
-## 2  2002       1.43
-## 3  2003       1.38
-## 4  2004       1.42
-## 5  2005       1.92</code></pre>
 <p><em>This is another good place to pause, commit changes with the commit message “Added answer for Ex 6”, and push.</em></p>
 <p>You’re done with the data analysis exercises, but we’d like you to do two more things:</p>
 <p>

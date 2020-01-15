@@ -195,6 +195,8 @@ This dataset contains daily percentage returns for the S&P 500 stock index betwe
 
 2. Add a variable called `day` to the `Smarket` data. This variable will range from 1 to `n()` within each `Year` where `n` is the number of observations in the given year.
 
+Below is the code you will need to complete this exercise. Basically, the answer is already given, but you need to include relevant bits in your Rmd document and successfully knit it and view the results.
+
 Start with the `Smarket` dataset and pipe it into the `group_by` function to group by Year. Then pipe this into the `mutate` function to create a new variable called `day`. Overwrite the `Smarket` data frame with this new data frame that includes the added variable.
 
 ```{r}
@@ -278,7 +280,7 @@ Facet by the `Year` variable, placing the plots in a 2 column grid, and don’t 
 
 And we can use the `group_by()` function to generate the average `Volume` by `Year`.
 
-```{r}
+```{r, eval = FALSE}
 Smarket %>%
   group_by(Year) %>%
   summarise(avg_volume = mean(Volume))
@@ -314,7 +316,7 @@ Once again click on the gear icon in on top of the R Markdown document, and sele
 
 ```{marginfigure}
 Not sure how to use emojis on your computer? Maybe a teammate can help? Or you can ask your TA as well!
-  ```
+```
 
 *Yay, you're done! Commit all remaining changes, use the commit message "Done with Lab 1! `r emo::ji("muscle")`", and push. Before you wrap up the assignment, make sure all documents are updated on your GitHub repo.*
 
