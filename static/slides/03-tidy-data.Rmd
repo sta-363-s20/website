@@ -315,10 +315,9 @@ ncbikecrash %>%
 .small[
 ```{r eval=FALSE}
 ncbikecrash %>%
-  mutate(driver_alcohol_drugs_simplified = case_when(
-    driver_alcohol_drugs == "Missing"       ~ NA,
-    str_detect(driver_alcohol_drugs, "Yes") ~ "Yes",
-    TRUE                                    ~ "No"
+  mutate(weather_clear = case_when(
+    weather == "Clear"       ~ "Yes",
+    TRUE ~ "No"
   ))
 ```
 ]
@@ -339,9 +338,9 @@ Most often when you define a new variable with `mutate` you'll also want to save
 .small[
 ```{r}
 ncbikecrash <- ncbikecrash %>% #<<
-  mutate(driver_alcohol_drugs_simplified = case_when(
-    str_detect(driver_alcohol_drugs, "Yes") ~ "Yes",
-    TRUE                                    ~ driver_alcohol_drugs
+  mutate(weather_clear = case_when(
+    weather == "Clear"       ~ "Yes",
+    TRUE ~ "No"
   ))
 ```
 ]
@@ -355,9 +354,9 @@ Most often when you define a new variable with `mutate` you'll also want to save
 .small[
 ```{r}
 ncbikecrash %>%
-  mutate(driver_alcohol_drugs_simplified = case_when(
-    str_detect(driver_alcohol_drugs, "Yes") ~ "Yes",
-    TRUE                                    ~ driver_alcohol_drugs
+  mutate(weather_clear = case_when(
+    weather == "Clear"       ~ "Yes",
+    TRUE ~ "No"
   )) -> ncbikecrash #<<
 ```
 ]
@@ -369,16 +368,17 @@ ncbikecrash %>%
 .small[
 ```{r}
 ncbikecrash %>% 
-  count(driver_alcohol_drugs, driver_alcohol_drugs_simplified)
-```
-
-```{r}
-ncbikecrash %>% 
-  count(driver_alcohol_drugs_simplified)
+  count(weather_clear, weather)
 ```
 ]
 
 ---
 
 ## <i class="fas fa-laptop"></i> `NC bike crashes`
+
+- Go to the [sta-363-s20 GitHub organization](https://github.com/sta-363-s20) and search for `appex-02-nc-bike-crashes`
+- Clone this repository into RStudio Cloud
+- Complete the exercises
+- **Commit** your changes
+- **Push** them back to GitHub
 

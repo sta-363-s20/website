@@ -575,10 +575,9 @@ ncbikecrash %&gt;%
 
 ```r
 ncbikecrash %&gt;%
-  mutate(driver_alcohol_drugs_simplified = case_when(
-    driver_alcohol_drugs == "Missing"       ~ NA,
-    str_detect(driver_alcohol_drugs, "Yes") ~ "Yes",
-    TRUE                                    ~ "No"
+  mutate(weather_clear = case_when(
+    weather == "Clear"       ~ "Yes",
+    TRUE ~ "No"
   ))
 ```
 ]
@@ -600,9 +599,9 @@ Most often when you define a new variable with `mutate` you'll also want to save
 
 ```r
 *ncbikecrash &lt;- ncbikecrash %&gt;%
-  mutate(driver_alcohol_drugs_simplified = case_when(
-    str_detect(driver_alcohol_drugs, "Yes") ~ "Yes",
-    TRUE                                    ~ driver_alcohol_drugs
+  mutate(weather_clear = case_when(
+    weather == "Clear"       ~ "Yes",
+    TRUE ~ "No"
   ))
 ```
 ]
@@ -617,9 +616,9 @@ Most often when you define a new variable with `mutate` you'll also want to save
 
 ```r
 ncbikecrash %&gt;%
-  mutate(driver_alcohol_drugs_simplified = case_when(
-    str_detect(driver_alcohol_drugs, "Yes") ~ "Yes",
-    TRUE                                    ~ driver_alcohol_drugs
+  mutate(weather_clear = case_when(
+    weather == "Clear"       ~ "Yes",
+    TRUE ~ "No"
 * )) -&gt; ncbikecrash
 ```
 ]
@@ -632,41 +631,31 @@ ncbikecrash %&gt;%
 
 ```r
 ncbikecrash %&gt;% 
-  count(driver_alcohol_drugs, driver_alcohol_drugs_simplified)
+  count(weather_clear, weather)
 ```
 
 ```
 ## # A tibble: 6 x 3
-##   driver_alcohol_drugs                driver_alcohol_drugs_simplified     n
-##   &lt;chr&gt;                               &lt;chr&gt;                           &lt;int&gt;
-## 1 Missing                             Missing                            99
-## 2 No                                  No                                695
-## 3 Yes-Alcohol,  impairment suspected  Yes                                12
-## 4 Yes-Alcohol, no impairment detected Yes                                 3
-## 5 Yes-Drugs, impairment suspected     Yes                                 4
-## 6 &lt;NA&gt;                                &lt;NA&gt;                             6654
-```
-
-
-```r
-ncbikecrash %&gt;% 
-  count(driver_alcohol_drugs_simplified)
-```
-
-```
-## # A tibble: 4 x 2
-##   driver_alcohol_drugs_simplified     n
-##   &lt;chr&gt;                           &lt;int&gt;
-## 1 Missing                            99
-## 2 No                                695
-## 3 Yes                                19
-## 4 &lt;NA&gt;                             6654
+##   weather_clear weather                                      n
+##   &lt;chr&gt;         &lt;chr&gt;                                    &lt;int&gt;
+## 1 No            Cloudy                                     951
+## 2 No            Fog, Smog, Smoke                            17
+## 3 No            Other                                       15
+## 4 No            Rain                                       295
+## 5 No            Snow, Sleet, Hail, Freezing Rain/Drizzle     8
+## 6 Yes           Clear                                     6181
 ```
 ]
 
 ---
 
 ## &lt;i class="fas fa-laptop"&gt;&lt;/i&gt; `NC bike crashes`
+
+- Go to the [sta-363-s20 GitHub organization](https://github.com/sta-363-s20) and search for `appex-02-nc-bike-crashes`
+- Clone this repository into RStudio Cloud
+- Complete the exercises
+- **Commit** your changes
+- **Push** them back to GitHub
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
