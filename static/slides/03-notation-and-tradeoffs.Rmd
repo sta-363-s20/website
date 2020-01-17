@@ -582,15 +582,12 @@ $$p_k(x) = P(Y = k|X=x), k = 1, 2, \dots, K$$
 These are **conditional class probabilities** at $x$
 
 --
-* The **Bayes optimal classifier** at $x$ is
-
-$$\mathcal{C}(x) = j \textrm{ if } p_j(x) = \textrm{max}\{p_1(x), p_2(x), \dots, p_K(x)\}$$
-
---
 .question[
 How do you think we could calculate this?
 ]
 
+--
+* In the plot, you could examine the mini-barplot at $x = 5$
 ---
 
 <center>
@@ -606,7 +603,6 @@ These are **conditional class probabilities** at $x$
 
 $$\mathcal{C}(x) = j \textrm{ if } p_j(x) = \textrm{max}\{p_1(x), p_2(x), \dots, p_K(x)\}$$
 
-* In the plot, you could examine the mini-barplot at $x = 5$
 
 ---
 
