@@ -11,7 +11,7 @@ lessons:
   - title: "Week 02"
   - date: "Tues, Jan 21"
     title: "Trade-offs: Accuracy and interpretability, bias and variance"
-    slides: "03-notation-and-tradeoffs"
+    slides: "03-notation-and-tradeoffs.html"
     reading: "01-reading.html"
   - title: "Tidy data"
     slides: "03-tidy-data.html"

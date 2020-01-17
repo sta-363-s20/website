@@ -19,8 +19,8 @@ output:
 layout: true
 
 <div class="my-footer">
-  <span>
-  Dr. Lucy D'Agostino McGowan <i>adapted from slides by Hastie & Tibshirani</i>
+<span>
+Dr. Lucy D'Agostino McGowan <i>adapted from slides by Hastie & Tibshirani</i>
 </span>
 </div> 
 
@@ -58,6 +58,12 @@ What would be an example of a **classification** problem?
 
 * Regression: quantitative response
 * Classification: qualitative (categorical) response
+
+---
+
+class: center, middle
+
+# Regression
 
 ---
 
@@ -131,7 +137,7 @@ ggplot(Auto, aes(horsepower, mpg)) +
   geom_point(aes(x = 100, y = 21.6), size = 3, color = "blue") +
   theme_classic()
 ```
- How do we choose $f(X)$? What is a good value for
+How do we choose $f(X)$? What is a good value for
 $f(X)$ at any selected value of $X$, say $X = 100$? There can be many $Y$ values at $X = 100$. 
 --
 
@@ -215,6 +221,7 @@ ggplot(Auto, aes(horsepower, mpg)) +
 .question[
 This point has a $Y$ value of 32.9. What is $\epsilon$?
 ]
+
 --
 
 * $\epsilon = Y - f(X) = 32.9 - 19.6 = \color{red}{13.3}$
@@ -285,3 +292,377 @@ $$\hat{f}(x) = \underbrace{E}_{\textrm{The expectation}}[\underbrace{Y}_{\textrm
 .alert[
 If you need a notation pause at any point during this class, please let me know! 
 ]
+
+---
+
+## Estimating $f$
+
+`r emo::ji("bulb")` We can _relax_ the definition and let
+
+$$\hat{f}(x) = E[Y | X\in \mathcal{N}(x)]$$
+
+--
+* Nearest neighbor averaging does pretty well with small $p$ ( $p\leq 4$ ) and large $n$
+
+--
+* Nearest neighbor is _not great_ when $p$ is large because of the **curse of dimensionality** (because nearest neighbors tend to be far away in high dimensions)
+
+--
+.question[
+What do I mean by $p$? What do I mean by $n$?
+]
+
+---
+
+## Parametric models
+
+A common parametric model is a **linear** model
+
+$$f(X) = \beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p$$
+
+--
+* A linear model has $p + 1$ parameters ( $\beta_0,\dots,\beta_p$ )
+
+--
+* We estimate these parameters by **fitting** a model to **training** data
+
+--
+* Although this model is _almost never correct_ it can often be a good interpretable approximation to the unknown true function, $f(X)$
+
+---
+
+class: center, middle
+
+## Let's look at a simulated example
+
+---
+
+<center>
+<img src = "img/03/sim1.png" height = "400"> </img>
+</center>
+
+* The <font color = "red"> red </font> points are simulated values for `income` from the model:
+
+$$\texttt{income} = f(\texttt{education, senority}) + \epsilon$$
+* $f$ is the <font color = "blue"> blue </font> surface
+
+---
+
+<center>
+<img src = "img/03/sim2.png" height = "400"> </img>
+</center>
+
+Linear regression model fit to the simulated data
+
+$$\hat{f}_L(\texttt{education, senority}) = \hat{\beta}_0 + \hat{\beta}_1\texttt{education}+\hat{\beta}_2\texttt{senority}$$
+
+---
+
+<center>
+<img src = "img/03/sim3.png" height = "400"> </img>
+</center>
+
+* More flexible regression model $\hat{f}_S(\texttt{education, seniority})$ fit to the simulated data
+* Here we use a technique called a **thin-plate spline** to fit a flexible surface
+
+---
+
+<center>
+<img src = "img/03/sim4.png" height = "400"> </img>
+</center>
+
+And even **MORE flexible** `r emo::ji("scream")` model $\hat{f}(\texttt{education, seniority})$
+* Here we've basically drawn the surface to hit every point, minimizing the error, but completely **overfitting**
+
+---
+
+## `r emo::ji("person_juggling")` Finding balance
+
+* **Prediction accuracy** versus **interpretability**
+* Linear models are easy to interpret, thin-plate splines
+are not
+--
+
+* Good fit versus **overfit** or **underfit**
+* How do we know when the fit is just right?
+--
+
+* **Parsimony** versus **black-box**
+* We often prefer a simpler model involving fewer variables over a black-box predictor involving them all
+
+---
+
+![](img/03/flex.png)
+
+---
+
+## Accuracy
+
+* We've fit a model $\hat{f}(x)$ to some training data $\texttt{train} = \{x_i, y_i\}^N_1$
+* We can measure **accuracy** as the average squared prediction error over that `train` data
+
+$$MSE_{\texttt{train}} = \textrm{Ave}_{i\in\texttt{train}}[y_i-\hat{f}(x_i)]^2$$
+--
+
+.question[
+What can go wrong here? 
+]
+
+--
+* This may be biased towards **overfit** models
+
+---
+
+## Accuracy
+
+
+```{r, echo = FALSE, fig.height = 2}
+df <- tibble(
+  x = sample(1:100, 20),
+  y = ifelse(x < 20, .1 * x ^ 2, 200 + - 2 * x) + rnorm(20, sd = 20)
+)
+ggplot(df, aes(x, y)) + 
+  geom_point()
+```
+
+.question[
+I have some `train` data, plotted above. What $\hat{f}(x)$ would minimize the $MSE_{\texttt{train}}$?
+]
+
+$$MSE_{\texttt{train}} = \textrm{Ave}_{i\in\texttt{train}}[y_i-\hat{f}(x_i)]^2$$
+
+---
+
+## Accuracy 
+
+```{r, echo = FALSE, fig.height = 2}
+ggplot(df, aes(x, y)) + 
+  geom_point() +
+  geom_line()
+```
+
+.question[
+I have some `train` data, plotted above. What $\hat{f}(x)$ would minimize the $MSE_{\texttt{train}}$?
+]
+
+$$MSE_{\texttt{train}} = \textrm{Ave}_{i\in\texttt{train}}[y_i-\hat{f}(x_i)]^2$$
+
+---
+
+## Accuracy 
+
+```{r, echo = FALSE, fig.height = 2}
+ggplot(df, aes(x, y)) + 
+  geom_point() +
+  geom_line()
+```
+
+.question[
+What is wrong with this?
+]
+
+--
+
+It's **overfit!**
+
+---
+
+## Accuracy
+
+```{r, echo = FALSE, fig.height = 2}
+df2 <- tibble(
+  x = sample(1:100, 20),
+  y = ifelse(x < 20, .1 * x ^ 2, 200 + - 2 * x) + rnorm(20, sd = 20)
+)
+ggplot(df2, aes(x, y)) + 
+  geom_point() + 
+  geom_line(data = df, aes(x, y))
+```
+
+If we get a new sample, that overfit model is probably going to be terrible!
+
+---
+
+## Accuracy
+
+* We've fit a model $\hat{f}(x)$ to some training data $\texttt{train} = \{x_i, y_i\}^N_1$
+* Instead of measuring **accuracy** as the average squared prediction error over that `train` data, we can compute it using fresh `test` data $\texttt{test} = \{x_i,y_i\}^M_1
+
+$$MSE_{\texttt{test}} = \textrm{Ave}_{i\in\texttt{test}}[y_i-\hat{f}(x_i)]^2$$
+
+---
+
+![](img/03/mse1.png)
+
+Black curve is the "truth" on the left. <font color="red"> Red </font> curve on right is $MSE_{\texttt{test}}$, <font color="grey">grey </font>curve is $MSE_{\texttt{train}}$. <font color="orange">Orange</font>, <font color="blue">blue </font>and <font color="green">green </font>curves/squares correspond to fis of different flexibility.
+---
+
+![](img/03/mse2.png)
+
+Here the truth is smoother, so the smoother fit and linear model do
+really well
+---
+
+![](img/03/mse3.png)
+
+Here the truth is wiggly and the noise is low, so the more flexible fits do the best
+---
+
+## Bias-variance trade-off
+
+* We've fit a model, $\hat{f}(x)$, to some training data
+--
+
+* Let's pull a test observation from this population ( $x_0, y_0$ )
+--
+
+* The _true_ model is $Y = f(x) + \epsilon$
+--
+
+* $f(x) = E[Y|X=x]$
+
+$$E(y_0 - \hat{f}(x_0))^2 = \textrm{Var}(\hat{f}(x_0)) + [\textrm{Bias}(\hat{f}(x_0))]^2 + \textrm{Var}(\epsilon)$$
+
+--
+
+The expectation averages over the variability of $y_0$ as well as the variability of the training data. $\textrm{Bias}(\hat{f}(x_0)) =E[\hat{f}(x_0)]-f(x_0)$
+
+* As **flexibility** of $\hat{f}$ $\uparrow$, its variance $\uparrow$ and its bias $\downarrow$
+
+--
+* choosing the flexibility based on average test error amounts to a **bias-variance trade-off**
+
+---
+
+## Bias-variance trade-off
+
+![](img/03/bias-var.png)
+
+---
+
+class: center, middle
+
+# Classification
+
+---
+
+## Notation
+
+* $Y$ is the response variable. It is **qualitative**
+* $\mathcal{C}(X)$ is the classifier that assigns a class $\mathcal{C}$ to some future unlabeled observation, $X$
+--
+
+* Examples:
+  * Email can be classified as $\mathcal{C}=(\texttt{spam, not spam})$
+  * Written number is one of $\mathcal{C}=\{0, 1, 2, \dots, 9\}$
+
+---
+
+## Classification Problem
+
+.question[
+What is the goal?
+]
+
+--
+
+* Build a classifier $\mathcal{C}(X)$ that assigns a class label from $\mathcal{C}$ to a future unlabeled observation $X$
+* Assess the uncertainty in each classification
+* Understand the roles of the different predictors among $X = (X_1, X_2, \dots, X_p)$
+
+---
+
+<center>
+<img src = "img/03/class1.png" height = 275></img>
+</center>
+
+Suppose there are $K$ elements in $\mathcal{C}$, numbered $1, 2, \dots, K$
+
+$$p_k(x) = P(Y = k|X=x), k = 1, 2, \dots, K$$
+These are **conditional class probabilities** at $x$
+
+--
+* The **Bayes optimal classifier** at $x$ is
+
+$$\mathcal{C}(x) = j \textrm{ if } p_j(x) = \textrm{max}\{p_1(x), p_2(x), \dots, p_K(x)\}$$
+
+--
+.question[
+How do you think we could calculate this?
+]
+
+---
+
+<center>
+<img src = "img/03/class1.png" height = 275></img>
+</center>
+
+Suppose there are $K$ elements in $\mathcal{C}$, numbered $1, 2, \dots, K$
+
+$$p_k(x) = P(Y = k|X=x), k = 1, 2, \dots, K$$
+These are **conditional class probabilities** at $x$
+
+* The **Bayes optimal classifier** at $x$ is
+
+$$\mathcal{C}(x) = j \textrm{ if } p_j(x) = \textrm{max}\{p_1(x), p_2(x), \dots, p_K(x)\}$$
+
+* In the plot, you could examine the mini-barplot at $x = 5$
+
+---
+
+<center>
+<img src = "img/03/class2.png" height = 275></img>
+</center>
+
+.question[
+What if this was our data and there were no points at exactly $x = 5$? Then how could we calculate this?
+]
+
+--
+
+* Nearest neighbor like before!
+--
+
+* This does break down as the dimensions grow, but the impact of $\mathcal{\hat{C}}(x)$ is less than on $\hat{p}_k(x), k = 1,2,\dots,K$
+
+---
+
+## Accuracy
+
+* Misclassification error rate
+
+$$Err_{\texttt{test}} = \textrm{Ave}_{i\in\texttt{test}}I[y_i\neq \mathcal{\hat{C}}(x_i)]$$
+
+--
+* The **Bayes Classifier** using the try $p_k(x)$ has the smallest error
+
+--
+* Some of the methods we will learn build structured models for $\mathcal{C}(x)$ (support vector machines, for example)
+
+--
+* Some build structured models for $p_k(x)$ (logistic regression, for example)
+
+---
+
+## K-Nearest-Neighbors example
+
+<img src = "img/03/knn1.png" height = 450></img>
+
+---
+
+## KNN (K = 10)
+
+<img src = "img/03/knn2.png" height = 450></img>
+
+---
+
+## KNN
+
+![](img/03/knn3.png)
+
+---
+
+## Trade-offs
+
+![](img/03/errors.png)
+
