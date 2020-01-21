@@ -51,7 +51,7 @@ library(tidyverse)
 
 class: center, middle
 
-## `r emo::ji("book") Canvas
+## `r emo::ji("book")` Canvas
 
 * _use Google Chrome_
 ---
@@ -715,6 +715,6 @@ $$Err_{\texttt{test}} = \textrm{Ave}_{i\in\texttt{test}}I[y_i\neq \mathcal{\hat{
 
 class: center, middle
 
-## `r emo::ji("book") Canvas
+## `r emo::ji("book")` Canvas
 
 * _use Google Chrome_
