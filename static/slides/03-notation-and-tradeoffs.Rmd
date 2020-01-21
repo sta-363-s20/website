@@ -26,10 +26,28 @@ Dr. Lucy D'Agostino McGowan <i>adapted from slides by Hastie & Tibshirani</i>
 
 ---
 
+## Study Sessions
+
+* Monday 7-9p
+* Manchester 122
+
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 library(tidyverse)
 ```
+
+---
+
+## Lab 01
+
+![](img/demo.png)
+
+* Knit, Commit, Push **often**
+* Commit and Push **all files**
+* Check on GitHub.com to make sure everything is updating
+* You won't see a _rendered_ file
+
+---
 
 ## Regression and Classification
 
