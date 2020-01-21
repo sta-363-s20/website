@@ -49,6 +49,13 @@ library(tidyverse)
 
 ---
 
+class: center, middle
+
+## `r emo::ji("book") Canvas
+
+* _use Google Chrome_
+---
+
 ## Regression and Classification
 
 * Regression: quantitative response
@@ -704,3 +711,10 @@ $$Err_{\texttt{test}} = \textrm{Ave}_{i\in\texttt{test}}I[y_i\neq \mathcal{\hat{
 
 ![](img/03/errors.png)
 
+---
+
+class: center, middle
+
+## `r emo::ji("book") Canvas
+
+* _use Google Chrome_
