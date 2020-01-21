@@ -24,17 +24,17 @@ Dr. Lucy D'Agostino McGowan <i>adapted from slides by Hastie & Tibshirani</i>
 </span>
 </div> 
 
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(tidyverse)
+```
+
 ---
 
 ## Study Sessions
 
 * Monday 7-9p
 * Manchester 122
-
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
-knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
-library(tidyverse)
-```
 
 ---
 
@@ -122,12 +122,11 @@ $\texttt{mpg} \approx f(\texttt{horsepower}, \texttt{weight}, \texttt{accelerati
 * `weight` is $X_2$
 * `acceleration` is $X_3$
 --
-
 * Our **input vector** is
 
 $$X = \begin{bmatrix} X_1 \\X_2 \\X_3\end{bmatrix}$$
---
 
+--
 * Our **model** is
 
 $$Y = f(X) + \epsilon$$
@@ -139,10 +138,8 @@ $$Y = f(X) + \epsilon$$
 
 * We can use $f(X)$ to make predictions of $Y$ for new values of $X = x$
 --
-
 * We can gain a better understanding of which components of $X = (X_1, X_2, \dots, X_p)$ are important for explaining $Y$
 --
-
 * Depending on how complex $f$ is, maybe we can understand how each component ( $X_j$ ) of $X$ affects $Y$
 
 ---
@@ -252,13 +249,19 @@ For any estimate, $\hat{f}(x)$, of $f(x)$, we have
 
 $$E[(Y - \hat{f}(x))^2 | X = x] = \underbrace{[f(x) - \hat{f}(x)]^2}_{\textrm{reducible error}} + \underbrace{Var(\epsilon)}_{\textrm{irreducible error}}$$
 
+???
+
+* Assume for a moment that both $\hat{f}$ and X are fixed.
+* $E(Y − \hat{Y})^2$ represents the average, or expected value, of the squared difference between the predicted and actual value of Y, and Var( $\epsilon$ ) represents the variance associated with the error term
+* The focus of this class is on techniques for estimating f with the aim of minimizing the reducible error. 
+* the irreducible error will always provide an upper bound on the accuracy of our prediction for Y
+* This bound is almost always unknown in practice
 ---
 
 ## Estimating $f$
 
 * Typically we have very few (if any!) data points at $X=x$ exactly, so we cannot compute $E[Y|X=x]$
 --
-
 * For example, what if we were interested in estimating miles per gallon when horsepower was 104.
 
 ```{r, fig.height = 1.25}
@@ -321,7 +324,6 @@ $$\hat{f}(x) = E[Y | X\in \mathcal{N}(x)]$$
 
 --
 * Nearest neighbor averaging does pretty well with small $p$ ( $p\leq 4$ ) and large $n$
-
 --
 * Nearest neighbor is _not great_ when $p$ is large because of the **curse of dimensionality** (because nearest neighbors tend to be far away in high dimensions)
 
@@ -340,10 +342,8 @@ $$f(X) = \beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p$$
 
 --
 * A linear model has $p + 1$ parameters ( $\beta_0,\dots,\beta_p$ )
-
 --
 * We estimate these parameters by **fitting** a model to **training** data
-
 --
 * Although this model is _almost never correct_ it can often be a good interpretable approximation to the unknown true function, $f(X)$
 
@@ -400,11 +400,9 @@ And even **MORE flexible** `r emo::ji("scream")` model $\hat{f}(\texttt{educatio
 * Linear models are easy to interpret, thin-plate splines
 are not
 --
-
 * Good fit versus **overfit** or **underfit**
 * How do we know when the fit is just right?
 --
-
 * **Parsimony** versus **black-box**
 * We often prefer a simpler model involving fewer variables over a black-box predictor involving them all
 
@@ -530,13 +528,10 @@ Here the truth is wiggly and the noise is low, so the more flexible fits do the 
 
 * We've fit a model, $\hat{f}(x)$, to some training data
 --
-
 * Let's pull a test observation from this population ( $x_0, y_0$ )
 --
-
 * The _true_ model is $Y = f(x) + \epsilon$
 --
-
 * $f(x) = E[Y|X=x]$
 
 $$E(y_0 - \hat{f}(x_0))^2 = \textrm{Var}(\hat{f}(x_0)) + [\textrm{Bias}(\hat{f}(x_0))]^2 + \textrm{Var}(\epsilon)$$
@@ -546,10 +541,17 @@ $$E(y_0 - \hat{f}(x_0))^2 = \textrm{Var}(\hat{f}(x_0)) + [\textrm{Bias}(\hat{f}(
 The expectation averages over the variability of $y_0$ as well as the variability of the training data. $\textrm{Bias}(\hat{f}(x_0)) =E[\hat{f}(x_0)]-f(x_0)$
 
 * As **flexibility** of $\hat{f}$ $\uparrow$, its variance $\uparrow$ and its bias $\downarrow$
-
 --
 * choosing the flexibility based on average test error amounts to a **bias-variance trade-off**
 
+???
+
+* That U-shape we see for the test MSE curves is due to this bias-variance trade-off
+* The expected test MSE for a given $x_0$ can be decomposed into three components: the **variance** of $\hat{f}(x_o)$, the squared **bias** of $\hat{f}(x_o)$ and t4he variance of the error term $\epsilon$
+* Here the notation $E[y_0 − \hat{f}(x_0)]^2$ defines the expected test MSE, and refers to the average test MSE that we would obtain if we repeatedly estimated $f$ using a large number of training sets, and tested each at $x_0$
+* The overall expected test MSE can be computed by averaging  $E[y_0 − \hat{f}(x_0)]^2$ over all possible values of $x_0$ in the test set.
+* SO we want to minimize the expected test error, so to do that we need to pick a statistical learning method to simultenously acheive low bias and low variance. 
+* Since both of these quantities are non-negative, the expected test MSE can never fall below Var( $\epsilon$ )
 ---
 
 ## Bias-variance trade-off
@@ -569,7 +571,6 @@ class: center, middle
 * $Y$ is the response variable. It is **qualitative**
 * $\mathcal{C}(X)$ is the classifier that assigns a class $\mathcal{C}$ to some future unlabeled observation, $X$
 --
-
 * Examples:
   * Email can be classified as $\mathcal{C}=(\texttt{spam, not spam})$
   * Written number is one of $\mathcal{C}=\{0, 1, 2, \dots, 9\}$
@@ -621,6 +622,11 @@ These are **conditional class probabilities** at $x$
 
 $$\mathcal{C}(x) = j \textrm{ if } p_j(x) = \textrm{max}\{p_1(x), p_2(x), \dots, p_K(x)\}$$
 
+???
+
+* Notice that probability is a **conditional** probability 
+* It is the probability that Y equals k given the observed preditor vector, $x$ 
+* Let's say we were using a Bayes Classifier for a two class problem, Y is 1 or 2. We would predict that the class is one if $P(Y=1|X=x_0)>0.5$ and 2 otherwise
 
 ---
 
@@ -633,10 +639,8 @@ What if this was our data and there were no points at exactly $x = 5$? Then how 
 ]
 
 --
-
 * Nearest neighbor like before!
 --
-
 * This does break down as the dimensions grow, but the impact of $\mathcal{\hat{C}}(x)$ is less than on $\hat{p}_k(x), k = 1,2,\dots,K$
 
 ---
@@ -648,13 +652,15 @@ What if this was our data and there were no points at exactly $x = 5$? Then how 
 $$Err_{\texttt{test}} = \textrm{Ave}_{i\in\texttt{test}}I[y_i\neq \mathcal{\hat{C}}(x_i)]$$
 
 --
-* The **Bayes Classifier** using the try $p_k(x)$ has the smallest error
-
+* The **Bayes Classifier** using the true $p_k(x)$ has the smallest error
 --
 * Some of the methods we will learn build structured models for $\mathcal{C}(x)$ (support vector machines, for example)
-
 --
 * Some build structured models for $p_k(x)$ (logistic regression, for example)
+
+???
+
+* the test error rate $\textrm{Ave}_{i\in\texttt{test}}I[y_i\neq \mathcal{\hat{C}}(x_i)]$ is minimized on average by very simple classifier that assigns each observation to the most likely class, given its predictor values (that's the Bayes classifier)
 
 ---
 
@@ -662,17 +668,35 @@ $$Err_{\texttt{test}} = \textrm{Ave}_{i\in\texttt{test}}I[y_i\neq \mathcal{\hat{
 
 <img src = "img/03/knn1.png" height = 450></img>
 
+???
+
+* Here is a simulated dataset of 100 observations in two groups, blue and orange
+* The purple dashed line represents the Bayes decision boundary
+* The orange background grid indicates the region where the test observations will be classified as orange, and the blue for the blue
+* We'd love to be able to use the Bayes classifier to but for real data, we don't know the conditional distribution of Y given X so computing the Bayes classifier is impossible
+* Alot of methods try to estimate the conditional distribution of Y given X and then classify a given observation to the class with the highest **estimated** probability
+* One method to do this is K-nearest neighbors
+
 ---
 
 ## KNN (K = 10)
 
 <img src = "img/03/knn2.png" height = 450></img>
 
+???
+
+* Again, the way KNN works is if K = 10, it is finding the 10 closest observations and calculating the probability of being orange or blue and will classify that point as such
+* So here is an example of K nearest neighbors where K is 10
+
 ---
 
 ## KNN
 
 ![](img/03/knn3.png)
+
+???
+
+* Because this dataset has 100 data points, K can range from 1 to 100 where at 1, the error rate in the TRAINING data will be 0 but the test error rate may be really high. So we are trying to find the happy medium. The test error is going to have that same u-shape relationship, you want to find the bottom of that U
 
 ---
 
