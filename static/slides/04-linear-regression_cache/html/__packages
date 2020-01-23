@@ -1,0 +1,13 @@
+base
+emo
+tidyverse
+ggplot2
+tibble
+tidyr
+readr
+purrr
+dplyr
+stringr
+forcats
+broom
+Stat2Data

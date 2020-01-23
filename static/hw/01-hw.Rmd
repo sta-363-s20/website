@@ -1,0 +1,113 @@
+---
+title: "Homework 1"
+output: 
+  tufte::tufte_html:
+    tufte_variant: "envisioned"
+    highlight: pygments
+    css: ../labs/lab.css
+link-citations: yes
+---
+
+
+**Due:** Wednesday 2020-01-29 at 5pm
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+# Getting started
+
+- Go to the course organization on GitHub: https://github.com/sta-363-s20.
+
+- Find the repo starting with `hw-01` and that has your team name at the end (this should be the only `hw-01` repo available to you).
+
+- In the repo, click on the green **Clone or download** button, select **Use HTTPS** (this might already be selected by default, and if it is, you'll see the text **Clone with HTTPS** as in the image below). Click on the clipboard icon to copy the repo URL.
+
+- Go to RStudio Cloud and into the course workspace. Create a **New Project from Git Repo**. You will need to click on the down arrow next to the **New Project** button to see this option.
+
+- Copy and paste the URL of your assignment repo into the dialog box:
+
+- Hit OK, and you're good to go!
+
+# Packages
+
+In this lab we will work with the `tidyverse` package, the `broom` package, and the `ISLR` package. So we need to load them:
+
+```{r eval = FALSE}
+library(tidyverse) 
+library(broom)
+library(ISLR)
+```
+
+Note that this package is also loaded in your R Markdown document.
+
+# Housekeeping
+
+## Git configuration
+
+```{marginfigure}
+Your email address is the address tied to your GitHub account and your name should be first and last name.
+```
+
+- Go to the *Terminal* pane
+- Type the following two lines of code, replacing the information in the quotation marks with your info.
+
+```{bash eval=FALSE}
+git config --global user.email "your email"
+git config --global user.name "your name"
+```
+
+To confirm that the changes have been implemented, run the following:
+
+```{bash eval=FALSE}
+git config --global user.email
+git config --global user.name
+```
+
+## Project name: 
+
+Currently your project is called *Untitled Project*. Update the name of your project to be "HW 01".
+
+# Warm up
+
+Before we begin, let's warm up with some simple exercises.
+
+## YAML: 
+
+Open the R Markdown (Rmd) file in your project, change the author name to your name, and knit the document.
+
+## Commiting and pushing changes:
+
+- Go to the **Git** pane in your RStudio. 
+- View the **Diff** and confirm that you are happy with the changes.
+- Add a commit message like "Update team name" in the **Commit message** box and hit **Commit**.
+- Click on **Push**. This will prompt a dialogue box where you first need to enter your user name, and then your password.
+
+1. I collect a set of data ($n = 100$ observations) containing a single predictor and a quantitative response. I then fit a linear regression model to the data, as well as a separate cubic regression, i.e. $Y = \beta_0 + \beta_1X + \beta_2X^2 + \beta_3X^3 + \epsilon$.
+
+* (1.1) Suppose that the true relationship between X and Y is linear, i.e. $Y = \beta_0 + \beta_1X + \epsilon$. Consider the training residual sum of squares (RSS) for the linear regression, and also the training RSS for the cubic regression. Would we expect one to be lower than the other, would we expect them to be the same, or is there not enough information to tell? Justify your answer.
+* (1.2) Answer (1.1) using **test** rather than training RSS
+* (1.3) Suppose that the true relationship between X and Y is not linear, but we don’t know how far it is from linear. Consider the training RSS for the linear regression, and also the training RSS for the cubic regression. Would we expect one to be lower than the other, would we expect them to be the same, or is there not enough information to tell? Justify your answer.
+* (1.4) Answer (1.3) using test rather than training RSS
+
+2. Using the `Auto` data from the `ISLR` package, perform a simple linear regression with `mpg` as the response and `horsepower` as the predictor. Is there a relationship between the predictor and the response? How strong is the relationship between the predictor and the response? Is the relationship between the predictor and the response positive or negative? What is the 95% confidence interval? What is the predicted `mpg` associated with a horsepower of 98? 
+
+The code to fit the linear model is provided below. 
+
+```{r}
+model <- lm(mpg ~ horsepower, data = Auto)
+tidy(model, conf.int = TRUE)
+```
+
+The `lm()` function fits the linear model. The `tidy()` function from the `broom` package takes the model output and puts it into a nice tidy data frame.
+
+3. Using the `Carseat` data from the `ISLR` package, fit a multiple regression model to predict `Sales` using `Price`, `Urban`, and `US`. Provide an interpretation of each coefficient in the model. _Be careful—some of the variables in the model are qualitative._ For which of the predictors can you reject the null hypothesis $H_0 : \beta_j = 0$?
+
+
+The code to fit the linear model is provided below. 
+
+```{r}
+model <- lm(Sales ~ Price + Urban + US, data = Carseat)
+tidy(model, conf.int = TRUE)
+```
+

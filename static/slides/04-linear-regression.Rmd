@@ -1,0 +1,1021 @@
+---
+title: "Linear Regression"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan <i>adapted from slides by Hastie & Tibshirani</i>
+</span>
+</div> 
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+library(tidyverse)
+library(broom)
+library(Stat2Data)
+data(Sparrows)
+```
+
+---
+
+## Lab follow-up
+
+* Knit, commit, and push **after every exercise**
+* When you are working on labs, homeworks, or application exercises, edit the file I have started for you (`01-hello-r.Rmd`)
+* Any questions?
+
+---
+
+## <i class="fas fa-laptop"></i> `Linear Models`
+
+- Go to the [sta-363-s20 GitHub organization](https://github.com/sta-363-s20) and search for `appex-01-linear-models`
+- Clone this repository into RStudio Cloud
+
+---
+
+## Linear Regression Questions
+
+* Is there a relationship between a response variable and predictors?
+* How strong is the relationship?
+* What is the uncertainty?
+* How accurately can we predict a future outcome?
+
+---
+
+## Simple linear regression
+
+$$Y = \beta_0 + \beta_1 X + \epsilon$$
+
+--
+* $\beta_0$: intercept
+--
+* $\beta_1$: slope
+--
+  * $\beta_0$ and $\beta_1$ are **coefficients**, **parameters**
+--
+* $\epsilon$: error
+
+---
+
+## Simple linear regression
+
+We **estimate** this with
+
+$$\hat{y} = \hat{\beta}_0 + \hat{\beta}_1x$$
+
+--
+* $\hat{y}$ is the prediction of $Y$ when $X = x$
+--
+* The **hat** denotes that this is an **estimated** value
+
+
+
+![](https://media.giphy.com/media/dZ0yRjxBulRjW/giphy.gif)
+
+
+---
+
+## Simple linear regression
+
+$$Y_i = \beta_0 + \beta_1X_i + \epsilon_i$$
+
+$$\epsilon_i\sim N(0, \sigma^2)$$
+
+---
+
+## Simple linear regression
+
+$$Y_i = \beta_0 + \beta_1X_i + \epsilon_i$$
+
+$$\epsilon_i\sim N(0, \sigma^2)$$
+.pull-left[
+$$
+\begin{align}
+Y_1 &= \beta_0 + \beta_1X_1 + \epsilon_1\\
+Y_2 &= \beta_0 + \beta_1X_2 + \epsilon_2\\
+\vdots \hspace{0.25cm} & \hspace{0.25cm} \vdots \hspace{0.5cm}  \vdots\\
+Y_n &=\beta_0 + \beta_1X_n + \epsilon_n
+\end{align}
+$$
+]
+
+--
+
+.pull-right[
+
+$$
+\begin{align}
+\begin{bmatrix} Y_1 \\Y_2\\ \vdots\\ Y_n \end{bmatrix} & =
+\begin{bmatrix} \beta_0 + \beta_1X_1\\ \beta_0+\beta_1X_2\\ \vdots\\ \beta_0 + \beta_1X_n\end{bmatrix} +
+\begin{bmatrix}\epsilon_1\\\epsilon_2\\\vdots\\\epsilon_n\end{bmatrix}
+\end{align}
+$$
+]
+---
+
+## Simple linear regression
+
+$$Y_i = \beta_0 + \beta_1X_i + \epsilon_i$$
+
+$$\epsilon_i\sim N(0, \sigma^2)$$
+.pull-left[
+$$
+\begin{align}
+Y_1 &= \beta_0 + \beta_1X_1 + \epsilon_1\\
+Y_2 &= \beta_0 + \beta_1X_2 + \epsilon_2\\
+\vdots \hspace{0.25cm} & \hspace{0.25cm} \vdots \hspace{0.5cm}  \vdots\\
+Y_n &=\beta_0 + \beta_1X_n + \epsilon_n
+\end{align}
+$$
+]
+
+.pull-right[
+
+$$
+\begin{align}
+\begin{bmatrix} Y_1 \\Y_2\\ \vdots\\ Y_n \end{bmatrix} & =
+\begin{bmatrix} 1 \hspace{0.25cm} X_1\\ 1\hspace{0.25cm} X_2\\ \vdots\hspace{0.25cm} \vdots\\ 1\hspace{0.25cm}X_n\end{bmatrix}
+\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix} +
+\begin{bmatrix}\epsilon_1\\\epsilon_2\\\vdots\\\epsilon_n\end{bmatrix}
+\end{align}
+$$
+]
+
+---
+
+## Simple linear regression
+
+
+$$
+\Large
+\begin{align}
+\begin{bmatrix} Y_1 \\Y_2\\ \vdots\\ Y_n \end{bmatrix} & =
+\begin{bmatrix} 1 \hspace{0.25cm} X_1\\ 1\hspace{0.25cm} X_2\\ \vdots\hspace{0.25cm} \vdots\\ 1\hspace{0.25cm}X_n\end{bmatrix}
+\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix} +
+\begin{bmatrix}\epsilon_1\\\epsilon_2\\\vdots\\\epsilon_n\end{bmatrix}
+\end{align}
+$$
+
+---
+
+## Simple linear regression
+
+
+$$
+\Large
+\begin{align}
+\begin{bmatrix} Y_1 \\Y_2\\ \vdots\\ Y_n \end{bmatrix} & =
+\underbrace{\begin{bmatrix} 1 \hspace{0.25cm} X_1\\ 1\hspace{0.25cm} X_2\\ \vdots\hspace{0.25cm} \vdots\\ 1\hspace{0.25cm}X_n\end{bmatrix}}_{\mathbf{X}: \textrm{ Design Matrix}}
+\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix} +
+\begin{bmatrix}\epsilon_1\\\epsilon_2\\\vdots\\\epsilon_n\end{bmatrix}
+\end{align}
+$$
+
+--
+
+.question[
+What are the dimensions of $\mathbf{X}$?
+]
+
+--
+* $n\times2$
+---
+
+## Simple linear regression
+
+
+$$
+\Large
+\begin{align}
+\begin{bmatrix} Y_1 \\Y_2\\ \vdots\\ Y_n \end{bmatrix} & =
+\underbrace{\begin{bmatrix} 1 \hspace{0.25cm} X_1\\ 1\hspace{0.25cm} X_2\\ \vdots\hspace{0.25cm} \vdots\\ 1\hspace{0.25cm}X_n\end{bmatrix}}_{\mathbf{X}: \textrm{ Design Matrix}}
+\underbrace{\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix}}_{\beta: \textrm{ Vector of parameters}} +
+\begin{bmatrix}\epsilon_1\\\epsilon_2\\\vdots\\\epsilon_n\end{bmatrix}
+\end{align}
+$$
+
+--
+
+.question[
+What are the dimensions of $\beta$?
+]
+
+---
+
+## Simple linear regression
+
+
+$$
+\Large
+\begin{align}
+\begin{bmatrix} Y_1 \\Y_2\\ \vdots\\ Y_n \end{bmatrix} & =
+\begin{bmatrix} 1 \hspace{0.25cm} X_1\\ 1\hspace{0.25cm} X_2\\ \vdots\hspace{0.25cm} \vdots\\ 1\hspace{0.25cm}X_n\end{bmatrix}
+\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix} +
+\underbrace{\begin{bmatrix}\epsilon_1\\\epsilon_2\\\vdots\\\epsilon_n\end{bmatrix}}_{\epsilon:\textrm{ vector of error terms}}
+\end{align}
+$$
+
+--
+
+.question[
+What are the dimensions of $\epsilon$?
+]
+
+---
+
+## Simple linear regression
+
+
+$$
+\Large
+\begin{align}
+\underbrace{\begin{bmatrix} Y_1 \\Y_2\\ \vdots\\ Y_n \end{bmatrix}}_{\textbf{Y}: \textrm{ Vector of responses}} & =
+\begin{bmatrix} 1 \hspace{0.25cm} X_1\\ 1\hspace{0.25cm} X_2\\ \vdots\hspace{0.25cm} \vdots\\ 1\hspace{0.25cm}X_n\end{bmatrix}
+\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix} +
+\begin{bmatrix}\epsilon_1\\\epsilon_2\\\vdots\\\epsilon_n\end{bmatrix}
+\end{align}
+$$
+--
+
+.question[
+What are the dimensions of $\mathbf{Y}$?
+]
+
+---
+
+## Simple linear regression
+
+
+$$
+\Large
+\begin{align}
+\begin{bmatrix} Y_1 \\Y_2\\ \vdots\\ Y_n \end{bmatrix} & =
+\begin{bmatrix} 1 \hspace{0.25cm} X_1\\ 1\hspace{0.25cm} X_2\\ \vdots\hspace{0.25cm} \vdots\\ 1\hspace{0.25cm}X_n\end{bmatrix}
+\begin{bmatrix}\beta_0\\\beta_1\end{bmatrix} +
+\begin{bmatrix}\epsilon_1\\\epsilon_2\\\vdots\\\epsilon_n\end{bmatrix}
+\end{align}
+$$
+
+$$\Large \mathbf{Y}=\mathbf{X}\beta+\epsilon$$
+
+---
+
+## Simple linear regression
+
+$$
+\Large
+\begin{align}
+\begin{bmatrix} \hat{y}_1 \\\hat{y}_2\\ \vdots\\ \hat{y}_n \end{bmatrix} & =
+\begin{bmatrix} 1 \hspace{0.25cm} x_1\\ 1\hspace{0.25cm} x_2\\ \vdots\hspace{0.25cm} \vdots\\ 1\hspace{0.25cm}x_n\end{bmatrix}
+\begin{bmatrix}\hat{\beta}_0\\\ \hat{\beta}_1\end{bmatrix} 
+\end{align}
+$$
+
+$$\Large \hat{y}_i=\hat{\beta}_0 + \hat{\beta}_1x_i$$
+--
+* $\epsilon_i = y_i - \hat{y}_i$
+--
+* $\epsilon_i = y_i - (\hat{\beta}_0+\hat{\beta}_1x_i)$
+--
+* $\epsilon_i$ is known as the **residual** for observation $i$
+
+---
+
+## Simple linear regression
+
+.question[
+How are $\hat{\beta}_0$ and $\hat{\beta}_1$ chosen? What are we minimizing?
+]
+
+--
+
+* Minimize the **residual sum of squares**
+--
+* RSS = $\sum\epsilon_i^2 = \epsilon_1^2 + \epsilon_2^2 + \dots+\epsilon_n^2$
+
+---
+
+## Simple linear regression
+
+.question[
+How could we re-write this with $y_i$ and $x_i$?
+]
+
+* Minimize the **residual sum of squares**
+* RSS = $\sum\epsilon_i^2 = \epsilon_1^2 + \epsilon_2^2 + \dots+\epsilon_n^2$
+--
+* RSS = $(y_1 - \hat{\beta_0} - \hat{\beta}_1x_1)^2 + (y_2 - \hat{\beta}_0-\hat{\beta}_1x_2)^2 + \dots + (y_n - \hat{\beta}_0-\hat{\beta}_1x_n)^2$
+
+---
+
+## Simple linear regression
+
+Let's put this back in matrix form:
+
+$$
+\Large
+\begin{align}
+ \sum \epsilon_i^2=\begin{bmatrix}\epsilon_1 &\epsilon_2 &\dots&\epsilon_n\end{bmatrix}
+\begin{bmatrix}\epsilon_1 \\ \epsilon_2 \\ \vdots \\ \epsilon_n\end{bmatrix} = \epsilon^T\epsilon
+\end{align}
+$$
+
+---
+
+## Simple linear regression
+
+.question[
+What can we replace $\epsilon_i$ with? (Hint: look back a few slides)
+]
+
+--
+
+$$
+\Large
+\begin{align}
+ \sum \epsilon_i^2 = (\mathbf{Y}-\mathbf{X}\beta)^T(\mathbf{Y}-\mathbf{X}\beta)
+\end{align}
+$$
+
+---
+
+## Simple linear regression
+
+OKAY! So this is the **thing** we are trying to minimize with respect to $\beta$:
+
+$$\Large (\mathbf{Y}-\mathbf{X}\beta)^T(\mathbf{Y}-\mathbf{X}\beta)$$
+
+.question[
+
+In calculus, how do we minimize things?
+
+]
+
+--
+* Take the derivative with respect to $\beta$
+* Set it equal to 0 (or a vector of 0s!)
+* Solve for $\beta$
+--
+
+$$ \frac{\mathcal{d}}{\mathcal{d}\beta}(\mathbf{Y}-\mathbf{X}\beta)^T(\mathbf{Y}-\mathbf{X}\beta) = -2 \mathbf{X}^T(\mathbf{Y}-\mathbf{X}\beta)$$
+--
+
+$$ -2 \mathbf{X}^T(\mathbf{Y}-\mathbf{X}\beta) = \mathbf{0}$$
+--
+
+$$\mathbf{X}^T\mathbf{Y} = \mathbf{X}^T\mathbf{X}\beta$$
+
+---
+
+## Simple linear regression
+
+
+$$\mathbf{X}^T\mathbf{Y} = \mathbf{X}^T\mathbf{X}\hat{\beta}$$
+
+$$
+\begin{align}
+\begin{bmatrix}\hat{\beta}_0\\\hat{\beta}_1\end{bmatrix}=
+(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{Y}
+\end{align}
+$$
+
+---
+
+## Simple linear regression
+
+$$
+\begin{align}
+\hat{\mathbf{Y}} &= \mathbf{X}\hat{\beta}\\
+\hat{\mathbf{Y}}&=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{Y}
+\end{align}
+$$
+
+---
+
+## Simple linear regression
+
+$$
+\begin{align}
+\hat{\mathbf{Y}} &= \mathbf{X}\hat{\beta}\\
+\hat{\mathbf{Y}}&=\mathbf{X}\underbrace{(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{Y}}_{\hat\beta}
+\end{align}
+$$
+
+---
+
+## Simple linear regression
+
+$$
+\begin{align}
+\hat{\mathbf{Y}} &= \mathbf{X}\hat{\beta}\\
+\hat{\mathbf{Y}}&=\underbrace{\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T}_{\textrm{hat matrix}}\mathbf{Y}
+\end{align}
+$$
+
+--
+.question[
+Why do you think this is called the "hat matrix"
+]
+
+![](https://media.giphy.com/media/dZ0yRjxBulRjW/giphy.gif)
+
+---
+
+## <i class="fas fa-laptop"></i> `Linear Models`
+
+- Go to the [sta-363-s20 GitHub organization](https://github.com/sta-363-s20) and search for `appex-01-linear-models`
+- Clone this repository into RStudio Cloud
+- Complete the exercises
+- **Knit, Commit, Push**
+
+---
+
+## Multiple linear regression
+
+We can generalize this beyond just one **predictor**
+
+
+$$
+\begin{align}
+\begin{bmatrix}\hat{\beta}_0\\\hat{\beta}_1\\\vdots\\\hat{\beta}_p\end{bmatrix}=
+(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{Y}
+\end{align}
+$$
+
+--
+
+.question[
+What are the dimensions of the **design** matrix, $\mathbf{X}$ now?
+]
+
+--
+* $\mathbf{X}_{n\times (p+1)}$
+
+---
+
+## Multiple linear regression
+
+We can generalize this beyond just one **predictor**
+
+
+$$
+\begin{align}
+\begin{bmatrix}\hat{\beta}_0\\\hat{\beta}_1\\\vdots\\\hat{\beta}_p\end{bmatrix}=
+(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{Y}
+\end{align}
+$$
+
+.question[
+What are the dimensions of the **design** matrix, $\mathbf{X}$ now?
+]
+
+$$
+\begin{align}
+\mathbf{X} = \begin{bmatrix} 1  & X_{11} & X_{12} & \dots & X_{1p} \\
+1 & X_{21} & X_{22} & \dots & X_{2p} \\
+\vdots & \vdots & \vdots & \vdots & \vdots\\
+1 & X_{n1} & X_{n2} & \dots & X_{np}\end{bmatrix}
+\end{align}
+$$
+
+
+---
+
+class: middle
+
+## $\hat\beta$ interpretation in multiple linear regression
+
+--
+The coefficient for $x$ is $\hat\beta$ (95% CI: $LB_\hat\beta, UB_\hat\beta$). A one-unit increase in $x$ yields an expected increase in y of $\hat\beta$, **holding all other variables constant**.
+
+---
+
+## Linear Regression Questions
+
+* `r emo::ji("heavy_check_mark")` Is there a relationship between a response variable and predictors? 
+* How strong is the relationship? 
+* What is the uncertainty?
+* How accurately can we predict a future outcome?
+
+---
+
+## Linear Regression Questions
+
+* Is there a relationship between a response variable and predictors? `r emo::ji("heavy_check_mark")`
+* **How strong is the relationship?**
+* **What is the uncertainty?**
+* How accurately can we predict a future outcome?
+
+---
+
+## Linear regression uncertainty
+
+* The standard error of an estimator reflects how it _varies_ under repeated sampling
+
+--
+
+$$\textrm{Var}(\hat{\beta}) =\sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$$
+
+--
+* $\sigma^2 = \textrm{Var}(\epsilon)$
+--
+* In the case of simple linear regression,
+
+$$\textrm{SE}(\hat{\beta}_1)^2 = \frac{\sigma^2}{\sum_{i=1}^n(x_i - \bar{x})^2}$$
+--
+
+* This uncertainty is used in the **test statistic** $t = \frac{\hat\beta_1}{SE_{\hat\beta_1}}$
+
+---
+
+## Let's look at an example
+
+Let's look at a sample of 116 sparrows from Kent Island. We are intrested in the relationship between `Weight` and `Wing Length`
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.height = 2}
+ggplot(Sparrows, aes(x = WingLength, y = Weight)) + 
+  geom_point() + 
+  labs(title = "The relationship between weight and wing length", 
+       subtitle = "Savannah Sparrows on Kent Island",
+       x = "Wing length") + 
+  geom_smooth(method = "lm", fill = "blue")
+```
+
+* the **standard error** of $\hat{\beta_1}$ ( $SE_{\hat{\beta}_1}$ ) is how much we expect the sample slope to vary from one random sample to another.
+
+---
+
+## Sparrows
+
+.question[
+How can we quantify how much we'd expect the slope to differ from one random sample to another?
+]
+
+.small[
+```{r, highlight.output = 5}
+lm(Weight ~ WingLength, data = Sparrows) %>%
+  tidy()
+```
+]
+
+---
+
+## Sparrows
+
+.question[
+How do we interpret this?
+]
+
+.small[
+```{r, highlight.output = 5}
+lm(Weight ~ WingLength, data = Sparrows) %>%
+  tidy()
+```
+]
+
+---
+
+## Sparrows
+
+.question[
+How do we interpret this?
+]
+
+.small[
+```{r, highlight.output = 5}
+lm(Weight ~ WingLength, data = Sparrows) %>%
+  tidy()
+```
+]
+
+* "the sample slope is more than 13 standard errors above a slope of zero"
+
+---
+
+## Sparrows
+
+.question[
+How do we know what values of this statistic are worth paying attention to?
+]
+
+.small[
+```{r, highlight.output = 5}
+lm(Weight ~ WingLength, data = Sparrows) %>%
+  tidy()
+```
+]
+
+---
+
+## Sparrows
+
+.question[
+How do we know what values of this statistic are worth paying attention to?
+]
+
+.small[
+```{r, highlight.output = 5}
+lm(Weight ~ WingLength, data = Sparrows) %>%
+  tidy()
+```
+]
+
+* confidence intervals
+* p-values
+
+---
+
+## Sparrows
+
+.question[
+How do we know what values of this statistic are worth paying attention to?
+]
+
+.small[
+```{r, highlight.output = 5}
+lm(Weight ~ WingLength, data = Sparrows) %>%
+  tidy(conf.int = TRUE) #<<
+```
+]
+
+* confidence intervals
+* p-values
+
+---
+
+## Sparrows
+
+.question[
+How are these statistics distributed under the null hypothesis?
+]
+
+.small[
+```{r, highlight.output = 5}
+lm(Weight ~ WingLength, data = Sparrows) %>%
+  tidy()
+```
+]
+
+---
+
+```{r, echo = FALSE}
+gen_null_stat <- function() { #<<
+  null_sparrow_data <- data.frame(
+    WingLength = rnorm(10, 27, 4),
+    Weight = rnorm(10, 14, 3)
+  )
+  lm(Weight ~ WingLength, data = null_sparrow_data) %>%
+    tidy() %>%
+    filter(term == "WingLength") %>%
+    select("statistic")
+} #<<
+```
+
+```{r, echo = FALSE, cache = TRUE}
+null_stats <- map_df(1:10000, ~ gen_null_stat())
+normal_data <- null_stats %>%
+  mutate(y_t = dt(statistic, df = 18),
+         y_norm = dnorm(statistic, 0, 1))
+```
+
+
+## Sparrows
+
+```{r, echo = FALSE}
+null_stats <- map_df(1:10000, ~ gen_null_stat())
+```
+
+```{r, echo = FALSE}
+ggplot(null_stats, aes(x = statistic)) +
+  geom_histogram(bins = 70) + 
+  labs(title = "Histogram of statistics under the null")
+```
+
+* I've generated some data under a null hypothesis where $n = 20$
+
+---
+
+## Sparrows
+
+
+```{r, echo = FALSE}
+ggplot(null_stats) +
+  geom_histogram(aes(x = statistic, y = ..density..), bins = 70) + 
+  geom_line(data = normal_data, aes(x = statistic, y = y_t), color = "green") + 
+  labs(title = "Histogram of statistics under the null",
+       subtitle = "Overlaid with a t-distribution")
+```
+
+* this is a **t-distribution** with **n-p-1** degrees of freedom.
+
+---
+
+## Sparrows
+
+The distribution of test statistics we would expect given the **null hypothesis is true**, $\beta_1 = 0$, is **t-distribution** with **n-2** degrees of freedom.
+
+```{r, echo = FALSE}
+ggplot(null_stats) +
+  geom_histogram(aes(x = statistic, y = ..density..), bins = 70) + 
+  geom_line(data = normal_data, aes(x = statistic, y = y_t), color = "green") + 
+    labs(title = "Histogram of statistics under the null",
+       subtitle = "Overlaid with a t-distribution")
+```
+
+---
+
+## Sparrows
+
+```{r, echo = FALSE, fig.height = 2}
+null_stats_bigger <- data.frame(
+  statistic = rt(10000, df = 114)
+)
+
+```
+
+```{r, echo = FALSE}
+ggplot(null_stats_bigger) +
+  geom_histogram(aes(x = statistic, y = ..density..), bins = 70) + 
+  geom_vline(xintercept = 13.463, lwd = 1.5) + 
+    labs(title = "Histogram of statistics under the null",
+         subtitle = "t-distribution with 114 degrees of freedom")
+```
+
+---
+
+## Sparrows
+
+.question[
+How can we compare this line to the distribution under the null?
+]
+
+```{r, echo = FALSE, fig.height = 2}
+ggplot(null_stats_bigger) +
+  geom_histogram(aes(x = statistic, y = ..density..), bins = 70) + 
+  geom_vline(xintercept = 13.463, lwd = 1.5) + 
+    labs(title = "Histogram of statistics under the null",
+         subtitle = "t-distribution with 114 degrees of freedom")
+```
+
+--
+
+* p-value
+
+---
+
+class: middle
+
+# p-value
+
+The probability of getting a statistic as extreme or more extreme than the observed test statistic **given the null hypothesis is true**
+
+---
+
+## Sparrows
+
+```{r, echo = FALSE, fig.height = 2}
+ggplot(null_stats_bigger) +
+  geom_histogram(aes(x = statistic, y = ..density..), bins = 70) + 
+  geom_vline(xintercept = 13.463, lwd = 1.5) + 
+  geom_vline(xintercept = -13.463, lwd = 1.5) +
+    labs(title = "Histogram of statistics under the null",
+         subtitle = "t-distribution with 114 degrees of freedom")
+```
+
+.small[
+```{r, highlight.output = 5}
+lm(Weight ~ WingLength, data = Sparrows) %>%
+  tidy()
+```
+]
+
+---
+
+## Return to generated data, n = 20
+
+```{r, echo = FALSE}
+null_stats$shade <- ifelse(null_stats$statistic > 1.5 | null_stats$statistic < -1.5, TRUE, FALSE)
+```
+
+```{r, echo = FALSE, fig.height = 2}
+ggplot(null_stats) +
+  geom_histogram(aes(x = statistic, fill = shade), bins = 70) + 
+  geom_vline(xintercept = 1.5, lwd = 1.5) + 
+  geom_vline(xintercept = -1.5, lwd = 1.5) +
+    labs(title = "Histogram of statistics under the null") + 
+  theme(legend.position = "none")
+```
+
+* Let's say we get a statistic of **1.5** in a sample
+---
+
+## Let's do it in R!
+
+The proportion of area less than 1.5
+
+```{r, echo = FALSE, fig.height = 2}
+null_stats$shade <- ifelse(null_stats$statistic < 1.5, TRUE, FALSE)
+ggplot(null_stats) +
+  geom_histogram(aes(x = statistic, fill = shade), bins = 70) + 
+  geom_vline(xintercept = 1.5, lwd = 1.5) + 
+    labs(title = "Histogram of statistics under the null") + 
+  theme(legend.position = "none")
+```
+
+
+```{r}
+pt(1.5, df = 18)
+```
+
+---
+
+## Let's do it in R!
+
+The proportion of area **greater** than 1.5
+
+```{r, echo = FALSE, fig.height = 2}
+null_stats$shade <- ifelse(null_stats$statistic > 1.5, TRUE, FALSE)
+ggplot(null_stats) +
+  geom_histogram(aes(x = statistic, fill = shade), bins = 70) + 
+  geom_vline(xintercept = 1.5, lwd = 1.5) + 
+    labs(title = "Histogram of statistics under the null") + 
+  theme(legend.position = "none")
+```
+
+
+```{r}
+pt(1.5, df = 18, lower.tail = FALSE)
+```
+---
+
+## Let's do it in R!
+
+The proportion of area **greater** than 1.5 **or** **less** than -1.5.
+
+```{r, echo = FALSE, fig.height = 2}
+null_stats$shade <- ifelse(null_stats$statistic > 1.5 | null_stats$statistic < - 1.5, TRUE, FALSE)
+ggplot(null_stats) +
+  geom_histogram(aes(x = statistic, fill = shade), bins = 70) + 
+  geom_vline(xintercept = 1.5, lwd = 1.5) + 
+    geom_vline(xintercept = -1.5, lwd = 1.5) + 
+    labs(title = "Histogram of statistics under the null") + 
+  theme(legend.position = "none")
+```
+
+--
+
+```{r}
+pt(1.5, df = 18, lower.tail = FALSE) * 2
+```
+
+---
+
+class: middle
+
+# p-value
+
+The probability of getting a statistic as extreme or more extreme than the observed test statistic **given the null hypothesis is true**
+
+---
+
+## Hypothesis test
+
+* **null hypothesis** $H_0: \beta_1 = 0$ 
+* **alternative hypothesis** $H_A: \beta_1 \ne 0$
+--
+* **p-value**: 0.15
+--
+* Often, we have an $\alpha$-level cutoff to compare this to, for example **0.05**. Since this is greater than **0.05**, we **fail to reject the null hypothesis**
+
+---
+
+class: middle
+
+# confidence intervals
+
+If we use the same sampling method to select different samples and computed an interval estimate for each sample, we would expect the true population parameter ( $\beta_1$ ) to fall within the interval estimates 95% of the time.
+
+---
+
+# Confidence interval
+
+.center[
+
+
+$\Huge \hat\beta_1 \pm t^∗ \times SE_{\hat\beta_1}$
+
+]
+
+--
+* $t^*$ is the critical value for the $t_{n−p-1}$ density curve to obtain the desired confidence level
+--
+* Often we want a **95% confidence level**.  
+
+---
+
+## Let's do it in R!
+
+.small[
+```{r, highlight.output = 5}
+lm(Weight ~ WingLength, data = Sparrows) %>%
+  tidy(conf.int = TRUE)
+```
+]
+
+* $t^* = t_{n-p-1} = t_{114} = 1.98$
+--
+* $LB = 0.47 - 1.98\times 0.0347 = 0.399$
+* $UB = 0.47+1.98 \times 0.0347 = 0.536$
+
+---
+
+class: middle
+
+# confidence intervals
+
+If we use the same sampling method to select different samples and computed an interval estimate for each sample, we would expect the true population parameter ( $\beta_1$ ) to fall within the interval estimates 95% of the time.
+
+---
+
+## Linear Regression Questions
+
+* `r emo::ji("heavy_check_mark")` Is there a relationship between a response variable and predictors? 
+* `r emo::ji("heavy_check_mark")` How strong is the relationship? 
+* `r emo::ji("heavy_check_mark")` What is the uncertainty? 
+* How accurately can we predict a future outcome?
+
+---
+
+## Sparrows
+
+.question[
+Using the information here, how could I predict a new sparrow's weight if I knew the wing length was 30?
+]
+
+```{r}
+lm(Weight ~ WingLength, data = Sparrows) %>%
+  tidy()
+```
+--
+* $1.37 + 0.467 \times 30 = 15.38$
+
+---
+
+## Linear Regression Accuracy
+
+.question[
+What is the residual sum of squares again?
+]
+
+* Note: In previous classes, this may have been referred to as SSE (sum of squares error), the book uses RSS, so we will stick with that!
+
+--
+
+$$RSS = \sum(y_i - \hat{y}_i)^2$$
+
+--
+
+* The **total sum of squares** represents the variability of the outcome, it is equivalent to the variability described by the **model** plus the remaining **residual sum of squares**
+
+$$TSS = \sum(y_i - \bar{y})^2$$
+---
+
+## Linear Regression Accuracy
+
+* There are many ways "model fit" can be assessed. Two commone ones are:
+  * Residual Standard Error (RSE)
+  * $R^2$ - the fraction of the variance explained
+--
+* $RSE = \sqrt{\frac{1}{n-p-1}RSS}$
+--
+* $R^2 = 1 - \frac{RSS}{TSS}
+
+---
+
+## Linear Regression Accuracy
+
+.question[
+What could we use to determine whether at least one predictor is useful?
+]
+
+--
+
+$$F = \frac{(TSS - RSS)/p}{RSS/(n-p-1)}\sim F_{p,n-p-1}$$
+We can use a F-statistic!
