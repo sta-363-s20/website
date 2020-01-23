@@ -9,7 +9,7 @@ link-citations: yes
 ---
 
 
-**Due:** Wednesday 2020-01-29 at 5pm
+**Due:** Wednesday 2020-01-29 at 11:59pm
 
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(eval = FALSE)
