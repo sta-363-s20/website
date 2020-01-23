@@ -444,6 +444,7 @@ Why do you think this is called the "hat matrix"
 - Clone this repository into RStudio Cloud
 - Complete the exercises
 - **Knit, Commit, Push**
+- _Leave RStudio Cloud open, we may return at the end of class_
 
 ---
 
@@ -518,7 +519,7 @@ The coefficient for `\(x\)` is `\(\hat\beta\)` (95% CI: `\(LB_\hat\beta, UB_\hat
 
 ## Linear Regression Questions
 
-* Is there a relationship between a response variable and predictors? ✔️
+* ✔️ Is there a relationship between a response variable and predictors? 
 * **How strong is the relationship?**
 * **What is the uncertainty?**
 * How accurately can we predict a future outcome?
@@ -555,6 +556,78 @@ Let's look at a sample of 116 sparrows from Kent Island. We are intrested in the
 
 ---
 
+## broom
+
+_a quick pause for R_
+
+.pull-left[
+![](img/04/tidyverse.png)
+
+![](img/04/broom.png)
+]
+.pull-right[
+	- You're familiar with the tidyverse:	
+	
+
+```r
+library(tidyverse)
+```
+
+- The broom package takes the messy output of built-in functions in R, such as `lm`, and turns them into tidy data frames.
+
+
+```r
+library(broom)
+```
+]
+
+---
+
+
+## How does a pipe work?
+
+- You can think about the following sequence of actions - find key, 
+unlock car, start car, drive to school, park.
+- Expressed as a set of nested functions in R pseudocode this would look like:
+
+```r
+park(drive(start_car(find("keys")), to = "campus"))
+```
+- Writing it out using pipes give it a more natural (and easier to read) 
+structure:
+
+```r
+find("keys") %&gt;%
+  start_car() %&gt;%
+  drive(to = "campus") %&gt;%
+  park()
+```
+
+---
+
+## What about other arguments?
+
+To send results to a function argument other than first one or to use the previous result for multiple arguments, use `.`:
+
+
+```r
+starwars %&gt;%
+  filter(species == "Human") %&gt;%
+  lm(mass ~ height, data = .)
+```
+
+```
+## 
+## Call:
+## lm(formula = mass ~ height, data = .)
+## 
+## Coefficients:
+## (Intercept)       height  
+##     -116.58         1.11
+```
+
+---
+
 ## Sparrows
 
 .question[
@@ -565,7 +638,7 @@ How can we quantify how much we'd expect the slope to differ from one random sam
 
 ```r
 lm(Weight ~ WingLength, data = Sparrows) %&gt;%
-  tidy()
+* tidy()
 ```
 
 ```
@@ -740,7 +813,7 @@ lm(Weight ~ WingLength, data = Sparrows) %&gt;%
 
 
 
-![](04-linear-regression_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+![](04-linear-regression_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
 
 * I've generated some data under a null hypothesis where `\(n = 20\)`
 
@@ -749,7 +822,7 @@ lm(Weight ~ WingLength, data = Sparrows) %&gt;%
 ## Sparrows
 
 
-![](04-linear-regression_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+![](04-linear-regression_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
 
 * this is a **t-distribution** with **n-p-1** degrees of freedom.
 
@@ -759,7 +832,7 @@ lm(Weight ~ WingLength, data = Sparrows) %&gt;%
 
 The distribution of test statistics we would expect given the **null hypothesis is true**, `\(\beta_1 = 0\)`, is **t-distribution** with **n-2** degrees of freedom.
 
-![](04-linear-regression_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+![](04-linear-regression_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -767,7 +840,7 @@ The distribution of test statistics we would expect given the **null hypothesis 
 
 
 
-![](04-linear-regression_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+![](04-linear-regression_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -777,7 +850,7 @@ The distribution of test statistics we would expect given the **null hypothesis 
 How can we compare this line to the distribution under the null?
 ]
 
-![](04-linear-regression_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+![](04-linear-regression_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
 
 --
 
@@ -795,7 +868,7 @@ The probability of getting a statistic as extreme or more extreme than the obser
 
 ## Sparrows
 
-![](04-linear-regression_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+![](04-linear-regression_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
 
 .small[
 
@@ -819,7 +892,7 @@ lm(Weight ~ WingLength, data = Sparrows) %&gt;%
 
 
 
-![](04-linear-regression_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+![](04-linear-regression_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
 
 * Let's say we get a statistic of **1.5** in a sample
 ---
@@ -828,7 +901,7 @@ lm(Weight ~ WingLength, data = Sparrows) %&gt;%
 
 The proportion of area less than 1.5
 
-![](04-linear-regression_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+![](04-linear-regression_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
 
 
 
@@ -846,7 +919,7 @@ pt(1.5, df = 18)
 
 The proportion of area **greater** than 1.5
 
-![](04-linear-regression_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+![](04-linear-regression_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
 
 
 
@@ -863,7 +936,7 @@ pt(1.5, df = 18, lower.tail = FALSE)
 
 The proportion of area **greater** than 1.5 **or** **less** than -1.5.
 
-![](04-linear-regression_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+![](04-linear-regression_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
 
 --
 
@@ -1014,7 +1087,7 @@ What is the residual sum of squares again?
 --
 * `\(RSE = \sqrt{\frac{1}{n-p-1}RSS}\)`
 --
-* $R^2 = 1 - \frac{RSS}{TSS}
+* `\(R^2 = 1 - \frac{RSS}{TSS}\)`
 
 ---
 
@@ -1028,6 +1101,37 @@ What could we use to determine whether at least one predictor is useful?
 
 `$$F = \frac{(TSS - RSS)/p}{RSS/(n-p-1)}\sim F_{p,n-p-1}$$`
 We can use a F-statistic!
+
+---
+
+## Let's do it in R!
+
+.small[
+
+```r
+lm(Weight ~ WingLength, data = Sparrows) %&gt;%
+* glance()
+```
+
+```
+## # A tibble: 1 x 11
+##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
+##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     0.614         0.611  1.40      181. 2.62e-25     2  -203.  411.  419.
+## # … with 2 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;
+```
+]
+
+---
+
+## &lt;i class="fas fa-laptop"&gt;&lt;/i&gt; `Linear Models`
+
+- Go back to your `Linear Models` RStudio Cloud session
+- load the tidyverse and broom using `library(tidyverse)` then `library(broom)`
+- Using the mtcars dataset, fit a model predicting `mpg` from `am`
+- Use the `tidy()` function to see the beta coefficients
+- Use the `glance()` function to see the model fit statistics
+- **Knit, Commit, Push**
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

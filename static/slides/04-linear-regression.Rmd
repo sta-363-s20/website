@@ -444,6 +444,7 @@ Why do you think this is called the "hat matrix"
 - Clone this repository into RStudio Cloud
 - Complete the exercises
 - **Knit, Commit, Push**
+- _Leave RStudio Cloud open, we may return at the end of class_
 
 ---
 
@@ -518,7 +519,7 @@ The coefficient for $x$ is $\hat\beta$ (95% CI: $LB_\hat\beta, UB_\hat\beta$). A
 
 ## Linear Regression Questions
 
-* Is there a relationship between a response variable and predictors? `r emo::ji("heavy_check_mark")`
+* `r emo::ji("heavy_check_mark")` Is there a relationship between a response variable and predictors? 
 * **How strong is the relationship?**
 * **What is the uncertainty?**
 * How accurately can we predict a future outcome?
@@ -562,6 +563,63 @@ ggplot(Sparrows, aes(x = WingLength, y = Weight)) +
 
 ---
 
+## broom
+
+_a quick pause for R_
+
+.pull-left[
+![](img/04/tidyverse.png)
+
+![](img/04/broom.png)
+]
+.pull-right[
+	- You're familiar with the tidyverse:	
+	
+```{r message=FALSE}
+library(tidyverse)
+```
+
+- The broom package takes the messy output of built-in functions in R, such as `lm`, and turns them into tidy data frames.
+
+```{r message=FALSE}
+library(broom)
+```
+]
+
+---
+
+
+## How does a pipe work?
+
+- You can think about the following sequence of actions - find key, 
+unlock car, start car, drive to school, park.
+- Expressed as a set of nested functions in R pseudocode this would look like:
+```{r eval=FALSE}
+park(drive(start_car(find("keys")), to = "campus"))
+```
+- Writing it out using pipes give it a more natural (and easier to read) 
+structure:
+```{r eval=FALSE}
+find("keys") %>%
+  start_car() %>%
+  drive(to = "campus") %>%
+  park()
+```
+
+---
+
+## What about other arguments?
+
+To send results to a function argument other than first one or to use the previous result for multiple arguments, use `.`:
+
+```{r fig.height=1.8, fig.width = 3.75}
+starwars %>%
+  filter(species == "Human") %>%
+  lm(mass ~ height, data = .)
+```
+
+---
+
 ## Sparrows
 
 .question[
@@ -571,7 +629,7 @@ How can we quantify how much we'd expect the slope to differ from one random sam
 .small[
 ```{r, highlight.output = 5}
 lm(Weight ~ WingLength, data = Sparrows) %>%
-  tidy()
+  tidy() #<<
 ```
 ]
 
@@ -1005,7 +1063,7 @@ $$TSS = \sum(y_i - \bar{y})^2$$
 --
 * $RSE = \sqrt{\frac{1}{n-p-1}RSS}$
 --
-* $R^2 = 1 - \frac{RSS}{TSS}
+* $R^2 = 1 - \frac{RSS}{TSS}$
 
 ---
 
@@ -1019,3 +1077,25 @@ What could we use to determine whether at least one predictor is useful?
 
 $$F = \frac{(TSS - RSS)/p}{RSS/(n-p-1)}\sim F_{p,n-p-1}$$
 We can use a F-statistic!
+
+---
+
+## Let's do it in R!
+
+.small[
+```{r}
+lm(Weight ~ WingLength, data = Sparrows) %>%
+  glance() #<<
+```
+]
+
+---
+
+## <i class="fas fa-laptop"></i> `Linear Models`
+
+- Go back to your `Linear Models` RStudio Cloud session
+- load the tidyverse and broom using `library(tidyverse)` then `library(broom)`
+- Using the mtcars dataset, fit a model predicting `mpg` from `am`
+- Use the `tidy()` function to see the beta coefficients
+- Use the `glance()` function to see the model fit statistics
+- **Knit, Commit, Push**
