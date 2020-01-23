@@ -47,7 +47,7 @@ Guidelines for posting questions:
 
 #### Study Sessions
 
-* Our TA will host study sessions on Monday evenings
+* Our TA will host study sessions on Monday evenings 7-9p in Manchester 122
 
 Please also make use of my office hours - I am here to help you learn! 
 
