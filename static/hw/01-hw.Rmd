@@ -101,13 +101,13 @@ tidy(model, conf.int = TRUE)
 
 The `lm()` function fits the linear model. The `tidy()` function from the `broom` package takes the model output and puts it into a nice tidy data frame.
 
-3. Using the `Carseat` data from the `ISLR` package, fit a multiple regression model to predict `Sales` using `Price`, `Urban`, and `US`. Provide an interpretation of each coefficient in the model. _Be careful—some of the variables in the model are qualitative._ For which of the predictors can you reject the null hypothesis $H_0 : \beta_j = 0$?
+3. Using the `Carseats` data from the `ISLR` package, fit a multiple regression model to predict `Sales` using `Price`, `Urban`, and `US`. Provide an interpretation of each coefficient in the model. _Be careful—some of the variables in the model are qualitative._ For which of the predictors can you reject the null hypothesis $H_0 : \beta_j = 0$?
 
 
 The code to fit the linear model is provided below. 
 
 ```{r}
-model <- lm(Sales ~ Price + Urban + US, data = Carseat)
+model <- lm(Sales ~ Price + Urban + US, data = Carseats)
 tidy(model, conf.int = TRUE)
 ```
 

@@ -543,10 +543,10 @@ color: #333333;
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">tidy</span>(model, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p>The <code>lm()</code> function fits the linear model. The <code>tidy()</code> function from the <code>broom</code> package takes the model output and puts it into a nice tidy data frame.</p>
 <ol start="3" style="list-style-type: decimal">
-<li>Using the <code>Carseat</code> data from the <code>ISLR</code> package, fit a multiple regression model to predict <code>Sales</code> using <code>Price</code>, <code>Urban</code>, and <code>US</code>. Provide an interpretation of each coefficient in the model. <em>Be careful—some of the variables in the model are qualitative.</em> For which of the predictors can you reject the null hypothesis <span class="math inline">\(H_0 : \beta_j = 0\)</span>?</li>
+<li>Using the <code>Carseats</code> data from the <code>ISLR</code> package, fit a multiple regression model to predict <code>Sales</code> using <code>Price</code>, <code>Urban</code>, and <code>US</code>. Provide an interpretation of each coefficient in the model. <em>Be careful—some of the variables in the model are qualitative.</em> For which of the predictors can you reject the null hypothesis <span class="math inline">\(H_0 : \beta_j = 0\)</span>?</li>
 </ol>
 <p>The code to fit the linear model is provided below.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw">lm</span>(Sales <span class="op">~</span><span class="st"> </span>Price <span class="op">+</span><span class="st"> </span>Urban <span class="op">+</span><span class="st"> </span>US, <span class="dt">data =</span> Carseat)</a>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw">lm</span>(Sales <span class="op">~</span><span class="st"> </span>Price <span class="op">+</span><span class="st"> </span>Urban <span class="op">+</span><span class="st"> </span>US, <span class="dt">data =</span> Carseats)</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">tidy</span>(model, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 </div>
 </div>
