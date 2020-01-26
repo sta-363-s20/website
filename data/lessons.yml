@@ -22,6 +22,7 @@ lessons:
   - title: "Week 03"
   - date: "Tues, Jan 28"
     reading: "03-reading.html"
+    slides: "05-logistic-lda-qda.html"
     title: "Bayes' Theorem, Linear Discriminant Analysis, Quadratic Discriminant Analysis"
   - title: "Tidy data"
     slides: "03-tidy-data.html"

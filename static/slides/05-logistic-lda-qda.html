@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Logistic regression, LDA, QDA</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. D’Agostino McGowan" />
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Logistic regression, LDA, QDA
+### Dr. D’Agostino McGowan
+
+---
+
+
+
+
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+Dr. Lucy D'Agostino McGowan &lt;i&gt;adapted from slides by Hastie &amp; Tibshirani&lt;/i&gt;
+&lt;/span&gt;
+&lt;/div&gt; 
+
+
+
+---
+
+## ☝️ Reminders
+
+* Homework 1 is due tomorrow (be sure to **knit, commit, push**)
+* Study sessions are 7-9 in Manchester 122
+* Questions? Use [github.com/sta-363-s20/community](https://github.com/sta-363-s20/community)
+
+---
+
+## Recap
+
+* Last class we had a _linear regression_ refresher
+--
+* We covered how to write a linear model in _matrix_ form
+--
+* We learned how to minimize RSS to calculate `\(\hat{\beta}\)` with `\((\mathbf{X^TX)^{-1}X^Ty}\)`
+--
+* Linear regression is a great tool when we have a continuous outcome
+* We are going to learn some fancy ways to do even better in the future
+---
+
+class: center, middle
+
+# Classification
+
+---
+
+## Classification
+
+.question[
+What are some examples of classification problems?
+]
+* Qualitative response variable in an _unordered set_, `\(\mathcal{C}\)`
+--
+  * `eye color` `\(\in\)` `{blue, brown, green}`
+  * `email` `\(\in\)` `{spam, not spam}`
+--
+* Response, `\(Y\)` takes on values in `\(\mathcal{C}\)`
+* Predictors are a vector, `\(X\)`
+--
+* The task: build a function `\(C(X)\)` that takes `\(X\)` and predicts `\(Y\)`, `\(C(X)\in\mathcal{C}\)`
+--
+* Many times we are actually more interested in the _probabilities_ that `\(X\)` belongs to each category in `\(\mathcal{C}\)`
+
+---
+
+## Example: Credit card default
+
+![](05-logistic-lda-qda_files/figure-html/plot1-1.png)&lt;!-- --&gt;
+
+---
+
+## Can we use linear regression?
+
+We can code `Default` as
+
+`$$Y = \begin{cases} 0 &amp; \textrm{if }\texttt{No}\\ 1&amp;\textrm{if }\texttt{Yes}\end{cases}$$`
+Can we fit a linear regression of `\(Y\)` on `\(X\)` and classify as `Yes` if `\(\hat{Y}&gt; 0.5\)`?
+
+--
+
+* In this case of a **binary** outcome, linear regression is okay (it is equivalent to **linear discriminant analysis**, we'll get to that soon!)
+* `\(E[Y|X=x] = P(Y=1|X=x)\)`, so it seems like this is a pretty good idea!
+* **The problem**: Linear regression can produce probabilities less than 0 or greater than 1 😱
+--
+.question[
+What may do a better job?
+]
+--
+* **Logistic regression!**
+
+---
+
+## Linear versus logistic regression
+
+![](05-logistic-lda-qda_files/figure-html/plot2-1.png)&lt;!-- --&gt;
+
+.question[
+Which does a better job at predicting the probability of default?
+]
+
+* The orange marks represent the response `\(Y\in\{0,1\}\)`
+
+---
+
+## Linear Regression
+
+What if we have `\(&gt;2\)` possible outcomes? For example, someone comes to the emergency room and we need to classify them according to their symptoms
+
+$$ 
+`\begin{align}
+Y = \begin{cases} 1&amp; \textrm{if }\texttt{stroke}\\2&amp;\textrm{if }\texttt{drug overdose}\\3&amp;\textrm{if }\texttt{epileptic seizure}\end{cases}
+\end{align}`
+$$
+
+.question[
+What could go wrong here?
+]
+--
+* The coding implies an _ordering_
+* The coding implies _equal spacing_ (that is the difference between `stroke` and `drug overdose` is the same as `drug overdose` and `epileptic seizure`)
+---
+
+## Linear Regression
+
+What if we have `\(&gt;2\)` possible outcomes? For example, someone comes to the emergency room and we need to classify them according to their symptoms
+
+$$ 
+`\begin{align}
+Y = \begin{cases} 1&amp; \textrm{if }\texttt{stroke}\\2&amp;\textrm{if }\texttt{drug overdose}\\3&amp;\textrm{if }\texttt{epileptic seizure}\end{cases}
+\end{align}`
+$$
+
+* Linear regression is **not** appropriate here
+* **Mutliclass logistic regression** or **discriminant analysis** are more appropriate
+
+---
+
+## Logistic Regression
+
+$$ 
+p(X) = \frac{e^{\beta_0+\beta_1X}}{1+e^{\beta_0+\beta_1X}}
+$$
+* Note: `\(p(X)\)` is shorthand for `\(P(Y=1|X)\)`
+* No matter what values `\(\beta_0\)`, `\(\beta_1\)`, or `\(X\)` take `\(p(X)\)` will always be between 0 and 1
+--
+* We can rearrange this into the following form:
+$$
+\log\left(\frac{p(X)}{1-p(X)}\right) = \beta_0 + \beta_1 X
+$$
+
+.question[
+What is this transformation called?
+]
+--
+* This is a **log odds** or **logit** transformation of `\(p(X)\)`
+
+---
+
+## Linear versus logistic regression
+
+![](05-logistic-lda-qda_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+
+Logistic regression ensures that our estimates for `\(p(X)\)` are between 0 and 1 🎉
+
+---
+
+## Maximum Likelihood
+
+.question[
+Refresher: How did we estimate `\(\hat\beta\)` in linear regression?
+]
+
+--
+In logistic regression, we use **matximum likelihood** to estimate the parameters
+
+`$$\mathcal{l}(\beta_0,\beta_1)=\prod_{i:y_i=1}p(x_i)\prod_{i:y_i=0}(1-p(x_i))$$`
+--
+* This **likelihood** give the probability of the observed ones and zeros in the data
+* We pick `\(\beta_0\)` and `\(\beta_1\)` to maximize the likelihood
+* _We'll let `R` do the heavy lifting here_
+
+---
+
+## Let's see it in R
+
+.small[
+
+```r
+glm(default ~ balance, data = Default, family = "binomial") %&gt;%
+  tidy()
+```
+
+```
+## # A tibble: 2 x 5
+##   term         estimate std.error statistic   p.value
+##   &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept) -10.7      0.361        -29.5 3.62e-191
+## 2 balance       0.00550  0.000220      25.0 1.98e-137
+```
+]
+
+* Use the `glm()` function in R with the `family = "binomial"` argument
+
+---
+
+## Making predictions
+
+.question[
+What is our estimated probability of default for someone with a balance of $1000?
+]
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -10.6513306 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.3611574 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -29.49221 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; balance &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0054989 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0002204 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 24.95309 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+--
+
+$$
+\hat{p}(X) = \frac{e^{\hat{\beta}_0+\hat{\beta}_1}X}{1+e^{\hat{\beta}_0+\hat{\beta}_1X}}=\frac{e^{-10.65+0.0055\times 1000}}{1+e^{-10.65+0.0055\times 1000}}=0.006
+$$
+--
+.question[
+What about a balance of $2000?
+]
+
+$$
+\hat{p}(X) = \frac{e^{\hat{\beta}_0+\hat{\beta}_1}X}{1+e^{\hat{\beta}_0+\hat{\beta}_1X}}=\frac{e^{-10.65+0.0055\times 2000}}{1+e^{-10.65+0.0055\times 2000}}=0.586
+$$
+
+---
+
+## Logistic regression example
+
+Let's refit the model to predict the probability of default given the customer is a `student`
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -3.5041278 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0707130 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -49.554219 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; studentYes &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.4048871 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1150188 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.520181 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0004313 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+`$$P(\texttt{default = Yes}|\texttt{student = Yes}) = \frac{e^{-3.5041+0.4049\times1}}{1+e^{-3.5041+0.4049\times1}}=0.0.0431$$`
+--
+.question[
+How will this change if `student = No`?
+]
+--
+`$$P(\texttt{default = Yes}|\texttt{student = No}) = \frac{e^{-3.5041+0.4049\times0}}{1+e^{-3.5041+0.4049\times0}}=0.0.0292$$`
+---
+
+## Multiple logistic regression
+
+`$$\log\left(\frac{p(X)}{1-p(X)}\right)=\beta_0+\beta_1X_1+\dots+\beta_pX_p$$`
+`$$p(X) = \frac{e^{\beta_0+\beta_1X_1+\dots+\beta_pX_p}}{1+e^{\beta_0+\beta_1X_1+\dots+\beta_pX_p}}$$`
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -10.8690452 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.4922555 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -22.080088 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; balance &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0057365 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0002319 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 24.737563 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; income &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000030 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000082 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.369815 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.7115203 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; studentYes &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.6467758 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.2362525 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -2.737646 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0061881 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+--
+* Why is the coefficient for `student` negative now when it was positive before?
+
+---
+
+## Confounding
+
+![](05-logistic-lda-qda_files/figure-html/plot3-1.png)&lt;!-- --&gt;
+
+.question[
+What is going on here?
+]
+---
+
+## Confounding
+
+![](05-logistic-lda-qda_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+* Students tend to have higher balances than non-students
+  * Their **margignal** default rate is higher
+--
+* For each level of balance, students default less 
+  * Their **conditional** default rate is lower
+
+---
+
+## Logistic regression for more than two classes
+
+* So far we've discussed **binary** outcome data
+* We can generalize this to situations with **multiple** classes
+
+`$$P(Y=k|X) = \frac{e ^{\beta_{0k}+\beta_{1k}X_1+\dots+\beta_{pk}X_p}}{\sum_{l=1}^Ke^{\beta_{0l}+\beta_{1l}X_1+\dots+\beta_{pl}X_p}}$$`
+
+* Here we have a linear function for **each** of the `\(K\)` classes
+* This is known as **multinomial logistic regression**
+
+---
+
+## Discriminant Analysis
+
+* Another way to model multiple classes
+💡 Big idea: 
+* Model the distribution of `\(X\)` in each class separately ( `\(P(X|Y)\)` )
+* Use **Bayes theorem** to flip things around to get `\(P(Y|X)\)`
+
+---
+
+## Bayes Theorem
+
+.question[
+What is Bayes theorem?
+]
+
+![](img/05/bayes.gif)
+
+---
+
+## Bayes Theorem
+
+.question[
+What is Bayes theorem?
+]
+
+`$$P(Y=k|X=x) =\frac{P(X=x|Y=k)\times P(Y=k)}{P(X=x)}$$`
+
+
+![](img/05/bayes.gif)
+
+---
+
+## Bayes Theorem and Discriminant Analysis
+
+`$$\Large P(Y=k|X=x) =\frac{P(X=x|Y=k)\times P(Y=k)}{P(X=x)}$$`
+
+This same equation is used for discriminant analysis with slightly different notation:
+--
+
+`$$\Large P(Y=k|X=x) =\frac{\pi_kf_k(x)}{\sum_{l=1}^Kf_l(x)}$$`
+
+--
+* `\(f_k(x)=P(X=x|Y=k)\)` is the **density** for `\(X\)` in class `\(k\)`
+  * For **linear discriminent analysis** we will use the **normal distribution** to represent this density
+--
+* `\(\pi_k=P(Y=k)\)` is the marginal or **prior** probability for
+class `\(k\)`
+
+---
+
+## Discriminant analysis
+
+![](img/05/lda.png)
+
+--
+* Here there are two classes
+--
+* We classify new points based on which density is highest
+--
+* On the left, the priors for the two classes are the same
+--
+* On the right, we favor the pink class, making the decision boundary shift to the left
+
+---
+
+## Why discriminant analysis?
+
+* When the classes are well separated, logistic regression is unstable, linear discriminant analysis (LDA) is not
+--
+* When `\(n\)` is small and the distribution of predictors ( `\(X\)` ) is approximately normal in each class, the linear discriminant model is more stable than the logistic model
+--
+* When we have more than 2 classes, LDA also provides a nice low dimensional way to **visualize** data
+
+---
+
+## Linear Discriminant Analysis when p = 1
+
+The density for the normal distribution is
+
+`$$f_k(x) = \frac{1}{\sqrt{2\pi}\sigma_k}e^{-\frac{1}{2}\left(\frac{x-\mu_k}{\sigma_k}\right)^2}$$`
+--
+* `\(\mu_k\)` is the mean in class `\(k\)`
+--
+* `\(\sigma^2_k\)` is the variance `\(k\)`
+  * We will assume `\(\sigma_k=\sigma\)` are the same for all classes
+--
+* We can plug this into Bayes formula
+
+`$$p_k(X) =\frac{\pi_k\frac{1}{\sqrt{2\pi}\sigma_k}e^{-\frac{1}{2}\left(\frac{x-\mu_k}{\sigma_k}\right)^2}}{\sum_{l=1}^k\pi_l\frac{1}{\sqrt{2\pi}\sigma_l}e^{-\frac{1}{2}\left(\frac{x-\mu_l}{\sigma_l}\right)^2}}$$`
+
+--
+
+😅 Luckily things cancel!
+
+---
+
+## Discriminant functions
+
+* To classify an observation where `\(X=x\)` we need to determine which of the `\(p_k(x)\)` is the largest
+* It turns out this is equivalent to assigning `\(x\)` to the class with the largest **discriminant score**
+
+`$$\delta_k(x) = x \frac{\mu_k}{\sigma^2}-\frac{\mu_k^2}{2\sigma^2}+\log(\pi_k)$$`
+
+--
+* This **discrimiminant score** , `\(\delta_k(x)\)`, is a function of `\(p_k(x)\)` (we took some logs and discarded terms that don't include `\(k\)`)
+* `\(\delta_k(x)\)` is a **linear** function of `\(x\)`
+
+--
+.question[
+If `\(K = 2\)`, how do you think we would calculate the decision boundary?
+]
+
+---
+
+## Discriminant functions
+
+$$
+`\begin{align}
+\delta_1(x) &amp;= \delta_2(x)
+\end{align}`
+$$
+
+--
+* Let's set `\(\pi_1 = \pi_2 = 0.5\)`
+
+--
+
+$$
+`\begin{align}
+x\frac{\mu_1}{\sigma^2}-\frac{\mu_1^2}{2\sigma^2}+\log(0.5) &amp; = x\frac{\mu_2}{\sigma^2}-\frac{\mu_2^2}{2\sigma^2}+\log(0.5)\\
+x\frac{\mu_1}{\sigma^2}-x\frac{\mu_2}{\sigma^2} &amp;= -\frac{\mu_2^2}{2\sigma^2}+\log(0.5) +\frac{\mu_1^2}{2\sigma^2}-\log(0.5)\\
+x(\mu_1-\mu_2)&amp;=\frac{\mu_1^2-\mu_2^2}{2}\\
+x &amp; = \frac{\mu_1^2-\mu_2^2}{(\mu_1-\mu_2)2}\\
+x &amp;= \frac{(\mu_1-\mu_2)(\mu_1+\mu_2)}{(\mu_1-\mu_2)2}\\
+x &amp;= \frac{\mu_1+\mu_2}{2}
+\end{align}`
+$$
+
+---
+
+![](img/05/lda-2.png)
+
+* `\(\mu_1 = -1.5\)`
+* `\(\mu_2 = 1.5\)`
+* `\(\pi_1=\pi_2=0.5\)`
+* `\(\sigma^2=1\)`
+--
+* typically we don't know the **true** parameters, we just use our training data to estimate them
+
+---
+
+## Estimating parameters
+
+`$$\hat{\pi}_k = \frac{n_k}{n}$$`
+--
+
+`$$\hat{\mu}_k = \frac{1}{n_k}\sum_{i:y_i=k}x_i$$`
+
+--
+
+$$
+`\begin{align}
+\hat{\sigma}^2 &amp;= \frac{1}{n-K}\sum_{k=1}^K\sum_{i:y_i=k}(x_i-\hat{\mu_k})^2\\
+&amp;=\sum_{k=1}^K\frac{n_k-1}{n-K}\hat\sigma^2_k
+\end{align}`
+$$
+
+--
+
+`$$\hat{\sigma}_k^2= \frac{1}{n_k-1}\sum_{i:y_i=k}(x_i-\hat{\mu}_k)^2$$`
+
+---
+
+## Linear discriminant analysis when `\(p&gt;1\)`
+
+![](img/05/lda-p.png)
+
+* When `\(p&gt;1\)` the density takes on the **multivariate normal** density
+
+`$$f(x) = \frac{1}{(2\pi)^{p/2}|\mathbf\Sigma|^{1/2}}e^{-\frac{1}{2}(x-\mu)^T\mathbf\Sigma^{-1}(x-\mu)}$$`
+
+--
+
+* The **discriminant function** is now
+
+`$$\delta_k(x)=x^T\mathbf\Sigma^{-1}\mu_k-\frac{1}{2}\mu_k^T\mathbf\Sigma^{-1}\mu_k+\log\pi_k$$`
+
+---
+## Linear discriminant analysis when `\(p&gt;1\)`
+
+![](img/05/lda-p.png)
+
+* The **discriminant function** is now
+
+`$$\delta_k(x)=x^T\mathbf\Sigma^{-1}\mu_k-\frac{1}{2}\mu_k^T\mathbf\Sigma^{-1}\mu_k+\log\pi_k$$`
+
+* This is still a linear function!
+
+---
+
+## Example `\(p = 2\)`, `\(K = 3\)`
+
+![](img/05/lda-3.png)
+
+* Here `\(\pi_1 = \pi_2 = \pi_3 = 1/3\)`
+* The dashed lines the Bayes decision boundaries
+  * If they were known, they would yield the fewest misclassification errors, among all possible classifiers.
+  
+---
+
+## From the discriminant score to probabilties
+
+We can turn `\(\hat{\delta}_k(x)\)` into estimates for class probabilities
+
+--
+
+`$$\hat{P}(Y=k|X=x)=\frac{e^{\hat{\delta}_k(x)}}{\sum_{l=1}^Ke^{\hat{\delta}_l(x)}}$$`
+
+--
+* Classifying the largest `\(\hat{\delta}_k(x)\)` is the same as classifying to the class with the largest `\(\hat{P}(Y=k|X=x)\)`
+--
+* For `\(K=2\)`:
+  * classify to 2 if `\(\hat{P}(Y=2|X=x)\ge 0.5\)`
+  * classify to 1 otherwise
+
+---
+
+## LDA on Credit Data
+
+| True Default (No) | True Default (Yes) | Total
+-|------------------|---------------------|-----
+**Predicted Default (No)** | 9644 | 252| 9895
+**Predicted Default (Yes)** | 23 | 81 | 104
+**Total** | 9667 | 333 | 10000
+
+.question[
+What is the misclassification rate?
+]
+
+--
+* `\(\frac{23 + 252}{10000}\)` errors - `\(2.75\%\)` misclassification
+--
+
+.question[
+Since this is **training error** what is a possible concern?
+]
+
+--
+* This could be **overfit**
+
+---
+
+## LDA on Credit Data
+
+| True Default (No) | True Default (Yes) | Total
+-|------------------|---------------------|-----
+**Predicted Default (No)** | 9644 | 252| 9895
+**Predicted Default (Yes)** | 23 | 81 | 104
+**Total** | 9667 | 333 | 10000
+
+
+* `\(\frac{23 + 252}{10000}\)` errors - `\(2.75\%\)` misclassification
+* ~~This could be **overfit**~~
+* Since we have a **large n** and **small p** ( `\(n = 10,000\)`, `\(p = 4\)` ) we aren't too worried about overfitting
+
+---
+
+## LDA on Credit Data
+
+| True Default (No) | True Default (Yes) | Total
+-|------------------|---------------------|-----
+**Predicted Default (No)** | 9644 | 252| 9895
+**Predicted Default (Yes)** | 23 | 81 | 104
+**Total** | 9667 | 333 | 10000
+
+
+* `\(\frac{23 + 252}{10000}\)` errors - `\(2.75\%\)` misclassification
+* Since we have a **large n** and **small p** ( `\(n = 10,000\)`, `\(p = 4\)` ) we aren't too worried about overfitting
+--
+.question[
+What would the error rate be if we classified to the _prior_, `No` default?
+]
+--
+* `\(333/10000\)` - `\(3.33\%\)`
+---
+
+## LDA on Credit Data
+
+| True Default (No) | True Default (Yes) | Total
+-|------------------|---------------------|-----
+**Predicted Default (No)** | 9644 | 252| 9895
+**Predicted Default (Yes)** | 23 | 81 | 104
+**Total** | 9667 | 333 | 10000
+
+
+* `\(\frac{23 + 252}{10000}\)` errors - `\(2.75\%\)` misclassification
+* Since we have a **large n** and **small p** ( `\(n = 10,000\)`, `\(p = 4\)` ) we aren't too worried about overfitting
+* Of the true `No`'s, we make `\(23/9667 = 0.2\%\)` errors; of the
+true `Yes`'s, we make `\(252/333 = 75.7\%\)` errors!
+
+---
+
+## Types of errors
+
+* **False positive rate**: The fraction of truly negative that are classified as positive
+* **False negative rate**: The fraction of truly positive that are classified as negative
+
+--
+
+.question[
+What is the false positive rate in the Credit Default example?
+]
+
+--
+* 0.2%
+--
+
+.question[
+What is the false positive rate in the Credit Default example?
+]
+
+--
+* 75.7%
+
+---
+
+## Types of errors
+
+* **False positive rate**: The fraction of truly negative that are classified as positive
+* **False negative rate**: The fraction of truly positive that are classified as negative
+* The Credit Default table was created by predicting the `Yes` class if
+
+`$$\hat{P}(\texttt{Default}|\texttt{Balance, Student})\ge 0.5$$`
+--
+* We can change the two error rates by changing the **threshold** from 0.5 to some other number between 0 and 1
+
+`$$\hat{P}(\texttt{Default}|\texttt{Balance, Student})\ge threshold$$`
+
+---
+
+## Varying the _threshold_
+
+![](img/05/error.png)
+
+* To reduce the **false negative rate** we may want the threshold to be 0.1 or less
+
+---
+
+## ROC
+
+.pull-left[
+![](img/05/roc.png)
+]
+
+
+.pull-right[
+
+* A receiver operating characteristic (ROC) curve looks at both simultaneously
+* The area under the ROC curve (AUC) is sometimes a metric for performance
+
+]
+
+--
+
+.question[
+Which do you think is better, higher or lower AUC?
+]
+
+---
+
+## Let's see it in R
+
+.small[
+
+```r
+library(MASS)
+model &lt;- lda(default ~ balance + student, data = Default)
+```
+
+]
+
+* Use the `lda()` function in R from the `MASS` pacakge
+
+---
+
+## Let's see it in R
+
+.small[
+
+```r
+library(MASS)
+model &lt;- lda(default ~ balance + student, data = Default)
+*predictions &lt;- predict(model)
+```
+
+]
+
+* Use the `lda()` function in R from the `MASS` pacakge
+* Get the predicted classes along with posterior probabilities using the `predict()` function
+
+---
+
+## Let's see it in R
+
+.small[
+
+```r
+library(MASS)
+model &lt;- lda(default ~ balance + student, data = Default)
+predictions &lt;- predict(model)
+Default &lt;- Default %&gt;%
+* mutate(predicted_class = predictions$class)
+```
+]
+
+* Use the `lda()` function in R from the `MASS` pacakge
+* Get the predicted classes along with posterior probabilities using the `predict()` function
+* Add the predicted class to the original data frame using the `mutate()` function
+
+---
+
+## Other forms of discriminant analysis
+
+`$$P(Y=k|X=x) = \frac{\pi_kf_k(x)}{\sum_{l=1}^K\pi_lf_l(x)}$$`
+
+--
+* When `\(f_k(x)\)` are **normal** densities with the **same covariance** matrix `\(\mathbf\Sigma\)` in each class, this is **linear discriminant analysis**
+--
+* When `\(f_k(x)\)` are **normal** densities with **different covariance** matrices `\(\mathbf\Sigma_k\)` in each class, this is **quadratic discriminant analysis**
+--
+* Lots of other forms are possible! 
+
+---
+
+## Quadratic Discriminant Analysis
+
+![](img/05/qda.png)
+
+`$$\delta_k(x) = -\frac{1}{2}(x-\mu_k)^T\mathbf\Sigma_k^{-1}(x-\mu_k)+\log\pi_k$$`
+.question[
+Why do you think this is called **quadratic** discriminant analysis?
+]
+--
+* Because the `\(\mathbf\Sigma_k\)` are different, the quadratic terms matter
+
+---
+
+
+## Let's see it in R
+
+.small[
+
+```r
+library(MASS)
+*model &lt;- qda(default ~ balance + student, data = Default)
+predictions &lt;- predict(model)
+```
+
+]
+
+* Use the `qda()` function in R from the `MASS` pacakge
+
+---
+
+## Logistic Regression versus LDA
+
+* For the two-class problem ( `\(K=2\)` ), LDA takes the form
+
+`$$\log\left(\frac{p_1(x)}{1-p_1(x)}\right)=\log\left(\frac{p_1}{p_2}\right) = c_0 + c_1x_1 + \dots+ c_px_p$$`
+--
+* This is the same form as logistic regression
+--
+* The difference is in how the parameters are estimated
+--
+  * Logistic regression uses the conditional likelihood based on
+`\(P(Y|X)\)` (**discriminative learning**)
+--
+  * LDA uses the full likelihood based on `\(P(X,Y)\)` (**generative learning**)
+--
+  * The results are often similar
+  
+---
+
+## Summary
+
+
+* Logistic regression is very popular for classification, especially when `\(K = 2\)` 
+* LDA is useful when `\(n\)` is small, or the classes are well separated, and normality assumptions are reasonable. Also when `\(K &gt; 2\)`
+--
+* See Section 4.5 in your book for some comparisons of logistic regression, LDA and KNN.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
