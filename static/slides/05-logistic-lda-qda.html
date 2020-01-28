@@ -42,6 +42,13 @@ Dr. Lucy D'Agostino McGowan &lt;i&gt;adapted from slides by Hastie &amp; Tibshir
 
 ---
 
+## &lt;i class="fas fa-laptop"&gt;&lt;/i&gt; `LDA`
+
+- Go to the [sta-363-s20 GitHub organization](https://github.com/sta-363-s20) and search for `appex-02-lda`
+- Clone this repository into RStudio Cloud
+
+---
+
 ## Recap
 
 * Last class we had a _linear regression_ refresher
@@ -65,16 +72,20 @@ class: center, middle
 .question[
 What are some examples of classification problems?
 ]
-* Qualitative response variable in an _unordered set_, `\(\mathcal{C}\)`
+* Qualitative response variable in an _unordered set_, `\(\mathcal{C}\)`  
 --
+
   * `eye color` `\(\in\)` `{blue, brown, green}`
   * `email` `\(\in\)` `{spam, not spam}`
 --
+
 * Response, `\(Y\)` takes on values in `\(\mathcal{C}\)`
 * Predictors are a vector, `\(X\)`
 --
-* The task: build a function `\(C(X)\)` that takes `\(X\)` and predicts `\(Y\)`, `\(C(X)\in\mathcal{C}\)`
+
+* The task: build a function `\(C(X)\)` that takes `\(X\)` and predicts `\(Y\)`, `\(C(X)\in\mathcal{C}\)` 
 --
+
 * Many times we are actually more interested in the _probabilities_ that `\(X\)` belongs to each category in `\(\mathcal{C}\)`
 
 ---
@@ -102,6 +113,7 @@ Can we fit a linear regression of `\(Y\)` on `\(X\)` and classify as `Yes` if `\
 What may do a better job?
 ]
 --
+
 * **Logistic regression!**
 
 ---
@@ -132,6 +144,7 @@ $$
 What could go wrong here?
 ]
 --
+
 * The coding implies an _ordering_
 * The coding implies _equal spacing_ (that is the difference between `stroke` and `drug overdose` is the same as `drug overdose` and `epileptic seizure`)
 ---
@@ -156,9 +169,11 @@ $$
 $$ 
 p(X) = \frac{e^{\beta_0+\beta_1X}}{1+e^{\beta_0+\beta_1X}}
 $$
+
 * Note: `\(p(X)\)` is shorthand for `\(P(Y=1|X)\)`
 * No matter what values `\(\beta_0\)`, `\(\beta_1\)`, or `\(X\)` take `\(p(X)\)` will always be between 0 and 1
 --
+
 * We can rearrange this into the following form:
 $$
 \log\left(\frac{p(X)}{1-p(X)}\right) = \beta_0 + \beta_1 X
@@ -168,6 +183,7 @@ $$
 What is this transformation called?
 ]
 --
+
 * This is a **log odds** or **logit** transformation of `\(p(X)\)`
 
 ---
@@ -191,6 +207,7 @@ In logistic regression, we use **matximum likelihood** to estimate the parameter
 
 `$$\mathcal{l}(\beta_0,\beta_1)=\prod_{i:y_i=1}p(x_i)\prod_{i:y_i=0}(1-p(x_i))$$`
 --
+
 * This **likelihood** give the probability of the observed ones and zeros in the data
 * We pick `\(\beta_0\)` and `\(\beta_1\)` to maximize the likelihood
 * _We'll let `R` do the heavy lifting here_
@@ -258,10 +275,44 @@ What is our estimated probability of default for someone with a balance of $1000
 $$
 \hat{p}(X) = \frac{e^{\hat{\beta}_0+\hat{\beta}_1}X}{1+e^{\hat{\beta}_0+\hat{\beta}_1X}}=\frac{e^{-10.65+0.0055\times 1000}}{1+e^{-10.65+0.0055\times 1000}}=0.006
 $$
---
+
+---
+
+## Making predictions
+
 .question[
-What about a balance of $2000?
+What is our estimated probability of default for someone with a balance of $2000?
 ]
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -10.6513306 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.3611574 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -29.49221 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; balance &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0054989 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0002204 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 24.95309 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+--
 
 $$
 \hat{p}(X) = \frac{e^{\hat{\beta}_0+\hat{\beta}_1}X}{1+e^{\hat{\beta}_0+\hat{\beta}_1X}}=\frac{e^{-10.65+0.0055\times 2000}}{1+e^{-10.65+0.0055\times 2000}}=0.586
@@ -303,11 +354,15 @@ Let's refit the model to predict the probability of default given the customer i
 
 `$$P(\texttt{default = Yes}|\texttt{student = Yes}) = \frac{e^{-3.5041+0.4049\times1}}{1+e^{-3.5041+0.4049\times1}}=0.0.0431$$`
 --
+
 .question[
 How will this change if `student = No`?
 ]
+
 --
+
 `$$P(\texttt{default = Yes}|\texttt{student = No}) = \frac{e^{-3.5041+0.4049\times0}}{1+e^{-3.5041+0.4049\times0}}=0.0.0292$$`
+
 ---
 
 ## Multiple logistic regression
@@ -373,11 +428,12 @@ What is going on here?
 
 ## Confounding
 
-![](05-logistic-lda-qda_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+![](05-logistic-lda-qda_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
 
 * Students tend to have higher balances than non-students
   * Their **margignal** default rate is higher
 --
+
 * For each level of balance, students default less 
   * Their **conditional** default rate is lower
 
@@ -427,19 +483,119 @@ What is Bayes theorem?
 
 ---
 
-## Bayes Theorem and Discriminant Analysis
+## Bayes Theorem
 
 `$$\Large P(Y=k|X=x) =\frac{P(X=x|Y=k)\times P(Y=k)}{P(X=x)}$$`
+
+---
+
+## Bayes Theorem
+
+`$$\Large \underbrace{P(Y=k|X=x)}_{posterior} =\frac{P(X=x|Y=k)\times P(Y=k)}{P(X=x)}$$`
+
+---
+
+## Bayes Theorem
+
+`$$\Large P(Y=k|X=x) =\frac{\overbrace{P(X=x|Y=k)}^{likelihood}\times P(Y=k)}{P(X=x)}$$`
+---
+
+## Bayes Theorem
+
+`$$\Large P(Y=k|X=x) =\frac{\overbrace{P(X=x|Y=k)}^{likelihood}\times \overbrace{P(Y=k)}^{prior}}{P(X=x)}$$`
+
+---
+
+## Bayes Theorem Example
+
+$$
+`\begin{align}
+P(Sick|+)&amp;=\frac{P(+|Sick)P(Sick)}{P(+)}\\
+&amp;=\frac{P(+|Sick)P(Sick)}{P(+|Sick)P(Sick)+P(+|Healthy)P(Healthy)}
+\end{align}`
+$$
+--
+
+* Often when a test is _created_ the _sensitivity_ is calculated, that is the _true positive rate_, the `\(P(+|Sick)\)`. **Let's say in this case that is 99%**
+--
+
+* Let's suppose the probability of a **positive test if you are healthy is rare, 1%**
+--
+
+* Finally, let's suppose **the disease is fairly common, 20% of people in the population have it.**
+--
+
+.question[
+What is my probability of having the disease given I tested positive?
+]
+---
+
+## Bayes Theorem Example
+
+$$
+`\begin{align}
+P(Sick|+)&amp;=\frac{P(+|Sick)P(Sick)}{P(+)}\\
+.71&amp;=\frac{0.99\times0.2}{0.99\times0.2+0.01\times0.8}
+\end{align}`
+$$
+* Often when a test is _created_ the _sensitivity_ is calculated, that is the _true positive rate_, the `\(P(+|Sick)\)`. **Let's say in this case that is 99%**
+* Let's suppose the probability of a **positive test if you are healthy is rare, 1%**
+* Finally, let's suppose **the disease is fairly common, 20% of people in the population have it.**
+
+.question[
+What is my probability of having the disease given I tested positive?
+]
+---
+
+## Bayes Theorem Example
+
+$$
+`\begin{align}
+P(Sick|+)&amp;=\frac{P(+|Sick)P(Sick)}{P(+)}\\
+.71&amp;=\frac{0.99\times0.2}{0.99\times0.2+0.01\times0.8}
+\end{align}`
+$$
+* Often when a test is _created_ the _sensitivity_ is calculated, that is the _true positive rate_, the `\(P(+|Sick)\)`. **Let's say in this case that is 99%**
+* Let's suppose the probability of a **positive test if you are healthy is rare, 1%**
+* If the disease is **rare (let's say 0.1% have it)** how does that change my probability of having it given a postive test?
+
+.question[
+What is my probability of having the disease given I tested positive?
+]
+---
+
+## Bayes Theorem Example
+
+$$
+`\begin{align}
+P(Sick|+)&amp;=\frac{P(+|Sick)P(Sick)}{P(+)}\\
+0.009&amp;=\frac{0.99\times0.001}{0.99\times0.001+0.01\times0.999}
+\end{align}`
+$$
+* Often when a test is _created_ the _sensitivity_ is calculated, that is the _true positive rate_, the `\(P(+|Sick)\)`. **Let's say in this case that is 99%**
+* Let's suppose the probability of a **positive test if you are healthy is rare, 1%**
+* If the disease is **rare (let's say 0.1% have it)** how does that change my probability of having it given a postive test?
+
+.question[
+What is my probability of having the disease given I tested positive?
+]
+---
+
+## Bayes Theorem and Discriminant Analysis
+
+`$$P(Y=k|X=x) =\frac{P(X=x|Y=k)\times P(Y=k)}{P(X=x)}$$`
 
 This same equation is used for discriminant analysis with slightly different notation:
 --
 
-`$$\Large P(Y=k|X=x) =\frac{\pi_kf_k(x)}{\sum_{l=1}^Kf_l(x)}$$`
+`$$P(Y=k|X=x) =\frac{\pi_kf_k(x)}{\sum_{l=1}^Kf_l(x)}$$`
 
 --
+
 * `\(f_k(x)=P(X=x|Y=k)\)` is the **density** for `\(X\)` in class `\(k\)`
   * For **linear discriminent analysis** we will use the **normal distribution** to represent this density
 --
+
 * `\(\pi_k=P(Y=k)\)` is the marginal or **prior** probability for
 class `\(k\)`
 
@@ -450,12 +606,16 @@ class `\(k\)`
 ![](img/05/lda.png)
 
 --
+
 * Here there are two classes
 --
+
 * We classify new points based on which density is highest
 --
+
 * On the left, the priors for the two classes are the same
 --
+
 * On the right, we favor the pink class, making the decision boundary shift to the left
 
 ---
@@ -464,23 +624,34 @@ class `\(k\)`
 
 * When the classes are well separated, logistic regression is unstable, linear discriminant analysis (LDA) is not
 --
+
 * When `\(n\)` is small and the distribution of predictors ( `\(X\)` ) is approximately normal in each class, the linear discriminant model is more stable than the logistic model
 --
+
 * When we have more than 2 classes, LDA also provides a nice low dimensional way to **visualize** data
 
 ---
 
-## Linear Discriminant Analysis when p = 1
+## Linear Discriminant Analysis p = 1
 
 The density for the normal distribution is
 
 `$$f_k(x) = \frac{1}{\sqrt{2\pi}\sigma_k}e^{-\frac{1}{2}\left(\frac{x-\mu_k}{\sigma_k}\right)^2}$$`
 --
+
 * `\(\mu_k\)` is the mean in class `\(k\)`
 --
-* `\(\sigma^2_k\)` is the variance `\(k\)`
-  * We will assume `\(\sigma_k=\sigma\)` are the same for all classes
---
+
+* `\(\sigma^2_k\)` is the variance `\(k\)` (We will assume `\(\sigma_k=\sigma\)` are the same for all classes)
+
+---
+
+## Linear Discriminant Analysis p = 1
+
+The density for the normal distribution is
+
+`$$f_k(x) = \frac{1}{\sqrt{2\pi}\sigma_k}e^{-\frac{1}{2}\left(\frac{x-\mu_k}{\sigma_k}\right)^2}$$`
+
 * We can plug this into Bayes formula
 
 `$$p_k(X) =\frac{\pi_k\frac{1}{\sqrt{2\pi}\sigma_k}e^{-\frac{1}{2}\left(\frac{x-\mu_k}{\sigma_k}\right)^2}}{\sum_{l=1}^k\pi_l\frac{1}{\sqrt{2\pi}\sigma_l}e^{-\frac{1}{2}\left(\frac{x-\mu_l}{\sigma_l}\right)^2}}$$`
@@ -499,10 +670,12 @@ The density for the normal distribution is
 `$$\delta_k(x) = x \frac{\mu_k}{\sigma^2}-\frac{\mu_k^2}{2\sigma^2}+\log(\pi_k)$$`
 
 --
+
 * This **discrimiminant score** , `\(\delta_k(x)\)`, is a function of `\(p_k(x)\)` (we took some logs and discarded terms that don't include `\(k\)`)
 * `\(\delta_k(x)\)` is a **linear** function of `\(x\)`
 
 --
+
 .question[
 If `\(K = 2\)`, how do you think we would calculate the decision boundary?
 ]
@@ -542,6 +715,7 @@ $$
 * `\(\pi_1=\pi_2=0.5\)`
 * `\(\sigma^2=1\)`
 --
+
 * typically we don't know the **true** parameters, we just use our training data to estimate them
 
 ---
@@ -568,7 +742,480 @@ $$
 
 ---
 
-## Linear discriminant analysis when `\(p&gt;1\)`
+## Estimating parameters (in R!)
+
+x | -1.6| 0.2| -0.9| -2.0| -3.0| 1.9| 1.2| 2.2| 2.7| -0.5 | 1.8 | 3.3 | 5.0 | 3.4 | 4.2
+--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--
+y | 1 | 1 | 1| 1| 1| 2|2|2|2|2|3|3|3|3|3
+
+
+`$$\hat{\pi}_k = \frac{n_k}{n}$$`
+
+
+
+```r
+df %&gt;%
+  group_by(y) %&gt;%
+  summarise(n = n()) %&gt;%
+  mutate(pi = n / sum(n))
+```
+
+```
+## # A tibble: 3 x 3
+##       y     n    pi
+##   &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;
+## 1     1     5 0.333
+## 2     2     5 0.333
+## 3     3     5 0.333
+```
+
+---
+
+## Estimating parameters (in R!)
+
+x | -1.6| 0.2| -0.9| -2.0| -3.0| 1.9| 1.2| 2.2| 2.7| -0.5 | 1.8 | 3.3 | 5.0 | 3.4 | 4.2
+--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--
+y | 1 | 1 | 1| 1| 1| 2|2|2|2|2|3|3|3|3|3
+
+`$$\hat{\pi}_k = \frac{n_k}{n}$$`
+
+.pull-left[
+
+
+```r
+df %&gt;%
+* group_by(y) %&gt;%
+  summarise(n = n()) %&gt;%
+  mutate(pi = n / sum(n))
+```
+
+```
+## # A tibble: 3 x 3
+##       y     n    pi
+##   &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;
+## 1     1     5 0.333
+## 2     2     5 0.333
+## 3     3     5 0.333
+```
+]
+
+.pull-right[
+* `group_by()`: do calculations on groups
+]
+---
+
+## Estimating parameters (in R!)
+
+x | -1.6| 0.2| -0.9| -2.0| -3.0| 1.9| 1.2| 2.2| 2.7| -0.5 | 1.8 | 3.3 | 5.0 | 3.4 | 4.2
+--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--
+y | 1 | 1 | 1| 1| 1| 2|2|2|2|2|3|3|3|3|3
+
+`$$\hat{\pi}_k = \frac{n_k}{n}$$`
+
+.pull-left[
+
+
+```r
+df %&gt;%
+  group_by(y) %&gt;%
+* summarise(n = n()) %&gt;%
+  mutate(pi = n / sum(n))
+```
+
+```
+## # A tibble: 3 x 3
+##       y     n    pi
+##   &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;
+## 1     1     5 0.333
+## 2     2     5 0.333
+## 3     3     5 0.333
+```
+
+]
+
+.pull-right[
+* `group_by()`: do calculations on groups
+* `summarise()`: reduce variables to values
+]
+---
+
+
+## Estimating parameters (in R!)
+
+x | -1.6| 0.2| -0.9| -2.0| -3.0| 1.9| 1.2| 2.2| 2.7| -0.5 | 1.8 | 3.3 |5.0 | 3.4 | 4.2
+--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--
+y | 1 | 1 | 1| 1| 1| 2|2|2|2|2|3|3|3|3|3
+
+`$$\hat{\pi}_k = \frac{n_k}{n}$$`
+
+.pull-left[
+
+
+```r
+df %&gt;%
+  group_by(y) %&gt;%
+  summarise(n = n()) %&gt;% 
+* mutate(pi = n / sum(n))
+```
+
+```
+## # A tibble: 3 x 3
+##       y     n    pi
+##   &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;
+## 1     1     5 0.333
+## 2     2     5 0.333
+## 3     3     5 0.333
+```
+
+]
+
+.pull-right[
+* `group_by()`: do calculations on groups
+* `summarise()`: reduce variables to values
+* `mutate()`: add new variables
+]
+---
+
+## Estimating parameters (in R!)
+
+x | -1.6| 0.2| -0.9| -2.0| -3.0| 1.9| 1.2| 2.2| 2.7| -0.5 | 1.8 | 3.3 |5.0 | 3.4 | 4.2
+--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--
+y | 1 | 1 | 1| 1| 1| 2|2|2|2|2|3|3|3|3|3
+
+`$$\hat{\pi}_k = \frac{n_k}{n}$$`
+
+.pull-left[
+
+
+```r
+df %&gt;%
+  group_by(y) %&gt;%
+  summarise(n = n()) %&gt;% 
+  mutate(pi = n / sum(n)) 
+```
+
+]
+
+.pull-right[
+* `group_by()`: do calculations on groups
+* `summarise()`: reduce variables to values
+* `mutate()`: add new variables
+]
+
+.question[
+How do we pull `\(\pi_k\)` out into their own R object?
+]
+
+---
+
+## Estimating parameters (in R!)
+
+x | -1.6| 0.2| -0.9| -2.0| -3.0| 1.9| 1.2| 2.2| 2.7| -0.5 | 1.8 | 3.3 |5.0 | 3.4 | 4.2
+--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--
+y | 1 | 1 | 1| 1| 1| 2|2|2|2|2|3|3|3|3|3
+
+`$$\hat{\pi}_k = \frac{n_k}{n}$$`
+
+
+```r
+df %&gt;%
+  group_by(y) %&gt;%
+  summarise(n = n()) %&gt;% 
+  mutate(pi = n / sum(n)) %&gt;%
+* pull(pi) -&gt; pi
+```
+
+
+.question[
+How do we pull `\(\pi_k\)` out into their own R object?
+]
+
+---
+
+## Estimating parameters (in R!)
+
+x | -1.6| 0.2| -0.9| -2.0| -3.0| 1.9| 1.2| 2.2| 2.7| -0.5 | 1.8 | 3.3 |5.0 | 3.4 | 4.2
+--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--
+y | 1 | 1 | 1| 1| 1| 2|2|2|2|2|3|3|3|3|3
+
+`$$\hat{\pi}_k = \frac{n_k}{n}$$`
+
+
+```r
+pi
+```
+
+```
+## [1] 0.3333333 0.3333333 0.3333333
+```
+
+.question[
+How do we pull `\(\pi_k\)` out into their own R object?
+]
+---
+
+## Estimating parameters (in R!)
+
+x | -1.6| 0.2| -0.9| -2.0| -3.0| 1.9| 1.2| 2.2| 2.7| -0.5 | 1.8 | 3.3 | 5.0 | 3.4 | 4.2
+--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--
+y | 1 | 1 | 1| 1| 1| 2|2|2|2|2|3|3|3|3|3
+
+`$$\hat{\mu}_k = \frac{1}{n_k}\sum_{i:y_i=k}x_i$$`
+
+
+```r
+df %&gt;%
+  group_by(y) %&gt;%
+* summarise(mu = mean(x))
+```
+
+```
+## # A tibble: 3 x 2
+##       y    mu
+##   &lt;dbl&gt; &lt;dbl&gt;
+## 1     1 -1.46
+## 2     2  1.5 
+## 3     3  3.54
+```
+
+---
+
+## Estimating parameters (in R!)
+
+x | -1.6| 0.2| -0.9| -2.0| -3.0| 1.9| 1.2| 2.2| 2.7| -0.5 | 1.8 | 3.3 | 5.0 | 3.4 | 4.2
+--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--
+y | 1 | 1 | 1| 1| 1| 2|2|2|2|2|3|3|3|3|3
+
+`$$\hat{\mu}_k = \frac{1}{n_k}\sum_{i:y_i=k}x_i$$`
+
+
+```r
+df %&gt;%
+  group_by(y) %&gt;%
+  summarise(mu = mean(x)) %&gt;%
+* pull(mu) -&gt; mu
+```
+
+---
+
+## Estimating parameters (in R!)
+
+x | -1.6| 0.2| -0.9| -2.0| -3.0| 1.9| 1.2| 2.2| 2.7| -0.5 | 1.8 | 3.3 | 5.0 | 3.4 | 4.2
+--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--
+y | 1 | 1 | 1| 1| 1| 2|2|2|2|2|3|3|3|3|3
+
+$$
+`\begin{align}
+\hat{\sigma}^2 =\sum_{k=1}^K\frac{n_k-1}{n-K}\hat\sigma^2_k
+\end{align}`
+$$
+
+.small[
+
+
+```r
+df %&gt;%
+  group_by(y) %&gt;%
+  summarise(var_k = var(x),
+            n = n()) %&gt;%
+  mutate(v = ((n - 1) / (sum(n) - 3)) * var_k) %&gt;%
+  summarise(sigma_sq = sum(v))
+```
+
+```
+## # A tibble: 1 x 1
+##   sigma_sq
+##      &lt;dbl&gt;
+## 1     1.47
+```
+
+]
+
+---
+
+## Estimating parameters (in R!)
+
+x | -1.6| 0.2| -0.9| -2.0| -3.0| 1.9| 1.2| 2.2| 2.7| -0.5 | 1.8 | 3.3 | 5.0 | 3.4 | 4.2
+--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--
+y | 1 | 1 | 1| 1| 1| 2|2|2|2|2|3|3|3|3|3
+
+$$
+`\begin{align}
+\hat{\sigma}^2 =\sum_{k=1}^K\frac{n_k-1}{n-K}\hat\sigma^2_k
+\end{align}`
+$$
+
+
+```r
+df %&gt;%
+  group_by(y) %&gt;%
+  summarise(var_k = var(x),
+            n = n()) %&gt;%
+  mutate(v = ((n - 1) / (sum(n) - 3)) * var_k) %&gt;%
+  summarise(sigma_sq = sum(v)) %&gt;%
+  pull(sigma_sq) -&gt; sigma_sq
+```
+
+---
+
+## Estimating parameters (in R!)
+
+x | -1.6| 0.2| -0.9| -2.0| -3.0| 1.9| 1.2| 2.2| 2.7| -0.5 | 1.8 | 3.3 | 5.0 | 3.4 | 4.2
+--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--
+y | 1 | 1 | 1| 1| 1| 2|2|2|2|2|3|3|3|3|3
+
+`$$\delta_k(x) = x \frac{\mu_k}{\sigma^2}-\frac{\mu_k^2}{2\sigma^2}+\log(\pi_k)$$`
+
+* Let's predict the class for `\(x = 2\)`
+
+```r
+x &lt;- 2
+x * (mu / sigma_sq) - mu^2 / (2 * sigma_sq) + log(pi)
+```
+
+```
+## [1] -3.8155857  0.1795063 -0.5436021
+```
+
+--
+.question[
+Which class should we give this point?
+]
+---
+
+## Estimating parameters (in R!)
+
+x | -1.6| 0.2| -0.9| -2.0| -3.0| 1.9| 1.2| 2.2| 2.7| -0.5 | 1.8 | 3.3 | 5.0 | 3.4 | 4.2
+--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--
+y | 1 | 1 | 1| 1| 1| 2|2|2|2|2|3|3|3|3|3
+
+`$$\delta_k(x) = x \frac{\mu_k}{\sigma^2}-\frac{\mu_k^2}{2\sigma^2}+\log(\pi_k)$$`
+
+* Let's predict the class for `\(x = 6\)`
+
+```r
+x &lt;- 6
+x * (mu / sigma_sq) - mu^2 / (2 * sigma_sq) + log(pi)
+```
+
+```
+## [1] -7.796499  4.269486  9.108750
+```
+
+--
+.question[
+Which class should we give this point?
+]
+
+---
+
+## From the discriminant score to probabilties
+
+We can turn `\(\hat{\delta}_k(x)\)` into estimates for class probabilities
+
+--
+
+`$$\hat{P}(Y=k|X=x)=\frac{e^{\hat{\delta}_k(x)}}{\sum_{l=1}^Ke^{\hat{\delta}_l(x)}}$$`
+
+--
+* Classifying the largest `\(\hat{\delta}_k(x)\)` is the same as classifying to the class with the largest `\(\hat{P}(Y=k|X=x)\)`
+--
+
+* For `\(K=2\)`:
+  * classify to 2 if `\(\hat{P}(Y=2|X=x)\ge 0.5\)`
+  * classify to 1 otherwise
+
+---
+
+
+## Estimating parameters (in R!)
+
+x | -1.6| 0.2| -0.9| -2.0| -3.0| 1.9| 1.2| 2.2| 2.7| -0.5 | 1.8 | 3.3 | 5.0 | 3.4 | 4.2
+--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--
+y | 1 | 1 | 1| 1| 1| 2|2|2|2|2|3|3|3|3|3
+
+
+`$$\hat{P}(Y=k|X=x)=\frac{e^{\hat{\delta}_k(x)}}{\sum_{l=1}^Ke^{\hat{\delta}_l(x)}}$$`
+
+* Let's get the posterior probability of each class for `\(x = 6\)`
+
+.small[
+
+```r
+x &lt;- 6
+d &lt;- x * (mu / sigma_sq) - mu^2 / (2 * sigma_sq) + log(pi)
+exp(d) / sum(exp(d))
+```
+
+```
+## [1] 4.515655e-08 7.850755e-03 9.921492e-01
+```
+]
+
+---
+
+## Estimating parameters (in R!)
+
+x | -1.6| 0.2| -0.9| -2.0| -3.0| 1.9| 1.2| 2.2| 2.7| -0.5 | 1.8 | 3.3 | 5.0 | 3.4 | 4.2
+--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--
+y | 1 | 1 | 1| 1| 1| 2|2|2|2|2|3|3|3|3|3
+
+* There is a function to do this in R called `lda()` in the **MASS** package
+
+.small[
+
+```r
+*library(MASS)
+model &lt;- lda(y ~ x, data = df)
+```
+]
+
+---
+
+
+## Estimating parameters (in R!)
+
+x | -1.6| 0.2| -0.9| -2.0| -3.0| 1.9| 1.2| 2.2| 2.7| -0.5 | 1.8 | 3.3 | 5.0 | 3.4 | 4.2
+--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--
+y | 1 | 1 | 1| 1| 1| 2|2|2|2|2|3|3|3|3|3
+
+* There is a function to do this in R called `lda()` in the **MASS** package
+
+.small[
+
+```r
+library(MASS) 
+model &lt;- lda(y ~ x, data = df)
+*predict(model, newdata = data.frame(x = 6))
+```
+
+```
+## $class
+## [1] 3
+## Levels: 1 2 3
+## 
+## $posterior
+##              1           2         3
+## 1 4.515655e-08 0.007850755 0.9921492
+## 
+## $x
+##        LD1
+## 1 3.968523
+```
+]
+
+---
+
+## &lt;i class="fas fa-laptop"&gt;&lt;/i&gt; `LDA`
+
+- Go to the [sta-363-s20 GitHub organization](https://github.com/sta-363-s20) and search for `appex-02-lda`
+- Clone this repository into RStudio Cloud
+- Complete the exercises
+- **Knit, Commit, Push**
+
+---
+
+## Linear discriminant analysis `\(p&gt;1\)`
 
 ![](img/05/lda-p.png)
 
@@ -576,14 +1223,9 @@ $$
 
 `$$f(x) = \frac{1}{(2\pi)^{p/2}|\mathbf\Sigma|^{1/2}}e^{-\frac{1}{2}(x-\mu)^T\mathbf\Sigma^{-1}(x-\mu)}$$`
 
---
-
-* The **discriminant function** is now
-
-`$$\delta_k(x)=x^T\mathbf\Sigma^{-1}\mu_k-\frac{1}{2}\mu_k^T\mathbf\Sigma^{-1}\mu_k+\log\pi_k$$`
-
 ---
-## Linear discriminant analysis when `\(p&gt;1\)`
+
+## Linear discriminant analysis `\(p&gt;1\)`
 
 ![](img/05/lda-p.png)
 
@@ -605,23 +1247,6 @@ $$
   
 ---
 
-## From the discriminant score to probabilties
-
-We can turn `\(\hat{\delta}_k(x)\)` into estimates for class probabilities
-
---
-
-`$$\hat{P}(Y=k|X=x)=\frac{e^{\hat{\delta}_k(x)}}{\sum_{l=1}^Ke^{\hat{\delta}_l(x)}}$$`
-
---
-* Classifying the largest `\(\hat{\delta}_k(x)\)` is the same as classifying to the class with the largest `\(\hat{P}(Y=k|X=x)\)`
---
-* For `\(K=2\)`:
-  * classify to 2 if `\(\hat{P}(Y=2|X=x)\ge 0.5\)`
-  * classify to 1 otherwise
-
----
-
 ## LDA on Credit Data
 
 | True Default (No) | True Default (Yes) | Total
@@ -635,6 +1260,7 @@ What is the misclassification rate?
 ]
 
 --
+
 * `\(\frac{23 + 252}{10000}\)` errors - `\(2.75\%\)` misclassification
 --
 
@@ -672,13 +1298,15 @@ Since this is **training error** what is a possible concern?
 
 
 * `\(\frac{23 + 252}{10000}\)` errors - `\(2.75\%\)` misclassification
-* Since we have a **large n** and **small p** ( `\(n = 10,000\)`, `\(p = 4\)` ) we aren't too worried about overfitting
 --
+
 .question[
 What would the error rate be if we classified to the _prior_, `No` default?
 ]
+
 --
 * `\(333/10000\)` - `\(3.33\%\)`
+
 ---
 
 ## LDA on Credit Data
@@ -710,10 +1338,11 @@ What is the false positive rate in the Credit Default example?
 
 --
 * 0.2%
+
 --
 
 .question[
-What is the false positive rate in the Credit Default example?
+What is the false negative rate in the Credit Default example?
 ]
 
 --
@@ -776,7 +1405,7 @@ model &lt;- lda(default ~ balance + student, data = Default)
 
 ]
 
-* Use the `lda()` function in R from the `MASS` pacakge
+* Use the `lda()` function in R from the **MASS** pacakge
 
 ---
 
@@ -805,14 +1434,42 @@ model &lt;- lda(default ~ balance + student, data = Default)
 library(MASS)
 model &lt;- lda(default ~ balance + student, data = Default)
 predictions &lt;- predict(model)
-Default &lt;- Default %&gt;%
+Default %&gt;%
 * mutate(predicted_class = predictions$class)
 ```
 ]
 
 * Use the `lda()` function in R from the `MASS` pacakge
 * Get the predicted classes along with posterior probabilities using the `predict()` function
-* Add the predicted class to the original data frame using the `mutate()` function
+* Add the predicted class using the `mutate()` function
+
+---
+
+## Let's see it in R
+
+.small[
+
+```r
+library(MASS)
+model &lt;- lda(default ~ balance + student, data = Default)
+predictions &lt;- predict(model)
+Default %&gt;%
+  mutate(predicted_class = predictions$class) %&gt;%
+  summarise(fpr = 
+*             sum(default == "No" &amp; predicted_class == "Yes") /
+*             sum(default == "No"),
+            fnr = 
+*             sum(default == "Yes" &amp; predicted_class == "No") /
+*             sum(default == "Yes"))
+```
+
+```
+##           fpr       fnr
+## 1 0.002379228 0.7567568
+```
+]
+
+* Use the `summarise()` function to add the false positive and false negative rates
 
 ---
 
@@ -821,23 +1478,27 @@ Default &lt;- Default %&gt;%
 `$$P(Y=k|X=x) = \frac{\pi_kf_k(x)}{\sum_{l=1}^K\pi_lf_l(x)}$$`
 
 --
+
 * When `\(f_k(x)\)` are **normal** densities with the **same covariance** matrix `\(\mathbf\Sigma\)` in each class, this is **linear discriminant analysis**
 --
+
 * When `\(f_k(x)\)` are **normal** densities with **different covariance** matrices `\(\mathbf\Sigma_k\)` in each class, this is **quadratic discriminant analysis**
 --
+
 * Lots of other forms are possible! 
 
 ---
 
 ## Quadratic Discriminant Analysis
 
-![](img/05/qda.png)
+&lt;img src = "img/05/qda.png" height = 250&gt;&lt;/img&gt;
 
 `$$\delta_k(x) = -\frac{1}{2}(x-\mu_k)^T\mathbf\Sigma_k^{-1}(x-\mu_k)+\log\pi_k$$`
 .question[
 Why do you think this is called **quadratic** discriminant analysis?
 ]
 --
+
 * Because the `\(\mathbf\Sigma_k\)` are different, the quadratic terms matter
 
 ---
@@ -855,7 +1516,7 @@ predictions &lt;- predict(model)
 
 ]
 
-* Use the `qda()` function in R from the `MASS` pacakge
+* Use the `qda()` function in R from the **MASS** pacakge
 
 ---
 
@@ -865,15 +1526,20 @@ predictions &lt;- predict(model)
 
 `$$\log\left(\frac{p_1(x)}{1-p_1(x)}\right)=\log\left(\frac{p_1}{p_2}\right) = c_0 + c_1x_1 + \dots+ c_px_p$$`
 --
+
 * This is the same form as logistic regression
 --
+
 * The difference is in how the parameters are estimated
 --
+
   * Logistic regression uses the conditional likelihood based on
 `\(P(Y|X)\)` (**discriminative learning**)
 --
+
   * LDA uses the full likelihood based on `\(P(X,Y)\)` (**generative learning**)
 --
+
   * The results are often similar
   
 ---
@@ -884,7 +1550,8 @@ predictions &lt;- predict(model)
 * Logistic regression is very popular for classification, especially when `\(K = 2\)` 
 * LDA is useful when `\(n\)` is small, or the classes are well separated, and normality assumptions are reasonable. Also when `\(K &gt; 2\)`
 --
-* See Section 4.5 in your book for some comparisons of logistic regression, LDA and KNN.
+
+* See Section 4.5 in your book for some comparisons of logistic regression, LDA, and KNN.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
