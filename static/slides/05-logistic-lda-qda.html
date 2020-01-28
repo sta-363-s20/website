@@ -285,7 +285,7 @@ What is our estimated probability of default for someone with a balance of $1000
 --
 
 $$
-\hat{p}(X) = \frac{e^{\hat{\beta}_0+\hat{\beta}_1}X}{1+e^{\hat{\beta}_0+\hat{\beta}_1X}}=\frac{e^{-10.65+0.0055\times 1000}}{1+e^{-10.65+0.0055\times 1000}}=0.006
+\hat{p}(X) = \frac{e^{\hat{\beta}_0+\hat{\beta}_1X}}{1+e^{\hat{\beta}_0+\hat{\beta}_1X}}=\frac{e^{-10.65+0.0055\times 1000}}{1+e^{-10.65+0.0055\times 1000}}=0.006
 $$
 
 ---
@@ -327,7 +327,7 @@ What is our estimated probability of default for someone with a balance of $2000
 --
 
 $$
-\hat{p}(X) = \frac{e^{\hat{\beta}_0+\hat{\beta}_1}X}{1+e^{\hat{\beta}_0+\hat{\beta}_1X}}=\frac{e^{-10.65+0.0055\times 2000}}{1+e^{-10.65+0.0055\times 2000}}=0.586
+\hat{p}(X) = \frac{e^{\hat{\beta}_0+\hat{\beta}_1X}}{1+e^{\hat{\beta}_0+\hat{\beta}_1X}}=\frac{e^{-10.65+0.0055\times 2000}}{1+e^{-10.65+0.0055\times 2000}}=0.586
 $$
 
 ---
@@ -364,7 +364,7 @@ Let's refit the model to predict the probability of default given the customer i
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-`$$P(\texttt{default = Yes}|\texttt{student = Yes}) = \frac{e^{-3.5041+0.4049\times1}}{1+e^{-3.5041+0.4049\times1}}=0.0.0431$$`
+`$$P(\texttt{default = Yes}|\texttt{student = Yes}) = \frac{e^{-3.5041+0.4049\times1}}{1+e^{-3.5041+0.4049\times1}}=0.0431$$`
 --
 
 .question[
@@ -373,7 +373,7 @@ How will this change if `student = No`?
 
 --
 
-`$$P(\texttt{default = Yes}|\texttt{student = No}) = \frac{e^{-3.5041+0.4049\times0}}{1+e^{-3.5041+0.4049\times0}}=0.0.0292$$`
+`$$P(\texttt{default = Yes}|\texttt{student = No}) = \frac{e^{-3.5041+0.4049\times0}}{1+e^{-3.5041+0.4049\times0}}=0.0292$$`
 
 ---
 
