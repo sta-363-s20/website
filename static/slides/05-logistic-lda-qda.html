@@ -443,7 +443,7 @@ What is going on here?
 ![](05-logistic-lda-qda_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
 
 * Students tend to have higher balances than non-students
-  * Their **margignal** default rate is higher
+  * Their **marginal** default rate is higher
 --
 
 * For each level of balance, students default less 
@@ -569,7 +569,7 @@ P(Sick|+)&amp;=\frac{P(+|Sick)P(Sick)}{P(+)}\\
 $$
 * Often when a test is _created_ the _sensitivity_ is calculated, that is the _true positive rate_, the `\(P(+|Sick)\)`. **Let's say in this case that is 99%**
 * Let's suppose the probability of a **positive test if you are healthy is rare, 1%**
-* If the disease is **rare (let's say 0.1% have it)** how does that change my probability of having it given a postive test?
+* If the disease is **rare (let's say 0.1% have it)** how does that change my probability of having it given a positive test?
 
 .question[
 What is my probability of having the disease given I tested positive?
@@ -586,7 +586,7 @@ P(Sick|+)&amp;=\frac{P(+|Sick)P(Sick)}{P(+)}\\
 $$
 * Often when a test is _created_ the _sensitivity_ is calculated, that is the _true positive rate_, the `\(P(+|Sick)\)`. **Let's say in this case that is 99%**
 * Let's suppose the probability of a **positive test if you are healthy is rare, 1%**
-* If the disease is **rare (let's say 0.1% have it)** how does that change my probability of having it given a postive test?
+* If the disease is **rare (let's say 0.1% have it)** how does that change my probability of having it given a positive test?
 
 .question[
 What is my probability of having the disease given I tested positive?
@@ -605,7 +605,7 @@ This same equation is used for discriminant analysis with slightly different not
 --
 
 * `\(f_k(x)=P(X=x|Y=k)\)` is the **density** for `\(X\)` in class `\(k\)`
-  * For **linear discriminent analysis** we will use the **normal distribution** to represent this density
+  * For **linear discriminant analysis** we will use the **normal distribution** to represent this density
 --
 
 * `\(\pi_k=P(Y=k)\)` is the marginal or **prior** probability for
@@ -683,7 +683,7 @@ The density for the normal distribution is
 
 --
 
-* This **discrimiminant score** , `\(\delta_k(x)\)`, is a function of `\(p_k(x)\)` (we took some logs and discarded terms that don't include `\(k\)`)
+* This **discriminant score** , `\(\delta_k(x)\)`, is a function of `\(p_k(x)\)` (we took some logs and discarded terms that don't include `\(k\)`)
 * `\(\delta_k(x)\)` is a **linear** function of `\(x\)`
 
 --
@@ -1121,7 +1121,7 @@ Which class should we give this point?
 
 ---
 
-## From the discriminant score to probabilties
+## From the discriminant score to probabilities
 
 We can turn `\(\hat{\delta}_k(x)\)` into estimates for class probabilities
 
@@ -1417,7 +1417,7 @@ model &lt;- lda(default ~ balance + student, data = Default)
 
 ]
 
-* Use the `lda()` function in R from the **MASS** pacakge
+* Use the `lda()` function in R from the **MASS** package
 
 ---
 
@@ -1433,7 +1433,7 @@ model &lt;- lda(default ~ balance + student, data = Default)
 
 ]
 
-* Use the `lda()` function in R from the `MASS` pacakge
+* Use the `lda()` function in R from the `MASS` package
 * Get the predicted classes along with posterior probabilities using the `predict()` function
 
 ---
@@ -1451,7 +1451,7 @@ Default %&gt;%
 ```
 ]
 
-* Use the `lda()` function in R from the `MASS` pacakge
+* Use the `lda()` function in R from the `MASS` package
 * Get the predicted classes along with posterior probabilities using the `predict()` function
 * Add the predicted class using the `mutate()` function
 
@@ -1528,7 +1528,7 @@ predictions &lt;- predict(model)
 
 ]
 
-* Use the `qda()` function in R from the **MASS** pacakge
+* Use the `qda()` function in R from the **MASS** package
 
 ---
 
