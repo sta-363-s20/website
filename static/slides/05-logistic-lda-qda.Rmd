@@ -42,6 +42,14 @@ library(ISLR)
 
 ---
 
+class: center, middle
+
+## `r emo::ji("book")` Canvas
+
+* _use Google Chrome_
+
+---
+
 ## <i class="fas fa-laptop"></i> `LDA`
 
 - Go to the [sta-363-s20 GitHub organization](https://github.com/sta-363-s20) and search for `appex-02-lda`
