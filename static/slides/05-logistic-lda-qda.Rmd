@@ -53,10 +53,13 @@ library(ISLR)
 
 * Last class we had a _linear regression_ refresher
 --
+
 * We covered how to write a linear model in _matrix_ form
 --
+
 * We learned how to minimize RSS to calculate $\hat{\beta}$ with $(\mathbf{X^TX)^{-1}X^Ty}$
 --
+
 * Linear regression is a great tool when we have a continuous outcome
 * We are going to learn some fancy ways to do even better in the future
 ---
@@ -253,10 +256,11 @@ Logistic regression ensures that our estimates for $p(X)$ are between 0 and 1 `r
 
 .question[
 Refresher: How did we estimate $\hat\beta$ in linear regression?
+
 ]
 
 --
-In logistic regression, we use **matximum likelihood** to estimate the parameters
+In logistic regression, we use **maximum likelihood** to estimate the parameters
 
 $$\mathcal{l}(\beta_0,\beta_1)=\prod_{i:y_i=1}p(x_i)\prod_{i:y_i=0}(1-p(x_i))$$
 --
