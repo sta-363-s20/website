@@ -1,0 +1,18 @@
+---
+title: "Reading 04"
+output: 
+  html_document: 
+    theme: yeti
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Due
+
+Thur, Feb 6
+
+## Required:
+
+- ISLR Sections 5.1 and 5.2
