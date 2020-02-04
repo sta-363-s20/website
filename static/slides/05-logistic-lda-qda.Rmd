@@ -1626,7 +1626,7 @@ ggplot(data = plot_data,
 
 - `ggplot()` is the main function in ggplot2 and plots are constructed in layers
 - The structure of the code for plots can often be summarized as
-```{r eval = FALSE}
+```{r eval = FALSE, echo = TRUE}
 ggplot + 
   geom_xxx
 ```
@@ -1636,7 +1636,7 @@ ggplot +
 or, more precisely
 
 .small[
-```{r eval = FALSE}
+```{r eval = FALSE, echo = TRUE}
 ggplot(data = [dataset], mapping = aes(x = [x-variable], y = [y-variable])) +
   geom_xxx() +
   other options

@@ -625,7 +625,7 @@ color: #333333;
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">train &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/train.csv&quot;</span>)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">test &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/test.csv&quot;</span>)</a></code></pre></div>
 <ol start="5" style="list-style-type: decimal">
-<li>Using the <code>lda()</code> function from the <strong>MASS</strong> package, perform a linear discriminant analysis predicting <code>g</code>, the outcome variable for the phoneme, from the rest of the variables using the <code>train</code> data.</li>
+<li>Using the <code>lda()</code> function from the <strong>MASS</strong> package, perform a linear discriminant analysis predicting <code>g</code>, the outcome variable for the phoneme, from the rest of the variables using the <code>train</code> data. Create a visualization of LD1 versus LD2 colored by the outcome variable.</li>
 </ol>
 <p><label for="tufte-mn-3" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-3" class="margin-toggle"><span class="marginnote"><span style="display: block;"><strong>Hint</strong>: When there are <em>lots</em> of variables and you intend to include them all in a model, you can use <code>.</code> as a shortcut in R.</span> <span style="display: block;">For example, <code>lm(y ~ ., data = df)</code> would include all variables except <code>y</code> in the model.</span></span></p>
 <ol start="6" style="list-style-type: decimal">

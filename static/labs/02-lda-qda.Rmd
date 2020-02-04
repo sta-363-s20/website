@@ -155,7 +155,7 @@ train <- read_csv("data/train.csv")
 test <- read_csv("data/test.csv")
 ```
 
-5. Using the `lda()` function from the **MASS** package, perform a linear discriminant analysis predicting `g`, the outcome variable for the phoneme, from the rest of the variables using the `train` data.
+5. Using the `lda()` function from the **MASS** package, perform a linear discriminant analysis predicting `g`, the outcome variable for the phoneme, from the rest of the variables using the `train` data. Create a visualization of LD1 versus LD2 colored by the outcome variable.
 
 ```{marginfigure}
 **Hint**: When there are _lots_ of variables and you intend to include them all in a model, you can use `.` as a shortcut in R. 
