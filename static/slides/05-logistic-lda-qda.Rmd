@@ -572,20 +572,20 @@ What is my probability of having the disease given I tested positive?
 
 ## Bayes Theorem and Discriminant Analysis
 
-$$P(Y=k|X=x) =\frac{P(X=x|Y=k)\times P(Y=k)}{P(X=x)}$$
+$$P(Y|X) =\frac{P(X|Y)\times P(Y)}{P(X)}$$
 
 This same equation is used for discriminant analysis with slightly different notation:
 --
 
-$$P(Y=k|X=x) =\frac{\pi_kf_k(x)}{\sum_{l=1}^Kf_l(x)}$$
+$$P(Y|X) =\frac{\pi_kf_k(x)}{\sum_{l=1}^Kf_l(x)}$$
 
 --
 
-* $f_k(x)=P(X=x|Y=k)$ is the **density** for $X$ in class $k$
+* $f_k(x)=P(X|Y)$ is the **density** for $X$ in class $k$
   * For **linear discriminant analysis** we will use the **normal distribution** to represent this density
 --
 
-* $\pi_k=P(Y=k)$ is the marginal or **prior** probability for
+* $\pi_k=P(Y)$ is the marginal or **prior** probability for
 class $k$
 
 ---
@@ -1329,7 +1329,7 @@ Which do you think is better, higher or lower AUC?
 .small[
 ```{r, echo = TRUE}
 library(MASS)
-model <- lda(default ~ balance + student, data = Default)
+model <- lda(default ~ balance + student + income, data = Default)
 ```
 
 ]
@@ -1343,7 +1343,7 @@ model <- lda(default ~ balance + student, data = Default)
 .small[
 ```{r, echo = TRUE}
 library(MASS)
-model <- lda(default ~ balance + student, data = Default)
+model <- lda(default ~ balance + student + income, data = Default)
 predictions <- predict(model) #<<
 ```
 
@@ -1359,7 +1359,7 @@ predictions <- predict(model) #<<
 .small[
 ```{r, echo = TRUE, eval = FALSE}
 library(MASS)
-model <- lda(default ~ balance + student, data = Default)
+model <- lda(default ~ balance + student + income, data = Default)
 predictions <- predict(model)
 Default %>%
   mutate(predicted_class = predictions$class) #<<
@@ -1377,7 +1377,7 @@ Default %>%
 .small[
 ```{r, echo = TRUE}
 library(MASS)
-model <- lda(default ~ balance + student, data = Default)
+model <- lda(default ~ balance + student + income, data = Default)
 predictions <- predict(model)
 Default %>%
   mutate(predicted_class = predictions$class) %>%
@@ -1394,9 +1394,28 @@ Default %>%
 
 ---
 
+## Let's see it in R
+
+.small[ 
+
+```{r, echo = TRUE}
+library(MASS)
+library(tidymodels) #<<
+model <- lda(default ~ balance + student + income, data = Default)
+predictions <- predict(model)
+Default %>%
+  mutate(predicted_class = predictions$class) %>%
+  conf_mat(default, predicted_class) %>% #<<
+  autoplot(type = "heatmap") #<<
+```
+
+]
+
+---
+
 ## Other forms of discriminant analysis
 
-$$P(Y=k|X=x) = \frac{\pi_kf_k(x)}{\sum_{l=1}^K\pi_lf_l(x)}$$
+$$P(Y|X) = \frac{\pi_kf_k(x)}{\sum_{l=1}^K\pi_lf_l(x)}$$
 
 --
 

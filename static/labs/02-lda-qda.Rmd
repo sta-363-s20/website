@@ -1,0 +1,190 @@
+---
+title: "Lab 02 - LDA and QDA"
+output: 
+  tufte::tufte_html:
+    tufte_variant: "envisioned"
+    highlight: pygments
+    css: lab.css
+link-citations: yes
+---
+
+```{r include=FALSE}
+library(tidyverse)
+library(tidymodels)
+library(ISLR)
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  show.signif.stars = FALSE     # for regression output
+)
+```
+
+**Due:** Monday 2020-02-10 at 11:59pm
+
+# Introduction
+
+In this lab we are going to classify speech data using linear discriminant analysis and quadratic discriminant analysis. A few reminders:
+
+* Remember to label your chunks
+* Write out your answers in full sentences, do not just rely on the R output
+* Knit, commit, and push regularly (at least after every exercise)
+
+# Getting started
+
+- Go to our class's GitHub organization [sta-363-s20](https://github.com/sta-363-s20)
+- Find the GitHub repository (which we'll refer to as "repo" going forward) for this lab, `lab-02-lda-qda-YOUR-GITHUB-HANDLE`. This repo contains a template you can build on to complete your assignment.
+- On GitHub, click on the green **Clone or download** button, select **Use HTTPS**. Click on the clipboard icon to copy the repo URL.
+- Go to RStudio Cloud and into the course workspace. Create a **New Project from Git Repo**. You will need to click on the down arrow next to the **New Project** button to see this option.
+- Copy and paste the URL of your assignment repo into the dialog box.
+- Hit OK, and you're good to go!
+
+# Packages
+
+In this lab we will work with three packages: `tidyverse` which is a collection of packages for doing data analysis in a "tidy" way, `tidymodels` which is a collection of packages for doing statistical analysis, and `MASS` a package that contains the functions to fit the models.
+
+Install these packages by running the following in the console.
+
+```{r eval = FALSE}
+install.packages("tidyverse")
+install.packages("tidymodels")
+install.packages("MASS")
+```
+
+Now that the necessary packages are installed, you should be able to Knit your document and see the results.
+
+If you'd like to run your code in the Console as well you'll also need to load the packages there. To do so, run the following in the console. 
+
+```{r eval = FALSE}
+library(tidyverse) 
+library(tidymodels)
+library(MASS)
+```
+
+Note that the packages are also loaded with the same commands in your R Markdown document.
+
+# Housekeeping
+
+## Git configuration
+
+```{marginfigure}
+Your email address is the address tied to your GitHub account and your name should be first and last name.
+```
+
+- Go to the *Terminal* pane
+- Type the following two lines of code, replacing the information in the quotation marks with your info:
+
+```{bash eval=FALSE}
+git config --global user.email "your email"
+git config --global user.name "your name"
+```
+
+To confirm that the changes have been implemented, run the following
+
+```{bash eval=FALSE}
+git config --global user.email
+git config --global user.name
+```
+
+## Password caching
+
+If you would like your git password cached for a week for this project, type the following in the Terminal:
+
+```{bash eval=FALSE}
+git config --global credential.helper 'cache --timeout 604800'
+```
+
+## Project name: 
+
+Currently your project is called *Untitled Project*. Update the name of your project to be "Lab 02 - LDA and QDA".
+
+# Warm up
+
+Before we introduce the data, let's warm up with some simple exercises.
+
+## YAML: 
+
+Open the R Markdown (Rmd) file in your project, change the author name to your name, and knit the document.
+
+## Commiting and pushing changes:
+
+- Go to the **Git** pane in your RStudio. 
+- View the **Diff** and confirm that you are happy with the changes.
+- Add a commit message like "Update team name" in the **Commit message** box and hit **Commit**.
+- Click on **Push**. This will prompt a dialogue box where you first need to enter your user name, and then your password.
+
+# Data
+
+The first few exercises will involve using a data frame that you will enter based on a table. 
+
+The remainder of the exercises will be based on speech data. These data arose from a collaboration between Andreas Buja, Werner Stuetzle and Martin Maechler. The data were extracted from the TIMIT database (TIMIT Acoustic-Phonetic Continuous Speech Corpus, NTIS, US Dept of Commerce) which is a widely used resource for research in speech recognition. A dataset was formed by selecting five phonemes for classification based on digitized speech from this database. The phonemes are transcribed as follows: "sh" as in "she", "dcl" as in "dark", "iy" as the vowel in "she", "aa" as the vowel in "dark", and "ao" as the first vowel in "water". From continuous speech of 50 male speakers, 4509 speech frames of 32 msec duration were selected, approximately 2 examples of each phoneme from each speaker. 
+
+The data contain 256 columns labelled "x.1" - "x.256" and a response column labelled "g".
+
+# Exercises
+
+## By hand
+
+1. Create a data frame containing two columns, $x$ and $y$, using the data in the table below.
+
+x | y
+--|--
+2.1 | 1
+1.7 | 1
+2.0 | 1
+3.8 | 1
+4.2 | 1
+0.8 | 2
+1.1 | 2
+1.3 | 2
+1.5 | 2
+3.8 | 2
+
+2. Using the data created in Exercise 1, calculate the discriminant scores for $x = 3$ _without using the `lda()` function_. What class would you classify this observation into?
+
+3. Using the `lda()` function from the **MASS** package, check your work for Exercise 2.
+
+## Speech data
+
+4. Load the data using `read_csv`. There are two data frames, `train` and `test`. You will fit the models on `train` and evaluate the models using `test`. How many variables are in each data frame? How many observations?
+
+```{marginfigure}
+**Hint**: Since we read this data in from a .csv file, we cannot rely on the `?` to find out more about these data frames. You can still use the `glimpse()` function (in the Console!).
+```
+
+```{r, eval = FALSE}
+train <- read_csv("data/train.csv")
+test <- read_csv("data/test.csv")
+```
+
+5. Using the `lda()` function from the **MASS** package, perform a linear discriminant analysis predicting `g`, the outcome variable for the phoneme, from the rest of the variables using the `train` data.
+
+```{marginfigure}
+**Hint**: When there are _lots_ of variables and you intend to include them all in a model, you can use `.` as a shortcut in R. 
+
+For example, `lm(y ~ ., data = df)` would include all variables except `y` in the model. 
+```
+
+6. Using the model created from Exercise 5, use the `predict()` function to capture the predicted `class` for each observation in the `test` data frame. Add this column to the `test` data frame using the `mutate()` function.
+
+Below is some code to get you started.
+
+```{r, eval = FALSE}
+class <- predict(---, newdata = ---)$class
+test <- test %>%
+  mutate(lda_predicted_class = class)
+```
+
+7. Plot a confusion matrix using the `test` data frame. How did this model perform?
+
+8. Calculate the accuracy of the linear discriminant analysis model in the `train` data frame and in the `test` data frame. How do they compare?
+
+9. Now we are going to perform quadratic discriminant analysis. Using the `qda()` function, predict `g` using all remaining variables in the `train` data frame. Predict the class of all observations in the `test` data frame and plot a confusion matrix. Calculate the accuracy of the quadratic discriminant analysis model in the `train` data frame and the `test` data frame. How does this compare to the linear discriminant analysis model?
+
+10. If you only used the accuracy from the `train` data frame, which model would you have chosen? If you use the accuracy from the `test` data frame, which model do you choose?
+
+## Conceptual questions
+
+10. If the Bayes decision boundary is linear, do we expect LDA or QDA to perform better on the training set? On the test set?
+
+11. If the Bayes decision boundary is non-linear, do we expect LDA or QDA to perform better on the training set? On the test set?
+
+12. In general, as the sample size n increases, do we expect the test prediction accuracy of QDA relative to LDA to improve, decline, or be unchanged? Why?
