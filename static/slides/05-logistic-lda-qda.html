@@ -1508,6 +1508,25 @@ Default %&gt;%
 
 ---
 
+## Let's see it in R
+
+* `conf_mat()` expects your outcome to be a factor variable
+
+
+```r
+library(MASS)
+*library(tidymodels)
+model &lt;- lda(default ~ balance + student + income, data = Default)
+predictions &lt;- predict(model)
+Default %&gt;%
+  mutate(predicted_class = predictions$class,
+*        default = as.factor(default)) %&gt;%
+  conf_mat(default, predicted_class) %&gt;% 
+  autoplot(type = "heatmap") 
+```
+
+---
+
 ## Other forms of discriminant analysis
 
 `$$P(Y|X) = \frac{\pi_kf_k(x)}{\sum_{l=1}^K\pi_lf_l(x)}$$`
@@ -1612,7 +1631,7 @@ head(plot_data)
 * geom_point()
 ```
 
-![](05-logistic-lda-qda_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
+![](05-logistic-lda-qda_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -1653,7 +1672,7 @@ ggplot(data = plot_data,
   labs(x = "LD1", y = "LD2")
 ```
 
-![](05-logistic-lda-qda_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
+![](05-logistic-lda-qda_files/figure-html/unnamed-chunk-39-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -1675,7 +1694,7 @@ ggplot(data = plot_data,
   labs(x = "LD1", y = "LD2")
 ```
 
-![](05-logistic-lda-qda_files/figure-html/unnamed-chunk-39-1.png)&lt;!-- --&gt;
+![](05-logistic-lda-qda_files/figure-html/unnamed-chunk-40-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -1697,7 +1716,7 @@ ggplot(data = plot_data,
   labs(x = "LD1", y = "LD2")
 ```
 
-![](05-logistic-lda-qda_files/figure-html/unnamed-chunk-40-1.png)&lt;!-- --&gt;
+![](05-logistic-lda-qda_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -1719,7 +1738,7 @@ ggplot(data = plot_data,
   labs(x = "LD1", y = "LD2")
 ```
 
-![](05-logistic-lda-qda_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
+![](05-logistic-lda-qda_files/figure-html/unnamed-chunk-42-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -1741,7 +1760,7 @@ ggplot(data = plot_data,
   labs(x = "LD1", y = "LD2")
 ```
 
-![](05-logistic-lda-qda_files/figure-html/unnamed-chunk-42-1.png)&lt;!-- --&gt;
+![](05-logistic-lda-qda_files/figure-html/unnamed-chunk-43-1.png)&lt;!-- --&gt;
 
 ]
 

@@ -1413,6 +1413,24 @@ Default %>%
 
 ---
 
+## Let's see it in R
+
+* `conf_mat()` expects your outcome to be a factor variable
+
+```{r, echo = TRUE, eval = FALSE}
+library(MASS)
+library(tidymodels) #<<
+model <- lda(default ~ balance + student + income, data = Default)
+predictions <- predict(model)
+Default %>%
+  mutate(predicted_class = predictions$class,
+         default = as.factor(default)) %>% #<<
+  conf_mat(default, predicted_class) %>% 
+  autoplot(type = "heatmap") 
+```
+
+---
+
 ## Other forms of discriminant analysis
 
 $$P(Y|X) = \frac{\pi_kf_k(x)}{\sum_{l=1}^K\pi_lf_l(x)}$$
