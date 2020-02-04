@@ -1459,6 +1459,207 @@ predictions <- predict(model)
 
 ---
 
+## Let's see it in R
+
+* Let's use LDA to visualize the data
+
+.small[
+
+```{r, echo = TRUE}
+model <- lda(Species ~ ., data = iris) #<<
+predictions <- predict(model)
+```
+
+]
+
+---
+
+## Let's see it in R
+
+* Let's use LDA to visualize the data
+
+.small[
+
+```{r, echo = TRUE}
+model <- lda(Species ~ ., data = iris) 
+predictions <- predict(model)
+plot_data <- data.frame(outcome = iris$Species, #<<
+                        lda = predictions$x) #<<
+head(plot_data)
+```
+
+]
+---
+
+## Let's see it in R
+
+* Let's use LDA to visualize the data
+
+.small[
+
+```{r, echo = TRUE, fig.height = 2}
+ggplot(data = plot_data, #<<
+       mapping = aes(x = lda.LD1, y = lda.LD2, color = outcome)) + #<<
+  geom_point() #<<
+```
+
+]
+
+---
+
+## ggplot2 $\in$ tidyverse
+
+.pull-left[
+![](img/02/ggplot2-part-of-tidyverse.png)
+]
+.pull-right[
+- **ggplot2** is tidyverse's data visualization package
+- The `gg` in "ggplot2" stands for Grammar of Graphics
+- It is inspired by the book **Grammar of Graphics** by Leland Wilkinson <sup>†</sup>
+- A grammar of graphics is a tool that enables us to concisely describe the components of a graphic
+![](img/02/grammar-of-graphics.png)
+]
+
+.footnote[ 
+<sup>†</sup> Source: [BloggoType](http://bloggotype.blogspot.com/2016/08/holiday-notes2-grammar-of-graphics.html)
+]
+
+---
+
+## ggplot2
+
+.question[
+What function creates the plot?
+]
+
+.small[
+
+```{r, echo = TRUE, fig.height = 2}
+ggplot(data = plot_data, 
+       mapping = aes(x = lda.LD1, y = lda.LD2, color = outcome)) + 
+  geom_point() +
+  labs(x = "LD1", y = "LD2")
+```
+
+]
+
+---
+
+## ggplot2
+
+.question[
+What data set is being plotted?
+]
+
+.small[
+
+```{r, echo = TRUE, fig.height = 2}
+ggplot(data = plot_data, 
+       mapping = aes(x = lda.LD1, y = lda.LD2, color = outcome)) + 
+  geom_point() +
+  labs(x = "LD1", y = "LD2")
+```
+
+]
+
+---
+
+## ggplot2
+
+.question[
+Which variables are on the x- and y-axis?
+]
+
+.small[
+
+```{r, echo = TRUE, fig.height = 2}
+ggplot(data = plot_data, 
+       mapping = aes(x = lda.LD1, y = lda.LD2, color = outcome)) + 
+  geom_point() +
+  labs(x = "LD1", y = "LD2")
+```
+
+]
+
+---
+
+## ggplot2
+
+.question[
+What variable in the dataset determines the color?
+]
+
+.small[
+
+```{r, echo = TRUE, fig.height = 2}
+ggplot(data = plot_data, 
+       mapping = aes(x = lda.LD1, y = lda.LD2, color = outcome)) + 
+  geom_point() +
+  labs(x = "LD1", y = "LD2")
+```
+
+]
+
+---
+
+## ggplot2
+
+.question[
+What does `geom_point()` mean?
+]
+
+.small[
+
+```{r, echo = TRUE, fig.height = 2}
+ggplot(data = plot_data, 
+       mapping = aes(x = lda.LD1, y = lda.LD2, color = outcome)) + 
+  geom_point() +
+  labs(x = "LD1", y = "LD2")
+```
+
+]
+
+---
+
+
+## Hello ggplot2!
+
+- `ggplot()` is the main function in ggplot2 and plots are constructed in layers
+- The structure of the code for plots can often be summarized as
+```{r eval = FALSE}
+ggplot + 
+  geom_xxx
+```
+
+--
+
+or, more precisely
+
+.small[
+```{r eval = FALSE}
+ggplot(data = [dataset], mapping = aes(x = [x-variable], y = [y-variable])) +
+  geom_xxx() +
+  other options
+```
+]
+
+---
+
+## Hello ggplot2!
+
+- To use ggplot2 functions, first load tidyverse
+
+```{r}
+library(tidyverse)
+```
+
+--
+
+- For help with the ggplot2, see [ggplot2.tidyverse.org](http://ggplot2.tidyverse.org/)
+
+---
+
+
 ## Logistic Regression versus LDA
 
 * For the two-class problem ( $K=2$ ), LDA takes the form

@@ -29,7 +29,7 @@ lessons:
     slides: "03-tidy-data.html"
     appex: "02-nc-bike-crashes.html"
   - title: "Data visualization"
-    slides: "03-data-visualization.html"
+    slides: "03-data-visualizing.html"
     appex: "02-starwars.html"
   - date: "Thur, Jan 30"
     slides: "05-logistic-lda-qda.html"
