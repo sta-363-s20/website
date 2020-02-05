@@ -32,6 +32,8 @@ library(gridExtra)
 library(ISLR)
 ```
 
+---
+
 ## Other forms of discriminant analysis
 
 $$P(Y|X) = \frac{\pi_kf_k(x)}{\sum_{l=1}^K\pi_lf_l(x)}$$
