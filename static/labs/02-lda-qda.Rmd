@@ -117,7 +117,34 @@ The first few exercises will involve using a data frame that you will enter base
 
 The remainder of the exercises will be based on speech data. These data arose from a collaboration between Andreas Buja, Werner Stuetzle and Martin Maechler. The data were extracted from the TIMIT database (TIMIT Acoustic-Phonetic Continuous Speech Corpus, NTIS, US Dept of Commerce) which is a widely used resource for research in speech recognition. A dataset was formed by selecting five phonemes for classification based on digitized speech from this database. The phonemes are transcribed as follows: "sh" as in "she", "dcl" as in "dark", "iy" as the vowel in "she", "aa" as the vowel in "dark", and "ao" as the first vowel in "water". From continuous speech of 50 male speakers, 4509 speech frames of 32 msec duration were selected, approximately 2 examples of each phoneme from each speaker. 
 
-The data contain 256 columns labelled "x.1" - "x.256" and a response column labelled "g".
+The data contain 256 columns labelled `x.1` - `x.256` and a response column labelled `g`. The response column, `g` has five classes: `ao`, `aa`, `iy`, `dcl`, and `sh`. The predictors, `x.1` - `x.256` consist of logged periograms at various frequencies.  A periodogram is essentially an estimate of the spectral density of a signal; in this case we are using **sound** data from subjects to predict what sound they were saying. Here is a plot of one of the observations:
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(ElemStatLearn)
+data(phoneme)
+d <- data.frame(x = unlist(phoneme[1, 1:256, drop = TRUE]), y = 1:256)
+ggplot(d, aes(x = y, y = x)) + 
+  geom_line() +
+  theme_classic() + 
+  labs(x = "frequency", y = "log periogram", title = "Observation saying `sh`") 
+```
+
+Here is a plot of all of the observations, split by the response variable, the sound they were saying:
+
+```{r, echo = FALSE}
+d <- phoneme %>%
+  dplyr::select(-speaker) %>%
+  pivot_longer(-g) %>%
+  mutate(id = rep(1:nrow(phoneme), each = 256),
+         frequency = rep(1:256, nrow(phoneme)))
+
+ggplot(d, aes(x = frequency, y = value, group = id, color = g)) +
+  geom_line() + 
+  facet_wrap(~ g) + 
+  labs(y = "log periogram") +
+  theme_classic() + 
+  theme(legend.position = "none") 
+```
 
 # Exercises
 
