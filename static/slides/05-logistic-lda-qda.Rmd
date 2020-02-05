@@ -1677,6 +1677,39 @@ library(tidyverse)
 
 ---
 
+```{r, fig.height = 2}
+ggplot(data = plot_data,
+       mapping = aes(x = lda.LD1, y = lda.LD2, color = outcome)) + 
+  geom_point() 
+```
+
+* What is going on here?
+
+--
+* LDA is projecting the samples $X$ onto a _hyperplane_ with $K-1$ dimensions.
+
+--
+.question[
+What is K here?
+]
+---
+
+
+```{r, fig.height = 2}
+ggplot(data = plot_data,
+       mapping = aes(x = lda.LD1, y = lda.LD2, color = outcome)) + 
+  geom_point() 
+```
+
+* What is going on here?
+* LDA is projecting the samples $X$ onto a _hyperplane_ with $K-1$ dimensions.
+* Why does this work?
+* LDA essentially classifies to the closest centroid, and they span a K - 1 dimensional plane.
+--
+
+* Even when K > 3, we can find the "best" 2-dimensional plane for vizualizing the discriminant rule by using the first two discriminant variables (LD1 and LD2)
+
+---
 
 ## Logistic Regression versus LDA
 
@@ -1709,4 +1742,7 @@ $P(Y|X)$ (**discriminative learning**)
 * LDA is useful when $n$ is small, or the classes are well separated, and normality assumptions are reasonable. Also when $K > 2$
 --
 
+* QDA is _similar_ to LDA, but it is more flexible because it allows the covariance of the predictors to be different for each class, $k$
+
+--
 * See Section 4.5 in your book for some comparisons of logistic regression, LDA, and KNN.
