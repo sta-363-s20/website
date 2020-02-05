@@ -42,7 +42,7 @@ lessons:
     lab: "02-lda-qda.html"
   - date: "Thur, Feb 6"
     title: "Cross-validation and Bootstrap"
-    reading: "03-reading.html"
+    reading: "04-reading.html"
   - title: "Week 05"
   - date: "Tues, Feb 11"
     title: "Review"
