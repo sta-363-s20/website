@@ -29,6 +29,7 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 library(tidyverse)
 library(ISLR)
 library(tidymodels)
+library(gridExtra)
 ```
 
 ---
@@ -295,9 +296,9 @@ Auto %>%
 
 ---
 
-## Estimating prediction error
+## Estimating prediction error (quantitative outcome)
 
-* Split the data into K parts, $C_1, C_2, \dots, C_k$
+* Split the data into K parts, where $C_1, C_2, \dots, C_k$ indicate the indices of observations in part $k$
 
 $$CV_{(K)} = \sum_{k=1}^K\frac{n_k}{n}MSE$$
 
@@ -656,6 +657,78 @@ $$CV_{(n)} = \frac{1}{n}\sum_{i=1}^n\left(\frac{y_i-\hat{y}_i}{1-h_i}\right)^2$$
 * $K =5$ or $K=10$ provides a nice compromise for the bias-variance trade-off
 
 ---
+
+## Approach #2: K-fold Cross Validation
+
+Auto example: 
+* We have 392 observations
+* Trying to predict `mpg` from `horsepower`
+
+
+```{r fig1, cache = TRUE, fig.height = 2, eval = FALSE}
+ggplot(d, aes(x = x, y = y, group = z, color = z)) + 
+  geom_line() +
+  labs(x = "degree polynomial", y = "MSE", title = "50-50 Validation set") + 
+  theme_classic() + 
+  theme(legend.position = "none") +
+  coord_cartesian(ylim = c(15, 30)) -> p1
+
+f2 <- function() {
+  Auto_ <- Auto %>%
+    slice(sample(1:nrow(Auto))) %>%
+    mutate(k = rep(1:10, length.out = nrow(Auto)))
+  
+  purrr::map2_df(rep(1:10, each = 15),
+                 rep(1:15, 10),
+                 ~ get_mse(.x, .y, data = Auto_)) %>%
+    group_by(x) %>%
+    summarise(cv_10 = sum(n / sum(n) * mse))
+}
+
+get_mse <- function(K, p, data = Auto_) {
+  Auto_k <- data %>%
+    filter(k != K)
+  model_k <- lm(mpg ~ poly(horsepower, p), data = Auto_k)
+  data %>%
+    filter(k == K) %>%
+    mutate(pred = predict(model_k, newdata = .)) %>%
+    summarise(mse = mean((mpg - pred)^2),
+              n = n(),
+              x = p)
+}
+d2 <- map_df(1:10, ~f2())
+d2$group <- rep(LETTERS[1:10], each = 15)
+ggplot(d2, aes(x = x, y = cv_10, group = group, color = group)) +
+  geom_line() + 
+  coord_cartesian(ylim = c(15, 30)) + 
+  labs(y = "MSE", x = "degree polynomial", title = "10-fold CV") + 
+  theme_classic() + 
+  theme(legend.position = "none") -> p2
+
+grid.arrange(p1, p2, ncol = 2)
+```
+
+
+
+---
+
+## Estimating prediction error (qualitative outcome)
+
+* The premise is the same as cross valiation for quantitative outcomes
+* Split the data into K parts, where $C_1, C_2, \dots, C_k$ indicate the indices of observations in part $k$
+
+$$CV_K = \sum_{k=1}^K\frac{n_k}{n}Err_k$$
+
+--
+* $Err_k = \sum_{i\in C_k}I(y_i\neq\hat{y}_i)/n_k$ (missclassification rate)
+
+--
+* $n_k$ is the number of observations in group $k$
+* $\hat{y}_i$ is the fit for observation $i$ obtained from the data with the part $k$ removed
+
+---
+
+
 
 ## <i class="fas fa-laptop"></i> `CV`
 

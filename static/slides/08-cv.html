@@ -332,9 +332,9 @@ Auto %&gt;%
 
 ---
 
-## Estimating prediction error
+## Estimating prediction error (quantitative outcome)
 
-* Split the data into K parts, `\(C_1, C_2, \dots, C_k\)`
+* Split the data into K parts, where `\(C_1, C_2, \dots, C_k\)` indicate the indices of observations in part `\(k\)`
 
 `$$CV_{(K)} = \sum_{k=1}^K\frac{n_k}{n}MSE$$`
 
@@ -833,6 +833,37 @@ map_df(1:K, ~ mse_k(.x)) %&gt;%
 * `\(K =5\)` or `\(K=10\)` provides a nice compromise for the bias-variance trade-off
 
 ---
+
+## Approach #2: K-fold Cross Validation
+
+Auto example: 
+* We have 392 observations
+* Trying to predict `mpg` from `horsepower`
+
+
+
+
+
+
+---
+
+## Estimating prediction error (qualitative outcome)
+
+* The premise is the same as cross valiation for quantitative outcomes
+* Split the data into K parts, where `\(C_1, C_2, \dots, C_k\)` indicate the indices of observations in part `\(k\)`
+
+`$$CV_K = \sum_{k=1}^K\frac{n_k}{n}Err_k$$`
+
+--
+* `\(Err_k = \sum_{i\in C_k}I(y_i\neq\hat{y}_i)/n_k\)` (missclassification rate)
+
+--
+* `\(n_k\)` is the number of observations in group `\(k\)`
+* `\(\hat{y}_i\)` is the fit for observation `\(i\)` obtained from the data with the part `\(k\)` removed
+
+---
+
+
 
 ## &lt;i class="fas fa-laptop"&gt;&lt;/i&gt; `CV`
 
