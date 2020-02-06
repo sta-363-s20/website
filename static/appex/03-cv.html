@@ -10,6 +10,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Lucy D’Agostino McGowan" />
 
 
 <title>Cross Validation</title>
@@ -363,6 +364,7 @@ summary {
 
 
 <h1 class="title toc-ignore">Cross Validation</h1>
+<h4 class="author">Lucy D’Agostino McGowan</h4>
 
 </div>
 
@@ -413,15 +415,22 @@ summary {
 <h2>Exercise 2: Using the data set below, create a vector, <code>y</code> and a design matrix <code>X</code>.</h2>
 <pre class="r"><code>d &lt;- data.frame(x = c(2.62, 2.88, 2.32, 3.22, 3.44, 3.46, 3.57),
                 y = c(21, 21, 22.8, 21.4, 18.7, 18.1, 14.3))</code></pre>
+<pre class="r"><code>y &lt;- d$y 
+X &lt;- matrix(c(rep(1, 7), d$x), ncol = 2)</code></pre>
 </div>
 <div id="exercise-3-calculate-the-hat-matrix-and-y-hat" class="section level2">
 <h2>Exercise 3: Calculate the hat matrix and y hat</h2>
 <p><strong>Hint 1</strong> Look back at Linear Regression slides: <a href="https://sta-363-s20.lucymcgowan.com/slides/04-linear-regression.html#48" class="uri">https://sta-363-s20.lucymcgowan.com/slides/04-linear-regression.html#48</a></p>
 <p><strong>Hint 2</strong> Look back at your linear application exercise (appex-01-linear-models)</p>
+<pre class="r"><code>hat_matrix &lt;- X %*% solve(t(X) %*% X) %*% t(X)
+h &lt;- diag(hat_matrix)
+y_hat &lt;- hat_matrix %*% y</code></pre>
 <p>You can use the <code>diag()</code> function to get the diagonal of the hat matrix</p>
 </div>
 <div id="exercise-4-calculate-the-loocv-error-using-y-yhat-and-the-diagonal-of-the-hat-matrix-calculated" class="section level2">
 <h2>Exercise 4: Calculate the LOOCV error using y, yhat, and the diagonal of the hat matrix calculated</h2>
+<pre class="r"><code>sum(((y - y_hat) / (1 - h))^2) / 7</code></pre>
+<pre><code>## [1] 4.505596</code></pre>
 </div>
 <div id="exercise-5-calculate-7-fold-cross-validation-loocv-using-the-iterative-method" class="section level2">
 <h2>Exercise 5: Calculate 7-fold cross validation (LOOCV) using the iterative method</h2>
@@ -430,15 +439,20 @@ summary {
   mutate(k = 1:7)
 
 mse_k &lt;- function(K = 1) { 
-  d_k &lt;- --- %&gt;% 
+  d_k &lt;- d %&gt;% 
     filter(k != K) #&lt;&lt;
-  model_k &lt;- lm(---, data = d_k)
-  --- %&gt;%
+  model_k &lt;- lm(y ~ x, data = d_k)
+  d %&gt;%
     filter(k == K) %&gt;% #&lt;&lt;
     mutate(p = predict(model_k, newdata = .)) %&gt;%
-    summarise(mse_k = mean((--- - p)^2),
+    summarise(mse_k = mean((y - p)^2),
               n_k = n())
-} </code></pre>
+} 
+
+map_df(1:7, ~ mse_k(.x)) %&gt;%
+  summarise(sum((n_k / sum(n_k)) * mse_k))</code></pre>
+<pre><code>##   sum((n_k/sum(n_k)) * mse_k)
+## 1                    4.505596</code></pre>
 </div>
 
 
