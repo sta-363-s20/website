@@ -46,6 +46,7 @@ lessons:
     title: "Cross-validation and Bootstrap"
     reading: "04-reading.html"
     slides: "08-cv.html"
+    appex: "03-cv.html"
   - title: "Week 05"
   - date: "Tues, Feb 11"
     title: "Review"
