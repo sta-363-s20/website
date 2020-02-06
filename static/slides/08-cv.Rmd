@@ -154,7 +154,7 @@ If we have a **qualitative predictor** (classification) what metric would we use
 Auto example: 
 * We have 392 observations
 * Trying to predict `mpg` from `horsepower`
-* We can split the data in half and use 196 to fit the model and 192 to test 
+* We can split the data in half and use 196 to fit the model and 196 to test 
 
 ```{r, fig.height = 2}
 data(Auto)
@@ -185,7 +185,7 @@ ggplot(f(), aes(x = x, y = y)) +
 Auto example: 
 * We have 392 observations
 * Trying to predict `mpg` from `horsepower`
-* We can split the data in half and use 196 to fit the model and 192 to test - **what if we did this many times?**
+* We can split the data in half and use 196 to fit the model and 196 to test - **what if we did this many times?**
 
 ```{r, fig.height = 2}
 set.seed(1)
@@ -300,7 +300,7 @@ Auto %>%
 
 * Split the data into K parts, where $C_1, C_2, \dots, C_k$ indicate the indices of observations in part $k$
 
-$$CV_{(K)} = \sum_{k=1}^K\frac{n_k}{n}MSE$$
+$$CV_{(K)} = \sum_{k=1}^K\frac{n_k}{n}MSE_k$$
 
 --
 
