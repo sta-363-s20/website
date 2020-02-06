@@ -665,7 +665,7 @@ Auto example:
 * Trying to predict `mpg` from `horsepower`
 
 
-```{r fig1, cache = TRUE, fig.height = 2, eval = FALSE}
+```{r fig1, cache = TRUE, fig.height = 2}
 ggplot(d, aes(x = x, y = y, group = z, color = z)) + 
   geom_line() +
   labs(x = "degree polynomial", y = "MSE", title = "50-50 Validation set") + 
