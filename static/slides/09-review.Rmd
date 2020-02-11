@@ -1,0 +1,177 @@
+---
+title: "Review"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan <i>adapted from slides by Hastie & Tibshirani</i>
+</span>
+</div> 
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(tidyverse)
+library(ISLR)
+library(tidymodels)
+library(gridExtra)
+```
+
+---
+
+class: center, middle
+
+## RStudio Cloud Update
+
+
+---
+
+class: center, middle
+
+## Make sure to bring a calculator to the exam on Thursday
+
+---
+
+
+## Office Hours this week:
+
+* Wednesday 10a
+* **Wednesday 2p**
+* Thursday 10a
+
+---
+
+mpg | weight | automatic 
+----|--------|-----
+21  | 2.6 | 1
+22.8 | 2.32 | 1
+18.7 | 3.4 | 0
+14.3 | 3.5 | 0
+24.4 | 3.1 | 0
+
+You want to predict mpg using weight and automatic. Write out how you would calculate $\hat\beta$ in matrix form using the data provided (you need not **solve** the matrices)
+
+---
+
+mpg | weight | automatic 
+-----|--------|-----
+21  | 2.6 | 1
+22.8 | 2.32 | 1
+18.7 | 3.4 | 0
+14.3 | 3.5 | 0
+24.4 | 3.1 | 0
+
+Solving the equation results in the following $\hat\beta$:
+
+$\begin{bmatrix} \hat{\beta}_0 \\ \hat{\beta}_1 \\ \hat{\beta}_2\end{bmatrix} = \begin{bmatrix}80.45 \\ -18.40 \\ -13.30\end{bmatrix}$
+
+
+Using the information provided, calculate the MSE (mean squared error) for this model.
+
+---
+
+mpg | weight | automatic 
+-----|--------|-----
+21  | 2.6 | 1
+22.8 | 2.32 | 1
+18.7 | 3.4 | 0
+14.3 | 3.5 | 0
+24.4 | 3.1 | 0
+
+$\begin{bmatrix} 0.66 &  0.34& 0.07& 0.19&-0.26 \\ 0.34& 0.66&-0.07&-0.19& 0.26 \\ 0.07&-0.07& 0.37& 0.42& 0.21 \\ 0.19&-0.19& 0.42& 0.55& 0.02 \\ -0.26& 0.26& 0.21& 0.02& 0.77 \\ \end{bmatrix}$
+
+Above is the **hat matrix** for the model. Use this to calculate LOOCV error for this model
+
+---
+
+mpg | weight | automatic 
+----|--------|-----
+8  | 3.8 | 0
+30.3 | 1.9 | 1
+40.9 | 1.5 | 1
+22.1 | 3.4 | 0
+26 | 2.1 | 1
+
+You get a new test data set (above). Using the same model you fit to the training data, calculate the MSE in this test dataset
+
+---
+
+class | x
+-------|---
+1 | -0.57
+1 | -1.26
+1 | 1.13
+2 | 3.3
+2 | 5.4
+
+Using the data above, calculate $\pi_k$, $\mu_k$, and $\sigma^2$
+
+---
+
+class | x
+-------|---
+1 | -0.57
+1 | -1.26
+1 | 1.13
+2 | 3.3
+2 | 5.4
+
+Using LDA, what is are the discrimant scores for x = 3? Which class would you classify this point into?
+
+---
+
+class | x
+-------|---
+1 | -0.57
+1 | -1.26
+1 | 1.13
+2 | 3.3
+2 | 5.4
+
+What is the probability that an observation where x = 3 is in class 1?
+
+---
+
+class | x
+-------|---
+1 | -0.57
+1 | -1.26
+1 | 1.13
+2 | 3.3
+2 | 5.4
+
+What is the decision boundary for this LDA problem?
+
+---
+
+## P(+ | Drug User) = 0.8
+## P(Drug User) = 0.1
+## P(+ | Not a drug user) = 0.2
+
+* What is the probability of being a drug user give you test positive?
+---
+
+| Truth (+) | Truth (-) | total
+-|---------|-------|
+Predicted (+) | 10 | 20 | 30
+Predicted (-) | 5 | 50 | 55
+Total | 15 | 70 | 85
+
+* What is the accuracy?
+* What is the false positive rate?
+* What is the false negative rate?

@@ -43,7 +43,7 @@ lessons:
   - title: "Lab 02:  LDA and QDA"
     lab: "02-lda-qda.html"
   - date: "Thur, Feb 6"
-    title: "Cross-validation and Bootstrap"
+    title: "Cross-validation"
     reading: "04-reading.html"
     slides: "08-cv.html"
     appex: "03-cv.html"
