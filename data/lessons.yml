@@ -50,6 +50,7 @@ lessons:
   - title: "Week 05"
   - date: "Tues, Feb 11"
     title: "Review"
+    slides: "09-review.html"
   - date: "Thur, Feb 13"
     title: "Midterm 01"
     exam: "coming-soon.html"
