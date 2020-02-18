@@ -1,0 +1,37 @@
+---
+title: "Midterm 01 Overview"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+class: center, middle
+
+## [bit.ly/sta-363-s20-office-hours)](bit.ly/sta-363-s20-office-hours)
+
+
+---
+## Midterm 01
+
+![](img/09/midterm-dist.png)
