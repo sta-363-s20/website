@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Review</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. D’Agostino McGowan" />
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Review
+### Dr. D’Agostino McGowan
+
+---
+
+
+
+
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+Dr. Lucy D'Agostino McGowan &lt;i&gt;adapted from slides by Hastie &amp; Tibshirani&lt;/i&gt;
+&lt;/span&gt;
+&lt;/div&gt; 
+
+
+
+---
+
+## RStudio Pro
+
+---
+
+class: center, middle
+
+## Practice getting your lab into RStudio Pro
+
+---
+
+class: center, middle
+
+## Now get your lab into RStudio Cloud
+
+---
+
+## Practice pushing and pulling in GitHub
+
+* So far we have just been **pushing** to GitHub, but a nice feature is that you can then **pull** your results at any time. 
+* Make a change to your Lab file in RStudio Pro and **push** this to GitHub (check the GitHub repo to make sure your changes showed up)
+* Check RStudio cloud - did those changes show up?
+
+--
+* Click the pull (down) arrow in RStudio cloud. Do you see the changes now?
+
+---
+
+## Some R functions
+
+
+```r
+sample(10)
+```
+
+```
+##  [1]  1  9  5  7  3 10  8  6  4  2
+```
+
+
+```r
+sample(10)
+```
+
+```
+##  [1]  2  5 10  3  6  7  1  9  4  8
+```
+
+---
+
+
+## Some R functions
+
+
+```r
+set.seed(1)
+sample(10)
+```
+
+```
+##  [1]  3  4  5  7  2  8  9  6 10  1
+```
+
+
+```r
+set.seed(1)
+sample(10)
+```
+
+```
+##  [1]  3  4  5  7  2  8  9  6 10  1
+```
+
+---
+
+class: center, middle
+
+## Use the `set.seed()` function before performing cross validation so you get consistent (reproducible) answers!
+
+---
+
+## Polynomial regression in R
+
+
+
+`\(y = \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^2 + \epsilon\)`
+
+
+```r
+lm(y ~ x + I(x^2) + I(x^3), data = data)
+```
+
+```
+## 
+## Call:
+## lm(formula = y ~ x + I(x^2) + I(x^3), data = data)
+## 
+## Coefficients:
+## (Intercept)            x       I(x^2)       I(x^3)  
+##     0.10276     -0.06669     -0.13772      0.02546
+```
+
+--
+
+
+```r
+lm(y ~ poly(x, 3), data = data)
+```
+
+```
+## 
+## Call:
+## lm(formula = y ~ poly(x, 3), data = data)
+## 
+## Coefficients:
+## (Intercept)  poly(x, 3)1  poly(x, 3)2  poly(x, 3)3  
+##   -0.007264    -0.205147    -1.465710     0.382521
+```
+
+---
+
+## Polynomial regression in R
+
+`\(y = \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^2 + \epsilon\)`
+
+
+```r
+model1 &lt;- lm(y ~ x + I(x^2) + I(x^3), data = data)
+model2 &lt;- lm(y ~ poly(x, 3), data = data)
+
+all.equal(predict(model1), predict(model2))
+```
+
+```
+## [1] TRUE
+```
+
+---
+
+class: center, middle
+
+## When doing polynomial regression, you can use the `poly()` function in R
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

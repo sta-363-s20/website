@@ -1,0 +1,133 @@
+---
+title: "Review"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan <i>adapted from slides by Hastie & Tibshirani</i>
+</span>
+</div> 
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+library(tidyverse)
+library(ISLR)
+library(tidymodels)
+library(gridExtra)
+```
+
+---
+
+## RStudio Pro
+
+---
+
+class: center, middle
+
+## Practice getting your lab into RStudio Pro
+
+---
+
+class: center, middle
+
+## Now get your lab into RStudio Cloud
+
+---
+
+## Practice pushing and pulling in GitHub
+
+* So far we have just been **pushing** to GitHub, but a nice feature is that you can then **pull** your results at any time. 
+* Make a change to your Lab file in RStudio Pro and **push** this to GitHub (check the GitHub repo to make sure your changes showed up)
+* Check RStudio cloud - did those changes show up?
+
+--
+* Click the pull (down) arrow in RStudio cloud. Do you see the changes now?
+
+---
+
+## Some R functions
+
+```{r}
+sample(10)
+```
+
+```{r}
+sample(10)
+```
+
+---
+
+
+## Some R functions
+
+```{r}
+set.seed(1)
+sample(10)
+```
+
+```{r}
+set.seed(1)
+sample(10)
+```
+
+---
+
+class: center, middle
+
+## Use the `set.seed()` function before performing cross validation so you get consistent (reproducible) answers!
+
+---
+
+## Polynomial regression in R
+
+```{r, echo = FALSE}
+data <- data.frame(x = rnorm(100), y = rnorm(100))
+```
+
+$y = \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^2 + \epsilon$
+
+```{r}
+lm(y ~ x + I(x^2) + I(x^3), data = data)
+```
+
+--
+
+```{r}
+lm(y ~ poly(x, 3), data = data)
+```
+
+---
+
+## Polynomial regression in R
+
+$y = \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^2 + \epsilon$
+
+```{r}
+model1 <- lm(y ~ x + I(x^2) + I(x^3), data = data)
+model2 <- lm(y ~ poly(x, 3), data = data)
+
+all.equal(predict(model1), predict(model2))
+```
+
+---
+
+class: center, middle
+
+## When doing polynomial regression, you can use the `poly()` function in R
+
