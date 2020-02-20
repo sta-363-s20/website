@@ -39,6 +39,7 @@ Dr. Lucy D'Agostino McGowan &lt;i&gt;adapted from slides by Hastie &amp; Tibshir
 # rstudio.hpc.ar53.wfu.edu:8787
 
 ## pw: R2D2Star!
+
 ---
 
 class: center, middle
@@ -72,7 +73,7 @@ sample(10)
 ```
 
 ```
-##  [1]  1  5  8  7  6  9  4  2  3 10
+##  [1]  7 10  5  3  2  9  4  6  1  8
 ```
 
 
@@ -81,7 +82,7 @@ sample(10)
 ```
 
 ```
-##  [1]  3 10  8  2  9  1  4  7  6  5
+##  [1]  2  4  1  3  8 10  6  9  7  5
 ```
 
 ---
@@ -121,7 +122,7 @@ class: center, middle
 
 
 
-`\(y = \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^2 + \epsilon\)`
+`\(y = \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^3 + \epsilon\)`
 
 
 ```r
@@ -159,7 +160,7 @@ lm(y ~ poly(x, 3), data = data)
 
 ## Polynomial regression in R
 
-`\(y = \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^2 + \epsilon\)`
+`\(y = \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^3 + \epsilon\)`
 
 
 ```r

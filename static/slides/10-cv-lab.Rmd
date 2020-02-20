@@ -28,8 +28,6 @@ Dr. Lucy D'Agostino McGowan <i>adapted from slides by Hastie & Tibshirani</i>
 knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 library(tidyverse)
 library(ISLR)
-library(tidymodels)
-library(gridExtra)
 ```
 
 ---
@@ -104,7 +102,7 @@ class: center, middle
 data <- data.frame(x = rnorm(100), y = rnorm(100))
 ```
 
-$y = \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^2 + \epsilon$
+$y = \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^3 + \epsilon$
 
 ```{r}
 lm(y ~ x + I(x^2) + I(x^3), data = data)
@@ -120,7 +118,7 @@ lm(y ~ poly(x, 3), data = data)
 
 ## Polynomial regression in R
 
-$y = \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^2 + \epsilon$
+$y = \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^3 + \epsilon$
 
 ```{r}
 model1 <- lm(y ~ x + I(x^2) + I(x^3), data = data)
