@@ -1,5 +1,5 @@
 ---
-title: "Review"
+title: "CV Lab"
 author: "Dr. D'Agostino McGowan"
 output:
   xaringan::moon_reader:
@@ -36,6 +36,9 @@ library(gridExtra)
 
 ## RStudio Pro
 
+# rstudio.hpc.ar53.wfu.edu:8787
+
+## pw: R2D2Star!
 ---
 
 class: center, middle
