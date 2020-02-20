@@ -39,13 +39,12 @@ In this lab we are going to practice cross validation. A few reminders:
 
 # Packages
 
-In this lab we will work with three packages: `tidyverse` which is a collection of packages for doing data analysis in a "tidy" way, `tidymodels` which is a collection of packages for doing statistical analysis, and `ISLR` a package that contains our data.
+In this lab we will work with two packages: `tidyverse` which is a collection of packages for doing data analysis in a "tidy" way and the `ISLR` a package that contains our data.
 
 Install these packages by running the following in the console.
 
 ```{r eval = FALSE}
 install.packages("tidyverse")
-install.packages("tidymodels")
 install.packages("ISLR")
 ```
 
@@ -55,7 +54,6 @@ If you'd like to run your code in the Console as well you'll also need to load t
 
 ```{r eval = FALSE}
 library(tidyverse) 
-library(tidymodels)
 library(ISLR)
 ```
 
