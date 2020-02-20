@@ -15,4 +15,4 @@ Thur, Feb 25
 
 ## Required:
 
-- ISLR Section 6.2.1
+- ISLR Sections 6.1.3 and 6.2.1
