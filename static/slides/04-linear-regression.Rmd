@@ -64,12 +64,16 @@ data(Sparrows)
 $$Y = \beta_0 + \beta_1 X + \epsilon$$
 
 --
+
 * $\beta_0$: intercept
 --
+
 * $\beta_1$: slope
 --
+
   * $\beta_0$ and $\beta_1$ are **coefficients**, **parameters**
 --
+
 * $\epsilon$: error
 
 ---
@@ -81,8 +85,10 @@ We **estimate** this with
 $$\hat{y} = \hat{\beta}_0 + \hat{\beta}_1x$$
 
 --
+
 * $\hat{y}$ is the prediction of $Y$ when $X = x$
 --
+
 * The **hat** denotes that this is an **estimated** value
 
 
@@ -290,10 +296,13 @@ $$
 
 $$\Large \hat{y}_i=\hat{\beta}_0 + \hat{\beta}_1x_i$$
 --
+
 * $\epsilon_i = y_i - \hat{y}_i$
 --
+
 * $\epsilon_i = y_i - (\hat{\beta}_0+\hat{\beta}_1x_i)$
 --
+
 * $\epsilon_i$ is known as the **residual** for observation $i$
 
 ---
@@ -308,6 +317,7 @@ How are $\hat{\beta}_0$ and $\hat{\beta}_1$ chosen? What are we minimizing?
 
 * Minimize the **residual sum of squares**
 --
+
 * RSS = $\sum\epsilon_i^2 = \epsilon_1^2 + \epsilon_2^2 + \dots+\epsilon_n^2$
 
 ---
@@ -321,6 +331,7 @@ How could we re-write this with $y_i$ and $x_i$?
 * Minimize the **residual sum of squares**
 * RSS = $\sum\epsilon_i^2 = \epsilon_1^2 + \epsilon_2^2 + \dots+\epsilon_n^2$
 --
+
 * RSS = $(y_1 - \hat{\beta_0} - \hat{\beta}_1x_1)^2 + (y_2 - \hat{\beta}_0-\hat{\beta}_1x_2)^2 + \dots + (y_n - \hat{\beta}_0-\hat{\beta}_1x_n)^2$
 
 ---

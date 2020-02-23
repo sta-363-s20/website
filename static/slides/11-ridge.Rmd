@@ -1,0 +1,755 @@
+---
+title: "Ridge Regression"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+library(tidyverse)
+library(broom)
+library(ISLR)
+```
+
+---
+
+## Linear Regression Review
+
+.question[
+In linear regression, what are we minimizing? How can I write this in matrix form?
+]
+
+--
+
+* RSS!
+
+$$(\mathbf{y} - \mathbf{X}\hat\beta)^T(\mathbf{y}-\mathbf{X}\hat\beta)$$
+
+--
+
+.question[
+What is the solution ( $\hat\beta$ ) to this?
+]
+
+--
+
+$$\mathbf{(X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$$
+
+---
+
+## Linear Regression Review
+
+.question[
+What is $\mathbf{X}$?
+]
+
+--
+
+- the design matrix!
+
+---
+
+## <i class="fas fa-pause-circle"></i> `Matrix fact`
+
+$$
+\begin{align}
+\mathbf{C} &= \mathbf{AB}\\
+\mathbf{C}^T &=\mathbf{B}^T\mathbf{A}^T
+\end{align}
+$$
+
+--
+
+## <i class="fas fa-edit"></i> `Try it!`
+
+* Distribute (FOIL / get rid of the parentheses) the RSS equation
+
+$$RSS = (\mathbf{y} - \mathbf{X}\hat\beta)^T(\mathbf{y}-\mathbf{X}\hat\beta)$$
+
+---
+
+## <i class="fas fa-pause-circle"></i> `Matrix fact`
+
+$$
+\begin{align}
+\mathbf{C} &= \mathbf{AB}\\
+\mathbf{C}^T &=\mathbf{B}^T\mathbf{A}^T
+\end{align}
+$$
+
+## <i class="fas fa-edit"></i> `Try it!`
+
+* Distribute (FOIL / get rid of the parentheses) the RSS equation
+
+$$
+\begin{align}
+RSS &= (\mathbf{y} - \mathbf{X}\hat\beta)^T(\mathbf{y}-\mathbf{X}\hat\beta) \\
+& = \mathbf{y}^T\mathbf{y}-\hat{\beta}^T\mathbf{X}^T\mathbf{y}-\mathbf{y}^T\mathbf{X}\hat\beta + \hat{\beta}^T\mathbf{X}^T\mathbf{X}\hat\beta
+\end{align}
+$$
+---
+
+## <i class="fas fa-pause-circle"></i> `Matrix fact`
+
+* the transpose of a scalar is a scalar
+--
+
+* $\hat\beta^T\mathbf{X}^T\mathbf{y}$ is a scalar 
+
+.question[
+Why? What are the dimensions of $\hat\beta^T$? What are the dimensions of $\mathbf{X}$? What are the dimensions of $\mathbf{y}$?
+]
+
+--
+
+* $(\mathbf{y}^T\mathbf{X}\hat\beta)^T = \hat\beta^T\mathbf{X}^T\mathbf{y}$
+
+
+--
+
+$$
+\begin{align}
+RSS &= (\mathbf{y} - \mathbf{X}\hat\beta)^T(\mathbf{y}-\mathbf{X}\hat\beta) \\
+& = \mathbf{y}^T\mathbf{y}-\hat{\beta}^T\mathbf{X}^T\mathbf{y}-\mathbf{y}^T\mathbf{X}\hat\beta + \hat{\beta}^T\mathbf{X}^T\mathbf{X}\hat\beta\\
+&=\mathbf{y}^T\mathbf{y}-2\hat{\beta}^T\mathbf{X}^T\mathbf{y} + \hat{\beta}^T\mathbf{X}^T\mathbf{X}\hat\beta\\
+\end{align}
+$$
+
+---
+
+## Linear Regression Review
+
+.question[
+To find the $\hat\beta$ that is going to minimize this RSS, what do we do? Why?
+]
+
+$$
+\begin{align}
+RSS &= (\mathbf{y} - \mathbf{X}\hat\beta)^T(\mathbf{y}-\mathbf{X}\hat\beta) \\
+& = \mathbf{y}^T\mathbf{y}-\hat{\beta}^T\mathbf{X}^T\mathbf{y}-\mathbf{y}^T\mathbf{X}\hat\beta + \hat{\beta}^T\mathbf{X}^T\mathbf{X}\hat\beta\\
+&=\mathbf{y}^T\mathbf{y}-2\hat{\beta}^T\mathbf{X}^T\mathbf{y} + \hat{\beta}^T\mathbf{X}^T\mathbf{X}\hat\beta\\
+\end{align}
+$$
+
+
+---
+
+## <i class="fas fa-pause-circle"></i> `Matrix fact`
+
+* When $\mathbf{a}$ and $\mathbf{b}$ are $p\times 1$ vectors
+
+$$\frac{\partial\mathbf{a}^T\mathbf{b}}{\partial\mathbf{b}}=\frac{\partial\mathbf{b}^T\mathbf{a}}{\partial\mathbf{b}}=\mathbf{a}$$
+
+--
+
+* When $\mathbf{A}$ is a symmetric matrix
+
+$$\frac{\partial\mathbf{b}^T\mathbf{Ab}}{\partial\mathbf{b}}=2\mathbf{Ab}=2\mathbf{b}^T\mathbf{A}$$
+
+--
+
+## <i class="fas fa-edit"></i> `Try it!`
+
+$$\frac{\partial RSS}{\partial\hat\beta} = $$
+
+* $RSS = \mathbf{y}^T\mathbf{y}-2\hat{\beta}^T\mathbf{X}^T\mathbf{y} + \hat{\beta}^T\mathbf{X}^T\mathbf{X}\hat\beta$
+
+---
+
+## Linear Regression Review
+
+.question[
+How did we get $\mathbf{(X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$?
+]
+
+$$RSS = \mathbf{y}^T\mathbf{y}-2\hat{\beta}^T\mathbf{X}^T\mathbf{y} + \hat{\beta}^T\mathbf{X}^T\mathbf{X}\hat\beta$$
+
+$$\frac{\partial RSS}{\partial\hat\beta}=-2\mathbf{X}^T\mathbf{y}+2\mathbf{X}^T\mathbf{X}\hat\beta = 0$$
+
+---
+
+## <i class="fas fa-pause-circle"></i> `Matrix fact`
+
+$$\mathbf{A}\mathbf{A}^{-1} = \mathbf{I}$$
+
+--
+
+.question[
+What is $\mathbf{I}$?
+]
+
+--
+
+* identity matrix
+
+$$\mathbf{I}=\begin{bmatrix}  1 & 0&\dots & 0 \\   0&1 & \dots &0 \\   \vdots&\vdots&\ddots&\vdots\\   0 &    0 & \dots    & 1    \end{bmatrix}$$
+
+$$\mathbf{AI} = \mathbf{A}$$
+
+---
+
+## <i class="fas fa-edit"></i> `Try it!`
+
+* Solve for $\hat\beta$
+
+$$-2\mathbf{X}^T\mathbf{y}+2\mathbf{X}^T\mathbf{X}\hat\beta = 0$$
+---
+
+## Linear Regression Review
+
+.question[
+How did we get $\mathbf{(X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$?
+]
+
+$$
+\begin{align}
+-2\mathbf{X}^T\mathbf{y}+2\mathbf{X}^T\mathbf{X}\hat\beta &= 0\\
+2\mathbf{X}^T\mathbf{X}\hat\beta & = 2\mathbf{X}^T\mathbf{y} \\
+\mathbf{X}^T\mathbf{X}\hat\beta & =\mathbf{X}^T\mathbf{y} \\
+\end{align}
+$$
+
+---
+
+## Linear Regression Review
+
+.question[
+How did we get $\mathbf{(X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$?
+]
+
+$$
+\begin{align}
+-2\mathbf{X}^T\mathbf{y}+2\mathbf{X}^T\mathbf{X}\hat\beta &= 0\\
+2\mathbf{X}^T\mathbf{X}\hat\beta & = 2\mathbf{X}^T\mathbf{y} \\
+\mathbf{X}^T\mathbf{X}\hat\beta & =\mathbf{X}^T\mathbf{y} \\
+(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\hat\beta &=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}\\
+\end{align}
+$$
+
+---
+
+## Linear Regression Review
+
+.question[
+How did we get $\mathbf{(X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$?
+]
+
+$$
+\begin{align}
+-2\mathbf{X}^T\mathbf{y}+2\mathbf{X}^T\mathbf{X}\hat\beta &= 0\\
+2\mathbf{X}^T\mathbf{X}\hat\beta & = 2\mathbf{X}^T\mathbf{y} \\
+\mathbf{X}^T\mathbf{X}\hat\beta & =\mathbf{X}^T\mathbf{y} \\
+(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\hat\beta &=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}\\
+\underbrace{(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}}_{\mathbf{I}}\hat\beta &=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}
+\end{align}
+$$
+
+---
+
+## Linear Regression Review
+
+.question[
+How did we get $\mathbf{(X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$?
+]
+
+$$
+\begin{align}
+-2\mathbf{X}^T\mathbf{y}+2\mathbf{X}^T\mathbf{X}\hat\beta &= 0\\
+2\mathbf{X}^T\mathbf{X}\hat\beta & = 2\mathbf{X}^T\mathbf{y} \\
+\mathbf{X}^T\mathbf{X}\hat\beta & =\mathbf{X}^T\mathbf{y} \\
+(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\hat\beta &=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}\\
+\underbrace{(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}}_{\mathbf{I}}\hat\beta &=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}\\
+\mathbf{I}\hat\beta &= (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}
+\end{align}
+$$
+
+---
+## Linear Regression Review
+
+.question[
+How did we get $\mathbf{(X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$?
+]
+
+$$
+\begin{align}
+-2\mathbf{X}^T\mathbf{y}+2\mathbf{X}^T\mathbf{X}\hat\beta &= 0\\
+2\mathbf{X}^T\mathbf{X}\hat\beta & = 2\mathbf{X}^T\mathbf{y} \\
+\mathbf{X}^T\mathbf{X}\hat\beta & =\mathbf{X}^T\mathbf{y} \\
+(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\hat\beta &=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}\\
+\underbrace{(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}}_{\mathbf{I}}\hat\beta &=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}\\
+\mathbf{I}\hat\beta &= (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}\\
+\hat\beta & = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}
+\end{align}
+$$
+
+
+---
+
+## Linear Regression Review
+
+.alert[
+Let's try to find an $\mathbf{X}$ for which it would be impossible to calculate $\hat\beta$
+]
+
+---
+
+## <i class="fas fa-laptop"></i> `Ridge`
+
+- Go to the [sta-363-s20 GitHub organization](https://github.com/sta-363-s20) and search for `appex-04-ridge`
+- Clone this repository into RStudio Pro
+  - rstudio.hpc.ar53.wfu.edu:8787
+  - pw: R2D2Star!
+- Be sure to knit, commit, and push!
+
+---
+
+## Estimating $\hat\beta$
+
+
+$\hat\beta = \mathbf{(X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$
+
+.question[
+Under what circumstances is this equation not estimable?
+]
+
+--
+
+* when we can't invert $(\mathbf{X^TX})^{-1}$
+--
+
+  * $p > n$
+  * multicollinearity
+
+--
+
+
+.alert[
+A guaranteed way to check whether a square matrix is not invertible is to check whether the **determinant** is equal to zero
+]
+
+
+---
+
+## Estimating $\hat\beta$
+
+$$\mathbf{X} = \begin{bmatrix}1 & 2 & 3 & 1 \\ 1 & 3 & 4& 0 \end{bmatrix}$$
+.question[
+What is $n$ here? What is $p$?
+]
+
+--
+
+.question[
+Is $\mathbf{(X^TX)^{-1}}$ going to be invertible? 
+]
+
+--
+
+
+```{r, eval = FALSE}
+X <- matrix(c(1, 1, 2, 3, 3, 4, 1, 0), nrow = 2)
+det(t(X) %*% X)
+```
+
+```{r, echo = FALSE}
+X <- matrix(c(1, 1, 2, 3, 3, 4, 1, 0), nrow = 2)
+round(det(t(X) %*% X))
+```
+
+---
+
+## Estimating $\hat\beta$
+
+$$\mathbf{X} = \begin{bmatrix} 1 & 3 & 6 \\ 1 & 4 & 8 \\1 & 5& 10\\ 1 & 2 & 4\end{bmatrix}$$
+
+--
+
+.question[
+Is $\mathbf{(X^TX)^{-1}}$ going to be invertible? 
+]
+
+--
+
+.small[
+```{r}
+X <- matrix(c(1, 1, 1, 1, 3, 4, 5, 2, 6, 8, 10, 4), nrow = 4)
+det(t(X) %*% X)
+cor(X[, 2], X[, 3])
+```
+]
+
+---
+
+## Estimating $\hat\beta$
+
+$$\mathbf{X} = \begin{bmatrix} 1 & 3 & 6 \\ 1 & 4 & 8 \\1 & 5& 10\\ 1 & 2 & 4\end{bmatrix}$$
+
+
+.question[
+What was the problem this time?
+]
+
+
+.small[
+```{r}
+X <- matrix(c(1, 1, 1, 1, 3, 4, 5, 2, 6, 8, 10, 4), nrow = 4)
+det(t(X) %*% X)
+cor(X[, 2], X[, 3])
+```
+]
+
+---
+
+
+## Estimating $\hat\beta$
+
+.question[
+What is a sure-fire way to tell whether $\mathbf{(X^TX)^{-1}}$ will be invertible?
+]
+
+--
+
+* Take the determinant!
+
+--
+
+$|\mathbf{A}|$ means the determinant of matrix $\mathbf{A}$
+
+--
+
+* For a 2x2 matrix:
+
+$$\mathbf{A} = \begin{bmatrix}a&b\\c&d\end{bmatrix}$$
+$$|\mathbf{A}| = ad - bc$$
+
+---
+
+## Estimating $\hat\beta$
+
+.question[
+What is a sure-fire way to tell whether $\mathbf{(X^TX)^{-1}}$ will be invertible?
+]
+
+
+* Take the determinant!
+
+$|\mathbf{A}|$ means the determinant of matrix $\mathbf{A}$
+
+* For a 3x3 matrix:
+
+$$\mathbf{A} = \begin{bmatrix}a&b&c\\d&e&f\\g&h&i\end{bmatrix}$$
+$$|\mathbf{A}| = a(ei-fh)-b(di-fg) +c(dh-eg)$$
+
+---
+
+## Determinants
+
+_It looks funky, but it follows a nice pattern!_
+
+$$\mathbf{A} = \begin{bmatrix}a&b&c\\d&e&f\\g&h&i\end{bmatrix}$$
+$$|\mathbf{A}| = a(ei-fh)-b(di-fg) +c(dh-eg)$$
+--
+
+* (1) multiply $a$ by the determinant of the portion of the matrix that are **not** in $a$'s row or column
+* do the same for $b$ (2) and $c$ (3)
+* put it together as **plus** (1) **minus** (2) **plus** (3)
+
+--
+
+$$|\mathbf{A}| = a \left|\begin{matrix}e&f\\h&i\end{matrix}\right|-b\left|\begin{matrix}d&f\\g&i\end{matrix}\right|+c\left|\begin{matrix}d&e\\g&h\end{matrix}\right|$$
+
+---
+
+## Determinants
+
+.question[
+How do you think this works for a 4x4 matrix?
+]
+
+$$\mathbf{A} = \begin{bmatrix}a&b&c &d\\e&f&g&h\\i&j&k&l\\m&n&o&p\end{bmatrix}$$
+
+--
+
+* (1) multiply $a$ by the determinant of the portion of the matrix that are **not** in $a$'s row or column
+* do the same for $b$ (2), $c$ (3), and $d$ (4)
+* put it together as **plus** (1) **minus** (2) **plus** (3) **minus** (4)
+* _Notice the **plus minus plus minus...** pattern! This holds!_
+
+---
+
+## <i class="fas fa-edit"></i> `Determinants`
+
+* Calculate the determinant of the following matrices:
+
+$$\mathbf{A} = \begin{bmatrix} 1 & 2 \\ 4 & 5 \end{bmatrix}$$
+
+$$\mathbf{B} = \begin{bmatrix} 1 & 2 & 3 \\ 3 & 6 & 9 \\ 2 & 5 & 7\end{bmatrix}$$
+* Are these both invertible?
+
+---
+
+
+## Estimating $\hat\beta$
+
+$$\mathbf{X} = \begin{bmatrix} 1 & 3.01 & 6 \\ 1 & 4 & 8 \\1 & 5& 10\\ 1 & 2 & 4\end{bmatrix}$$
+
+--
+
+.question[
+Is $\mathbf{(X^TX)^{-1}}$ going to be invertible? 
+]
+
+--
+
+.small[
+```{r}
+X <- matrix(c(1, 1, 1, 1, 3.01, 4, 5, 2, 6, 8, 10, 4), nrow = 4)
+det(t(X) %*% X)
+cor(X[, 2], X[, 3])
+```
+]
+
+---
+
+## Estimating $\hat\beta$
+
+$$\mathbf{X} = \begin{bmatrix} 1 & 3.01 & 6 \\ 1 & 4 & 8 \\1 & 5& 10\\ 1 & 2 & 4\end{bmatrix}$$
+
+
+.question[
+Is $\mathbf{(X^TX)^{-1}}$ going to be invertible? 
+]
+
+.small[
+```{r}
+y <- c(1, 2, 3, 2)
+solve(t(X) %*% X) %*% t(X) %*% y
+```
+]
+
+---
+
+## Estimating $\hat\beta$
+
+$$\mathbf{X} = \begin{bmatrix} 1 & 3.01 & 6 \\ 1 & 4 & 8 \\1 & 5& 10\\ 1 & 2 & 4\end{bmatrix}$$
+
+
+.question[
+Is $\mathbf{(X^TX)^{-1}}$ going to be invertible? 
+]
+
+$$\begin{bmatrix}\hat\beta_0\\\hat\beta_i\\\hat\beta_2\end{bmatrix} = \begin{bmatrix}1.28\\-114.29\\57.29\end{bmatrix}$$
+
+---
+
+## Estimating $\hat\beta$
+
+$$\mathbf{X} = \begin{bmatrix} 1 & 3.01 & 6 \\ 1 & 4 & 8 \\1 & 5& 10\\ 1 & 2 & 4\end{bmatrix}$$
+
+
+.question[
+What is the equation for the variance of $\hat\beta$?
+]
+
+$$var(\hat\beta) = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$$
+
+--
+
+* $\hat\sigma^2 = \frac{RSS}{n-p-1}$
+
+--
+
+$$var(\hat\beta) = \begin{bmatrix} \mathbf{0.91835}   &-24.489  &  12.132\\-24.48943  & \mathbf{4081.571} & -2038.745 \\12.13247 & -2038.745  &\mathbf{1018.367}\end{bmatrix}$$
+
+
+---
+
+## Estimating $\hat\beta$
+
+$$\mathbf{X} = \begin{bmatrix} 1 & 3.01 & 6 \\ 1 & 4 & 8 \\1 & 5& 10\\ 1 & 2 & 4\end{bmatrix}$$
+
+
+
+$$var(\hat\beta) = \begin{bmatrix} \mathbf{0.91835}   &-24.489  &  12.132\\-24.48943  & \mathbf{4081.571} & -2038.745 \\12.13247 & -2038.745  &\mathbf{1018.367}\end{bmatrix}$$
+
+.question[
+What is the variance for $\hat\beta_0$?
+]
+
+---
+
+## Estimating $\hat\beta$
+
+$$\mathbf{X} = \begin{bmatrix} 1 & 3.01 & 6 \\ 1 & 4 & 8 \\1 & 5& 10\\ 1 & 2 & 4\end{bmatrix}$$
+
+
+
+$$var(\hat\beta) = \begin{bmatrix} \color{blue}{\mathbf{0.91835}}&-24.489  &  12.132\\-24.48943  & \mathbf{4081.571} & -2038.745 \\12.13247 & -2038.745  &\mathbf{1018.367}\end{bmatrix}$$
+
+.question[
+What is the variance for $\hat\beta_0$?
+]
+
+---
+
+## Estimating $\hat\beta$
+
+$$\mathbf{X} = \begin{bmatrix} 1 & 3.01 & 6 \\ 1 & 4 & 8 \\1 & 5& 10\\ 1 & 2 & 4\end{bmatrix}$$
+
+
+
+$$var(\hat\beta) = \begin{bmatrix} \mathbf{0.91835}   &-24.489  &  12.132\\-24.48943  & \mathbf{4081.571} & -2038.745 \\12.13247 & -2038.745  &\mathbf{1018.367}\end{bmatrix}$$
+
+.question[
+What is the variance for $\hat\beta_1$?
+]
+
+---
+
+## Estimating $\hat\beta$
+
+$$\mathbf{X} = \begin{bmatrix} 1 & 3.01 & 6 \\ 1 & 4 & 8 \\1 & 5& 10\\ 1 & 2 & 4\end{bmatrix}$$
+
+
+
+$$var(\hat\beta) = \begin{bmatrix} \mathbf{0.91835}   &-24.489  &  12.132\\-24.48943  & \color{blue}{\mathbf{4081.571}} & -2038.745 \\12.13247 & -2038.745  &\mathbf{1018.367}\end{bmatrix}$$
+
+.question[
+What is the variance for $\hat\beta_1$? `r emo::ji("scream")`
+]
+
+---
+
+## What's the problem?
+
+* Sometimes we can't solve for $\hat\beta$
+
+.question[
+Why?
+]
+
+---
+
+## What's the problem?
+
+* Sometimes we can't solve for $\hat\beta$
+  * $\mathbf{X}^T\mathbf{X}$ is not invertible
+--
+
+ * We have more variables than observations ( $p > n$ )
+ * The variables are linear combinations of one another
+--
+
+* Even when we **can** invert $\mathbf{X}^T\mathbf{X}$, things can go wrong
+--
+  
+  * The variance can blow up, like we just saw!
+  
+---
+
+class: center, middle
+
+## What can we do about this?
+
+---
+
+## Ridge Regression
+
+* What if we add an additional _penalty_ to keep the $\hat\beta$ coefficients small (this will keep the variance from blowing up!)
+--
+
+* Instead of minimizing $RSS$, like we do with linear regresion, let's minimize $RSS$ PLUS some penalty function
+
+--
+
+$$RSS + \underbrace{\lambda\sum_{j=1}^p\beta^2_j}_{\textrm{shrinkage penalty}}$$
+
+--
+
+.question[
+What happens when $\lambda=0$? What happens as $\lambda\rightarrow\infty$?
+]
+
+---
+
+## Ridge Regression
+
+.question[
+Let's solve for the $\hat\beta$ coefficients using Ridge Regression. What are we minimizing?
+]
+
+--
+
+$$(\mathbf{y}-\mathbf{X}\beta)^T(\mathbf{y}-\mathbf{X}\beta)-\lambda\beta^T\beta$$
+
+---
+
+
+## <i class="fas fa-edit"></i> `Try it!`
+
+* Find $\hat\beta$ that minimizes this:
+
+$$(\mathbf{y}-\mathbf{X}\beta)^T(\mathbf{y}-\mathbf{X}\beta)-\lambda\beta^T\beta$$
+
+---
+
+## Ridge Regression
+
+$$\hat\beta_{ridge} = (\mathbf{X}^T\mathbf{X}+\lambda\mathbf{I})^{-1}\mathbf{X}^T\mathbf{y}$$
+
+--
+
+* Not only does this help with the variance, it solves our problem when $\mathbf{X}^{T}\mathbf{X}$ isn't invertible!
+
+---
+
+## Choosing $\lambda$
+
+* $\lambda$ is known as a **tuning parameter** and is selected using **cross validation**
+* For example, choose the $\lambda$ that results in the smallest estimated test error
+
+---
+
+## Bias-variance tradeoff
+
+.question[
+How do you think ridge regression fits into the bias-variance tradeoff?
+]
+
+--
+
+* As $\lambda$ `r emo::ji("point_up")`, bias `r emo::ji("point_up")`, variance `r emo::ji("point_down")`
+
+---
+
+## Ridge Regression
+
+* **IMPORTANT**: When doing ridge regression, it is important to standardize your variables (divide by the standard deviation)
+
+--
+
+.question[
+Why?
+]
+
