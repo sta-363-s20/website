@@ -380,6 +380,7 @@ In calculus, how do we minimize things?
 ]
 
 --
+
 * Take the derivative with respect to $\beta$
 * Set it equal to 0 (or a vector of 0s!)
 * Solve for $\beta$
