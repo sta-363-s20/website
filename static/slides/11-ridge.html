@@ -786,6 +786,22 @@ How do you think ridge regression fits into the bias-variance tradeoff?
 --
 
 * As `\(\lambda\)` ☝️, bias ☝️, variance 👇
+--
+
+* Bias( `\(\hat\beta_{ridge}\)` ) = `\(-\lambda(\mathbf{X}^T\mathbf{X}+\lambda\mathbf{I})^{-1}\beta\)`
+--
+
+.question[
+What would this be if `\(\lambda\)` was 0?
+]
+
+--
+* Var( `\(\hat\beta_{ridge}\)` ) = `\(\sigma^2(\mathbf{X}^T\mathbf{X}+\lambda\mathbf{I})^{-1}\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X}+\lambda\mathbf{I})^{-1}\)`
+--
+
+.question[
+Is this bigger or smaller than `\(\sigma(\mathbf{X}^T\mathbf{X})^{-1}\)`? What is this when `\(\lambda = 0\)`? As `\(\lambda\rightarrow\infty\)` does this go up or down? 
+]
 
 ---
 
@@ -798,6 +814,33 @@ How do you think ridge regression fits into the bias-variance tradeoff?
 .question[
 Why?
 ]
+
+---
+
+&lt;!-- ## tidymodels --&gt;
+
+&lt;!-- .pull-left[ --&gt;
+&lt;!-- ![](img/02/tidymodels.png) --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- .pull-right[ --&gt;
+&lt;!-- .center[ --&gt;
+&lt;!-- [tidyverse.org](https://www.tidyverse.org/) --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- - tidymodels is an opinionated collection of R packages designed for modeling and statistical analysis. --&gt;
+&lt;!-- - All packages share an underlying philosophy and a common grammar.  --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- ## tidymodels --&gt;
+
+&lt;!-- .alert[ --&gt;
+&lt;!-- Don't worry about the code for now, we will step through it next week --&gt;
+&lt;!-- ] --&gt;
+
+---
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

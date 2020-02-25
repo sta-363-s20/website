@@ -66,6 +66,7 @@ lessons:
   - date: "Tues, Feb 25"
     title: "Ridge Regression"
     reading: "05-reading.html"
+    slides: "11-ridge.html"
   - date: "Thur, Feb 27"
     title: "The Lasso"
   - title: "Week 08"

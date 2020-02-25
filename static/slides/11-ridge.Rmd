@@ -740,6 +740,22 @@ How do you think ridge regression fits into the bias-variance tradeoff?
 --
 
 * As $\lambda$ `r emo::ji("point_up")`, bias `r emo::ji("point_up")`, variance `r emo::ji("point_down")`
+--
+
+* Bias( $\hat\beta_{ridge}$ ) = $-\lambda(\mathbf{X}^T\mathbf{X}+\lambda\mathbf{I})^{-1}\beta$
+--
+
+.question[
+What would this be if $\lambda$ was 0?
+]
+
+--
+* Var( $\hat\beta_{ridge}$ ) = $\sigma^2(\mathbf{X}^T\mathbf{X}+\lambda\mathbf{I})^{-1}\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X}+\lambda\mathbf{I})^{-1}$
+--
+
+.question[
+Is this bigger or smaller than $\sigma(\mathbf{X}^T\mathbf{X})^{-1}$? What is this when $\lambda = 0$? As $\lambda\rightarrow\infty$ does this go up or down? 
+]
 
 ---
 
@@ -752,4 +768,62 @@ How do you think ridge regression fits into the bias-variance tradeoff?
 .question[
 Why?
 ]
+
+---
+
+<!-- ## tidymodels -->
+
+<!-- .pull-left[ -->
+<!-- ![](img/02/tidymodels.png) -->
+<!-- ] -->
+
+<!-- .pull-right[ -->
+<!-- .center[ -->
+<!-- [tidyverse.org](https://www.tidyverse.org/) -->
+<!-- ] -->
+
+<!-- - tidymodels is an opinionated collection of R packages designed for modeling and statistical analysis. -->
+<!-- - All packages share an underlying philosophy and a common grammar.  -->
+<!-- ] -->
+
+<!-- --- -->
+
+<!-- ## tidymodels -->
+
+<!-- .alert[ -->
+<!-- Don't worry about the code for now, we will step through it next week -->
+<!-- ] -->
+
+---
+
+
+```{r, eval = FALSE, echo = FALSE}
+library(ISLR)
+library(tidymodels)
+library(workflows)
+library(tune)
+cross_val_tbl <- vfold_cv(Hitters)
+
+rec <- Hitters %>%
+  recipe(Salary ~ .) %>%
+  step_scale(has_type("numeric"), -all_outcomes()) %>%
+  step_naomit(all_predictors(), all_outcomes())
+
+engine <- linear_reg(penalty = 1) %>%
+  set_engine("glmnet")
+
+wrk_flow <- workflow() %>%
+  add_recipe(rec) %>%
+  add_model(engine)
+
+wrk_flow %>%
+  fit_resamples(resamples = cross_val_tbl) %>%
+  collect_metric()
+grid_t <- grid_regular(penalty(range = c(10, 10000), trans = NULL), levels = 4)
+t <- tune_grid(wrk_flow, cross_val_tbl, grid = grid_t, metrics = metric_set(rmse))
+
+```
+
+
+
 
