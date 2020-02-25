@@ -514,26 +514,26 @@ _It looks funky, but it follows a nice pattern!_
 
 ---
 
-## Determinants
+&lt;!-- ## Determinants --&gt;
 
-.question[
-How do you think this works for a 4x4 matrix?
-]
+&lt;!-- .question[ --&gt;
+&lt;!-- How do you think this works for a 4x4 matrix? --&gt;
+&lt;!-- ] --&gt;
 
-`$$\mathbf{A} = \begin{bmatrix}a&amp;b&amp;c &amp;d\\e&amp;f&amp;g&amp;h\\i&amp;j&amp;k&amp;l\\m&amp;n&amp;o&amp;p\end{bmatrix}$$`
+&lt;!-- `$$\mathbf{A} = \begin{bmatrix}a&amp;b&amp;c &amp;d\\e&amp;f&amp;g&amp;h\\i&amp;j&amp;k&amp;l\\m&amp;n&amp;o&amp;p\end{bmatrix}$$` --&gt;
 
---
+&lt;!-- -- --&gt;
 
-* (1) multiply `\(a\)` by the determinant of the portion of the matrix that are **not** in `\(a\)`'s row or column
-* do the same for `\(b\)` (2), `\(c\)` (3), and `\(d\)` (4)
-* put it together as **plus** (1) **minus** (2) **plus** (3) **minus** (4)
-* _Notice the **plus minus plus minus...** pattern! This holds!_
+&lt;!-- * (1) multiply `\(a\)` by the determinant of the portion of the matrix that are **not** in `\(a\)`'s row or column --&gt;
+&lt;!-- * do the same for `\(b\)` (2), `\(c\)` (3), and `\(d\)` (4) --&gt;
+&lt;!-- * put it together as **plus** (1) **minus** (2) **plus** (3) **minus** (4) --&gt;
+&lt;!-- * _Notice the **plus minus plus minus...** pattern! This holds!_ --&gt;
 
----
+&lt;!-- --- --&gt;
 
-## &lt;i class="fas fa-edit"&gt;&lt;/i&gt; `Determinants`
+## &lt;i class="fas fa-laptop"&gt;&lt;/i&gt; `Determinants`
 
-* Calculate the determinant of the following matrices:
+* Calculate the determinant of the following matrices in R using the `det()` function:
 
 `$$\mathbf{A} = \begin{bmatrix} 1 &amp; 2 \\ 4 &amp; 5 \end{bmatrix}$$`
 
@@ -754,7 +754,7 @@ Let's solve for the `\(\hat\beta\)` coefficients using Ridge Regression. What ar
 
 --
 
-`$$(\mathbf{y}-\mathbf{X}\beta)^T(\mathbf{y}-\mathbf{X}\beta)-\lambda\beta^T\beta$$`
+`$$(\mathbf{y}-\mathbf{X}\beta)^T(\mathbf{y}-\mathbf{X}\beta)+\lambda\beta^T\beta$$`
 
 ---
 
@@ -763,7 +763,7 @@ Let's solve for the `\(\hat\beta\)` coefficients using Ridge Regression. What ar
 
 * Find `\(\hat\beta\)` that minimizes this:
 
-`$$(\mathbf{y}-\mathbf{X}\beta)^T(\mathbf{y}-\mathbf{X}\beta)-\lambda\beta^T\beta$$`
+`$$(\mathbf{y}-\mathbf{X}\beta)^T(\mathbf{y}-\mathbf{X}\beta)+\lambda\beta^T\beta$$`
 
 ---
 

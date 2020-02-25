@@ -488,26 +488,26 @@ $$|\mathbf{A}| = a \left|\begin{matrix}e&f\\h&i\end{matrix}\right|-b\left|\begin
 
 ---
 
-## Determinants
+<!-- ## Determinants -->
 
-.question[
-How do you think this works for a 4x4 matrix?
-]
+<!-- .question[ -->
+<!-- How do you think this works for a 4x4 matrix? -->
+<!-- ] -->
 
-$$\mathbf{A} = \begin{bmatrix}a&b&c &d\\e&f&g&h\\i&j&k&l\\m&n&o&p\end{bmatrix}$$
+<!-- $$\mathbf{A} = \begin{bmatrix}a&b&c &d\\e&f&g&h\\i&j&k&l\\m&n&o&p\end{bmatrix}$$ -->
 
---
+<!-- -- -->
 
-* (1) multiply $a$ by the determinant of the portion of the matrix that are **not** in $a$'s row or column
-* do the same for $b$ (2), $c$ (3), and $d$ (4)
-* put it together as **plus** (1) **minus** (2) **plus** (3) **minus** (4)
-* _Notice the **plus minus plus minus...** pattern! This holds!_
+<!-- * (1) multiply $a$ by the determinant of the portion of the matrix that are **not** in $a$'s row or column -->
+<!-- * do the same for $b$ (2), $c$ (3), and $d$ (4) -->
+<!-- * put it together as **plus** (1) **minus** (2) **plus** (3) **minus** (4) -->
+<!-- * _Notice the **plus minus plus minus...** pattern! This holds!_ -->
 
----
+<!-- --- -->
 
-## <i class="fas fa-edit"></i> `Determinants`
+## <i class="fas fa-laptop"></i> `Determinants`
 
-* Calculate the determinant of the following matrices:
+* Calculate the determinant of the following matrices in R using the `det()` function:
 
 $$\mathbf{A} = \begin{bmatrix} 1 & 2 \\ 4 & 5 \end{bmatrix}$$
 
@@ -708,7 +708,7 @@ Let's solve for the $\hat\beta$ coefficients using Ridge Regression. What are we
 
 --
 
-$$(\mathbf{y}-\mathbf{X}\beta)^T(\mathbf{y}-\mathbf{X}\beta)-\lambda\beta^T\beta$$
+$$(\mathbf{y}-\mathbf{X}\beta)^T(\mathbf{y}-\mathbf{X}\beta)+\lambda\beta^T\beta$$
 
 ---
 
@@ -717,7 +717,7 @@ $$(\mathbf{y}-\mathbf{X}\beta)^T(\mathbf{y}-\mathbf{X}\beta)-\lambda\beta^T\beta
 
 * Find $\hat\beta$ that minimizes this:
 
-$$(\mathbf{y}-\mathbf{X}\beta)^T(\mathbf{y}-\mathbf{X}\beta)-\lambda\beta^T\beta$$
+$$(\mathbf{y}-\mathbf{X}\beta)^T(\mathbf{y}-\mathbf{X}\beta)+\lambda\beta^T\beta$$
 
 ---
 
