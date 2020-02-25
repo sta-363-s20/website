@@ -30,6 +30,7 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 library(tidyverse)
 library(broom)
 library(ISLR)
+library(countdown)
 ```
 
 ---
@@ -37,6 +38,7 @@ library(ISLR)
 class: center, middle
 
 `r emo::ji("book")` Canvas
+
 
 ---
 
@@ -93,6 +95,8 @@ $$
 
 $$RSS = (\mathbf{y} - \mathbf{X}\hat\beta)^T(\mathbf{y}-\mathbf{X}\hat\beta)$$
 
+`r countdown(minutes = 2)`
+
 ---
 
 ## <i class="fas fa-pause-circle"></i> `Matrix fact`
@@ -114,6 +118,8 @@ RSS &= (\mathbf{y} - \mathbf{X}\hat\beta)^T(\mathbf{y}-\mathbf{X}\hat\beta) \\
 & = \mathbf{y}^T\mathbf{y}-\hat{\beta}^T\mathbf{X}^T\mathbf{y}-\mathbf{y}^T\mathbf{X}\hat\beta + \hat{\beta}^T\mathbf{X}^T\mathbf{X}\hat\beta
 \end{align}
 $$
+
+
 ---
 
 ## <i class="fas fa-pause-circle"></i> `Matrix fact`
@@ -181,6 +187,8 @@ $$\frac{\partial RSS}{\partial\hat\beta} = $$
 
 * $RSS = \mathbf{y}^T\mathbf{y}-2\hat{\beta}^T\mathbf{X}^T\mathbf{y} + \hat{\beta}^T\mathbf{X}^T\mathbf{X}\hat\beta$
 
+`r countdown(minutes = 2)`
+
 ---
 
 ## Linear Regression Review
@@ -220,6 +228,9 @@ $$\mathbf{AI} = \mathbf{A}$$
 * Solve for $\hat\beta$
 
 $$-2\mathbf{X}^T\mathbf{y}+2\mathbf{X}^T\mathbf{X}\hat\beta = 0$$
+
+`r countdown(minutes = 2)`
+
 ---
 
 ## Linear Regression Review
@@ -327,6 +338,8 @@ Let's try to find an $\mathbf{X}$ for which it would be impossible to calculate 
   - rstudio.hpc.ar53.wfu.edu:8787
   - pw: R2D2Star!
   
+`r countdown(minutes = 5)`
+
 <!-- - Be sure to knit, commit, and push! -->
 
 ---
@@ -513,6 +526,8 @@ $$\mathbf{A} = \begin{bmatrix} 1 & 2 \\ 4 & 5 \end{bmatrix}$$
 
 $$\mathbf{B} = \begin{bmatrix} 1 & 2 & 3 \\ 3 & 6 & 9 \\ 2 & 5 & 7\end{bmatrix}$$
 * Are these both invertible?
+
+`r countdown(minutes = 1)`
 
 ---
 
@@ -718,6 +733,8 @@ $$(\mathbf{y}-\mathbf{X}\beta)^T(\mathbf{y}-\mathbf{X}\beta)+\lambda\beta^T\beta
 * Find $\hat\beta$ that minimizes this:
 
 $$(\mathbf{y}-\mathbf{X}\beta)^T(\mathbf{y}-\mathbf{X}\beta)+\lambda\beta^T\beta$$
+
+`r countdown(minutes = 2)`
 
 ---
 
