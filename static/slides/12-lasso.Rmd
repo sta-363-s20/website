@@ -1,5 +1,5 @@
 ---
-title: "Lasso"
+title: "Lasso and Elastic Net"
 author: "Dr. D'Agostino McGowan"
 output:
   xaringan::moon_reader:
@@ -142,6 +142,33 @@ $$RSS + \lambda\sum_{j=1}^p|\beta_j|$$
 
 ---
 
+## Ridge Regression
+
+.pull-left[
+
+## Pros
+
+* Can be used when $p > n$
+* Can be used to help with multicollinearity
+* Will decrease variance
+(as $\lambda \rightarrow \infty$ )
+* Can be used for variable selection, since it will make some $\beta$ coefficients exactly 0
+
+]
+
+--
+
+.pull-right[
+
+## Cons
+
+* Will have increased bias (compared to least squares)
+* If $p>n$ the lasso can select **at most** $n$ variables
+
+]
+
+---
+
 ## Ridge versus lasso
 
 * Neither Ridge nor lasso will universally dominate
@@ -151,3 +178,62 @@ $$RSS + \lambda\sum_{j=1}^p|\beta_j|$$
 --
 
 * Cross-validation is **also** used to select $\lambda$ in either method. You choose the $\lambda$ value for which the cross-validation model is the smallest
+
+---
+
+## What if we want to do both?
+
+* Elastic net!
+
+--
+
+$$RSS + \lambda_1\sum_{j=1}^p\beta^2_j+\lambda_2\sum_{j=1}^p|\beta_j|$$
+
+--
+
+.question[
+What is the $\ell_1$ part of the penalty?
+]
+
+--
+
+.question[
+What is the $\ell_2$ part of the penalty
+]
+
+---
+
+## Elastic net
+
+$$RSS + \lambda_1\sum_{j=1}^p\beta^2_j+\lambda_2\sum_{j=1}^p|\beta_j|$$
+
+.question[
+When will this be equivalent to Ridge Regression?
+]
+
+---
+
+## Elastic net
+
+$$RSS + \lambda_1\sum_{j=1}^p\beta^2_j+\lambda_2\sum_{j=1}^p|\beta_j|$$
+
+.question[
+When will this be equivalent to Lasso?
+]
+
+---
+
+## Elastic Net
+
+$$RSS + \lambda_1\sum_{j=1}^p\beta^2_j+\lambda_2\sum_{j=1}^p|\beta_j|$$
+
+
+* The $\ell_1$ part of the penalty will generate a **sparse** model (shrink some $\beta$ coefficients to exactly 0)
+--
+
+* The $\ell_2$ part of the penalty removes the limitation on the number of variables selected (can be $>n$ now)
+--
+
+.question[
+How do you think $\lambda_1$ and $\lambda_2$ are chosen?
+]

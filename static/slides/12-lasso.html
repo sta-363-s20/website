@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
   <head>
-    <title>Lasso</title>
+    <title>Lasso and Elastic Net</title>
     <meta charset="utf-8" />
     <meta name="author" content="Dr. D’Agostino McGowan" />
     <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
@@ -12,7 +12,7 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Lasso
+# Lasso and Elastic Net
 ### Dr. D’Agostino McGowan
 
 ---
@@ -142,6 +142,33 @@ What is the bias-variance trade-off?
 
 ---
 
+## Ridge Regression
+
+.pull-left[
+
+## Pros
+
+* Can be used when `\(p &gt; n\)`
+* Can be used to help with multicollinearity
+* Will decrease variance
+(as `\(\lambda \rightarrow \infty\)` )
+* Can be used for variable selection, since it will make some `\(\beta\)` coefficients exactly 0
+
+]
+
+--
+
+.pull-right[
+
+## Cons
+
+* Will have increased bias (compared to least squares)
+* If `\(p&gt;n\)` the lasso can select **at most** `\(n\)` variables
+
+]
+
+---
+
 ## Ridge versus lasso
 
 * Neither Ridge nor lasso will universally dominate
@@ -151,6 +178,65 @@ What is the bias-variance trade-off?
 --
 
 * Cross-validation is **also** used to select `\(\lambda\)` in either method. You choose the `\(\lambda\)` value for which the cross-validation model is the smallest
+
+---
+
+## What if we want to do both?
+
+* Elastic net!
+
+--
+
+`$$RSS + \lambda_1\sum_{j=1}^p\beta^2_j+\lambda_2\sum_{j=1}^p|\beta_j|$$`
+
+--
+
+.question[
+What is the `\(\ell_1\)` part of the penalty?
+]
+
+--
+
+.question[
+What is the `\(\ell_2\)` part of the penalty
+]
+
+---
+
+## Elastic net
+
+`$$RSS + \lambda_1\sum_{j=1}^p\beta^2_j+\lambda_2\sum_{j=1}^p|\beta_j|$$`
+
+.question[
+When will this be equivalent to Ridge Regression?
+]
+
+---
+
+## Elastic net
+
+`$$RSS + \lambda_1\sum_{j=1}^p\beta^2_j+\lambda_2\sum_{j=1}^p|\beta_j|$$`
+
+.question[
+When will this be equivalent to Lasso?
+]
+
+---
+
+## Elastic Net
+
+`$$RSS + \lambda_1\sum_{j=1}^p\beta^2_j+\lambda_2\sum_{j=1}^p|\beta_j|$$`
+
+
+* The `\(\ell_1\)` part of the penalty will generate a **sparse** model (shrink some `\(\beta\)` coefficients to exactly 0)
+--
+
+* The `\(\ell_2\)` part of the penalty removes the limitation on the number of variables selected (can be `\(&gt;n\)` now)
+--
+
+.question[
+How do you think `\(\lambda_1\)` and `\(\lambda_2\)` are chosen?
+]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
