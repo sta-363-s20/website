@@ -69,6 +69,8 @@ lessons:
     slides: "11-ridge.html"
   - date: "Thur, Feb 27"
     title: "The Lasso"
+    hw: "02-hw.html"
+    slides: "12-lasso.html"
   - title: "Week 08"
   - date: "Tues, Mar 3"
     title: "The Lasso (Part 2)"

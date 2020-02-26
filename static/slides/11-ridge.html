@@ -97,7 +97,7 @@ $$
 
 `$$RSS = (\mathbf{y} - \mathbf{X}\hat\beta)^T(\mathbf{y}-\mathbf{X}\hat\beta)$$`
 
-<div class="countdown" id="timer_5e556fe4" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5e56bbb4" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -191,7 +191,7 @@ $$\frac{\partial RSS}{\partial\hat\beta} = $$
 
 * `\(RSS = \mathbf{y}^T\mathbf{y}-2\hat{\beta}^T\mathbf{X}^T\mathbf{y} + \hat{\beta}^T\mathbf{X}^T\mathbf{X}\hat\beta\)`
 
-<div class="countdown" id="timer_5e557314" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5e56bd0a" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -235,7 +235,7 @@ What is `\(\mathbf{I}\)`?
 
 `$$-2\mathbf{X}^T\mathbf{y}+2\mathbf{X}^T\mathbf{X}\hat\beta = 0$$`
 
-<div class="countdown" id="timer_5e55715c" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5e56bb77" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -346,7 +346,7 @@ Let's try to find an `\(\mathbf{X}\)` for which it would be impossible to calcul
   - rstudio.hpc.ar53.wfu.edu:8787
   - pw: R2D2Star!
   
-<div class="countdown" id="timer_5e5571a2" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5e56bb7c" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -562,7 +562,7 @@ _It looks funky, but it follows a nice pattern!_
 `$$\mathbf{B} = \begin{bmatrix} 1 &amp; 2 &amp; 3 \\ 3 &amp; 6 &amp; 9 \\ 2 &amp; 5 &amp; 7\end{bmatrix}$$`
 * Are these both invertible?
 
-<div class="countdown" id="timer_5e55709b" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5e56baca" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -638,7 +638,7 @@ solve(t(X) %*% X) %*% t(X) %*% y
 Is `\(\mathbf{(X^TX)^{-1}}\)` going to be invertible? 
 ]
 
-`$$\begin{bmatrix}\hat\beta_0\\\hat\beta_i\\\hat\beta_2\end{bmatrix} = \begin{bmatrix}1.28\\-114.29\\57.29\end{bmatrix}$$`
+`$$\begin{bmatrix}\hat\beta_0\\\hat\beta_1\\\hat\beta_2\end{bmatrix} = \begin{bmatrix}1.28\\-114.29\\57.29\end{bmatrix}$$`
 
 ---
 
@@ -791,7 +791,7 @@ Let's solve for the `\(\hat\beta\)` coefficients using Ridge Regression. What ar
 
 `$$(\mathbf{y}-\mathbf{X}\beta)^T(\mathbf{y}-\mathbf{X}\beta)+\lambda\beta^T\beta$$`
 
-<div class="countdown" id="timer_5e557179" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5e56ba80" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 

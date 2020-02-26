@@ -581,7 +581,7 @@ $$\mathbf{X} = \begin{bmatrix} 1 & 3.01 & 6 \\ 1 & 4 & 8 \\1 & 5& 10\\ 1 & 2 & 4
 Is $\mathbf{(X^TX)^{-1}}$ going to be invertible? 
 ]
 
-$$\begin{bmatrix}\hat\beta_0\\\hat\beta_i\\\hat\beta_2\end{bmatrix} = \begin{bmatrix}1.28\\-114.29\\57.29\end{bmatrix}$$
+$$\begin{bmatrix}\hat\beta_0\\\hat\beta_1\\\hat\beta_2\end{bmatrix} = \begin{bmatrix}1.28\\-114.29\\57.29\end{bmatrix}$$
 
 ---
 

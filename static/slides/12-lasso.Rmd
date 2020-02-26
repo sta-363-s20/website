@@ -1,0 +1,153 @@
+---
+title: "Lasso"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan <i>adapted from slides by Hastie & Tibshirani</i>
+</span>
+</div> 
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+library(tidyverse)
+library(broom)
+library(ISLR)
+library(countdown)
+```
+
+---
+
+## Ridge Review
+
+.question[
+What are we minimizing with Ridge Regression?
+]
+
+--
+
+$$RSS + \lambda\sum_{j=1}^p\beta_j^2$$
+
+--
+
+.question[
+What is the resulting estimate for $\hat\beta_{ridge}$?
+]
+
+--
+
+$$\hat\beta_{ridge} = (\mathbf{X}^{T}\mathbf{X}+\lambda\mathbf{I})^{-1}\mathbf{X}^T\mathbf{y}$$
+
+--
+
+.question[
+
+Why is this useful?
+]
+
+---
+
+## Ridge Review
+
+.question[
+How is $\lambda$ determined?
+]
+
+$$RSS + \lambda\sum_{j=1}^p\beta_j^2$$
+
+--
+
+.question[
+What is the bias-variance trade-off?
+]
+
+---
+
+## Ridge Regression
+
+.pull-left[
+
+## Pros
+
+* Can be used when $p > n$
+* Can be used to help with multicollinearity
+* Will decrease variance
+(as $\lambda \rightarrow \infty$ )
+
+]
+
+--
+
+.pull-right[
+
+## Cons
+
+* Will have increased bias (compared to least squares)
+* Does not really help with variable selection (all variables are included in _some_ regard, even if their $\beta$ coefficients are really small)
+
+]
+
+---
+
+## Lasso!
+
+* The lasso is similar to ridge, but it actually drives some $\beta$ coefficients to 0! (So it helps with variable selection)
+
+--
+
+$$RSS + \lambda\sum_{j=1}^p|\beta_j|$$
+
+--
+
+* We say lasso uses an $\ell_1$ penalty, ridge uses an $\ell_2$ penalty
+--
+
+* $||\beta||_1=\sum|\beta_j|$
+* $||\beta||_2=\sum\beta_j^2$
+
+---
+
+## Lasso
+
+* Like Ridge regression, lasso shrinks the coefficients towards 0
+--
+
+* In lasso, the $\ell_1$ penalty **forces** some of the coefficient estimates to be **exactly zero** when the tuning parameter $\lambda$ is sufficiently large
+--
+
+* Therefore, lasso can be used for **variable selection**
+--
+
+* The lasso can help create **smaller, simplier** models
+--
+
+* Choosing $\lambda$ again is done via cross-validation
+
+---
+
+## Ridge versus lasso
+
+* Neither Ridge nor lasso will universally dominate
+--
+
+* Cross-validation can also be used to determine which method (Ridge or lasso) should be used
+--
+
+* Cross-validation is **also** used to select $\lambda$ in either method. You choose the $\lambda$ value for which the cross-validation model is the smallest
