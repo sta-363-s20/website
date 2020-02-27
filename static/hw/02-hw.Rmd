@@ -104,3 +104,6 @@ U shape.
 
 4. Which is better for feature (variable) section, Ridge Regression or Lasso? Justify your answer.
 
+5. Write the equation that is being minimized for an Elastic Net. Explain how this is related to Ridge Regression and Lasso.
+
+You will need to use _math mode_ in your .Rmd file to do this. This _math mode_ renders most $\LaTeX$ commands. If you don't know how to add math expressions to your .Rmd file, you can read about it [here](https://bookdown.org/yihui/rmarkdown/markdown-syntax.html#math-expressions). If you are unfamiliar with $\LaTeX$, here is a [cheatsheet](https://wch.github.io/latexsheet/). 
