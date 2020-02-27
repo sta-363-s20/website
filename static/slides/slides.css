@@ -36,9 +36,10 @@ a, a > code {
   color: #ffffff;
   /* text-shadow: 0 0 20px #333; */
 }
-.inverse h1, .inverse h2, .inverse h3 {
+.inverse h1, .inverse h2, .inverse h3, .inverse a {
   color: #f3f3f3;
 }
+
 
 /* Code formatting */
 .remark-code-line-highlighted {

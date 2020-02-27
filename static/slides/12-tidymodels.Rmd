@@ -1,0 +1,589 @@
+---
+title: "tidymodels"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan <i> adapted from Alison Hill's Introduction to ML with the Tidyverse</i>
+</span>
+</div> 
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+library(tidymodels)
+library(broom)
+library(ISLR)
+library(countdown)
+```
+
+---
+
+## tidymodels
+
+.pull-left[
+![](img/02/tidymodels.png)
+]
+
+.pull-right[
+.center[
+[tidyverse.org](https://www.tidyverse.org/)
+]
+
+- tidymodels is an opinionated collection of R packages designed for modeling and statistical analysis.
+- All packages share an underlying philosophy and a common grammar.
+]
+
+---
+
+## Step 1: Specify the model
+
+* Pick the **model**
+--
+
+* Set the **engine**
+
+---
+
+## Specify the model
+
+
+```{r, eval = FALSE}
+linear_reg() %>%
+  set_engine("lm")
+```
+
+---
+
+## Specify the model
+
+
+```{r, eval = FALSE}
+linear_reg() %>%
+  set_engine("glmnet")
+```
+
+---
+
+## Specify the model
+
+
+```{r, eval = FALSE}
+linear_reg() %>%
+  set_engine("spark")
+```
+
+---
+
+## Specify the model
+
+
+```{r, eval = FALSE}
+decision_tree() %>%
+  set_engine("ranger")
+```
+
+---
+
+## Specify the model
+
+* All available models:
+
+https://tidymodels.github.io/parsnip/articles/articles/Models.html
+
+---
+
+class: inverse
+
+## <i class="fas fa-laptop"></i> `Specify Model`
+
+Write a pipe that creates a model that uses `lm()` to fit a linear regression using tidymodels. Save it as `lm_spec` and look at the object. What does it return?
+
+_Hint: you'll need  https://tidymodels.github.io/parsnip/articles/articles/Models.html_
+
+`r countdown::countdown(minutes = 2)`
+
+---
+
+```{r}
+lm_spec <- 
+  linear_reg() %>% # Pick linear regression
+  set_engine(engine = "lm") # set engine
+lm_spec
+```
+
+---
+
+## Fit the data
+
+* You can train your model using the `fit()` function
+
+```{r}
+fit(lm_spec,
+    formula = mpg ~ horsepower,
+    data = Auto)
+```
+
+---
+
+class: inverse
+
+## <i class="fas fa-laptop"></i> `Fit Model`
+
+Fit the model:
+
+```{r, eval = FALSE}
+library(ISLR)
+lm_fit <- fit(lm_spec,
+              formula = mpg ~ horsepower,
+              data = Auto)
+lm_fit
+```
+
+Does this give the same results as
+
+```{r, eval = FALSE}
+lm(mpg ~ horsepower, data = Auto)
+```
+
+`r countdown::countdown(1, 30)`
+
+---
+
+```{r, echo = FALSE}
+lm_fit <- fit(lm_spec,
+              formula = mpg ~ horsepower,
+              data = Auto)
+```
+
+
+## Get predictions
+
+```{r, eval = FALSE}
+lm_fit %>%
+  predict(new_data = Auto)
+```
+
+--
+
+* Still uses the `predict()` function
+--
+
+* `r emo::ji("double_exclamation_mark")` Now `new_data` has an underscore
+--
+
+* `r emo::ji("smile")` This automagically creates a data frame
+
+---
+
+## Get predictions
+
+```{r}
+lm_fit %>%
+  predict(new_data = Auto)
+```
+
+---
+
+class: inverse
+
+`r countdown::countdown(minutes = 1, 30)`
+
+## <i class="fas fa-laptop"></i> `Get predictions`
+
+Edit the code below to add a column called `truth` that contains the true `mpg` values from the original training data.
+
+
+```{r, eval = FALSE}
+mpg_pred <- lm_fit %>% 
+  predict(new_data = Auto) %>% 
+  mutate(---)
+```
+
+---
+
+## Get predictions
+
+```{r}
+mpg_pred <- lm_fit %>%
+  predict(new_data = Auto) %>%
+  mutate(truth = Auto$mpg)
+
+mpg_pred
+```
+
+---
+
+## Calculate the error
+
+* Root mean square error
+
+```{r}
+mpg_pred %>%
+ rmse(truth = truth, estimate = .pred)
+```
+
+--
+
+.question[
+What is this estimate? (training error? testing error?)
+]
+
+---
+
+## Validation set approach
+
+```{r}
+Auto_split <- initial_split(Auto, prop = 0.5)
+Auto_split
+```
+
+--
+
+* Extract the training and testing data
+
+```{r, eval = FALSE}
+training(Auto_split)
+testing(Auto_split)
+```
+
+---
+
+## Validation set approach
+
+```{r}
+Auto_train <- training(Auto_split)
+```
+
+```{r, eval = FALSE}
+Auto_train
+```
+
+.small[
+```{r, echo = FALSE}
+as_tibble(Auto_train)
+```
+]
+
+
+---
+
+class: inverse
+
+`r countdown::countdown(minutes = 4)`
+
+## <i class="fas fa-laptop"></i> `Validation Set`
+
+Copy the code below, fill in the blanks to fit a model on the **training** data then calculate the **test** RMSE.
+
+```{r, eval = FALSE}
+set.seed(100)
+Auto_split  <- ________
+Auto_train  <- ________
+Auto_test   <- ________
+lm_fit      <- fit(lm_spec, 
+                   formula = mpg ~ horsepower, 
+                   data = ________)
+price_pred  <- ________ %>% 
+  predict(new_data = ________) %>% 
+  mutate(price_truth = ________)
+rmse(________, truth = ________, estimate = ________)
+```
+
+---
+
+## What about cross validation?
+
+```{r}
+Auto_cv <- vfold_cv(Auto, v = 5)
+Auto_cv
+```
+
+---
+
+## What about cross validation?
+
+--
+
+```{r, eval = FALSE}
+fit_resamples(lm_spec,
+              mpg ~ horsepower,
+              resamples = Auto_cv)
+```
+
+---
+
+## What about cross validation?
+
+```{r}
+fit_resamples(lm_spec,
+              mpg ~ horsepower,
+              resamples = Auto_cv)
+```
+
+---
+
+## What about cross validation?
+
+.question[
+How do we get the metrics out? With `collect_metrics()`!
+]
+
+--
+
+```{r}
+results <- fit_resamples(lm_spec,
+              mpg ~ horsepower,
+              resamples = Auto_cv)
+
+results %>%
+  collect_metrics()
+```
+
+---
+
+
+class: inverse
+
+`r countdown::countdown(minutes = 2)`
+
+## <i class="fas fa-laptop"></i> `K-fold cross validation`
+
+
+Edit the code below to get the 5-fold cross validation error rate for the following model:
+
+$mpg = \beta_0 + \beta_1 horsepower + \beta_2 horsepower^2+ \epsilon$
+
+```{r, eval = FALSE}
+Auto_cv <- vfold_cv(Auto, v = 5)
+
+results <- fit_resamples(lm_spec,
+              ----,
+              resamples = ---)
+
+results %>%
+  collect_metrics()
+```
+
+* What do you think `rsq` is?
+
+---
+
+## Okay, but we wanted to look at 3 different models!
+
+* `workflow()`!
+
+--
+
+```{r}
+wrkflow <- workflow() %>%
+  add_model(lm_spec) %>%
+  add_formula(mpg ~ horsepower)
+```
+
+---
+
+```{r}
+wrkflow
+```
+
+---
+
+## workflow
+
+```{r, eval = FALSE}
+fit_resamples(wrkflow,
+              resamples = Auto_cv)
+
+wrkflow %>%
+  fit_resamples(Auto_cv)
+```
+
+
+---
+
+## workflow
+
+.small[
+```{r}
+wrkflow %>%
+  fit_resamples(resamples = Auto_cv) %>%
+  collect_metrics()
+```
+]
+
+--
+
+.small[
+```{r}
+wrkflow %>%
+  update_formula(mpg ~ poly(horsepower, 2)) %>%
+  fit_resamples(resamples = Auto_cv) %>%
+  collect_metrics()
+```
+]
+
+---
+
+.small[
+```{r}
+wrkflow %>%
+  update_formula(mpg ~ poly(horsepower, 3)) %>%
+  fit_resamples(resamples = Auto_cv) %>%
+  collect_metrics()
+```
+]
+
+--
+
+* `r emo::ji("scream")` this looks like copy + pasting!
+
+---
+
+## workflow + recipe + tune `r emo::ji("notes")`
+
+* First, create a recipe with pre-processing steps
+
+```{r}
+rec <- recipe(mpg ~ horsepower, data = Auto) %>%
+  step_poly(horsepower, degree = tune()) #<<
+```
+
+--
+* Notice the code above has `tune()` for the degree of the polynomial. That is the thing we want to vary!
+
+---
+
+## workflow + recipe + tune `r emo::ji("notes")`
+
+* Add this recipe to the workflow (notice we got rid of `add_formula()` since the formula is specified in the recipe)
+
+```{r}
+wrkflow <- workflow() %>%
+  add_recipe(rec) %>% #<<
+  add_model(lm_spec)
+```
+
+
+---
+
+## workflow + recipe + tune `r emo::ji("notes")`
+
+* Now we need to create a grid of potential degrees of the polynomial that we want to test
+* Instead of `fit_resamples()` we are going to use `tune_grid()`
+
+```{r}
+grid <- expand_grid(degree = c(1, 2, 3))
+
+results <- tune_grid(wrkflow,
+          grid = grid, #<<
+          resamples = Auto_cv)
+```
+
+---
+
+## workflow + recipe + tune `r emo::ji("notes")`
+
+```{r}
+results %>%
+  collect_metrics()
+```
+
+---
+
+## workflow + recipe + tune `r emo::ji("notes")`
+
+```{r}
+results %>%
+  collect_metrics() %>%
+  filter(.metric == "rmse")
+```
+
+* Since this is a data frame, we can do things like filter!
+
+---
+
+## workflow + recipe + tune `r emo::ji("notes")`
+
+* We can easily tweak this process to look at more polynomial degrees by adding more numbers to our `grid` data frame.
+
+---
+
+class: inverse
+
+`r countdown::countdown(minutes = 4)`
+
+## <i class="fas fa-laptop"></i> `K-fold cross validation`
+
+Edit the code below to look at 1-10 degree polynomials. **Bonus** Try to plot the RMSE by degree
+
+```{r, eval = FALSE}
+rec <- recipe(mpg ~ horsepower, data = Auto) %>%
+  step_poly(horsepower, degree = tune()) 
+
+wrkflow <- workflow() %>%
+  add_recipe(rec) %>% 
+  add_model(lm_spec)
+
+grid <- expand_grid(degree = ---)
+
+results <- tune_grid(wrkflow,
+          grid = grid,
+          resamples = Auto_cv)
+
+results %>%
+  collect_metrics()
+```
+
+
+---
+
+
+```{r, eval = FALSE}
+results %>%
+  collect_metrics() %>%
+  filter(.metric == "rmse") %>%
+  ggplot(aes(degree, mean)) + 
+    geom_point() + 
+    labs(y = RMSE)
+```
+
+```{r rmse-plot, cache = TRUE, echo = FALSE}
+set.seed(1)
+rec <- recipe(mpg ~ horsepower, data = Auto) %>%
+  step_poly(horsepower, degree = tune()) 
+
+wrkflow <- workflow() %>%
+  add_recipe(rec) %>% 
+  add_model(lm_spec)
+
+grid <- expand_grid(degree = 1:10)
+
+results <- tune_grid(wrkflow,
+          grid = grid,
+          resamples = Auto_cv)
+
+results %>%
+  collect_metrics() %>%
+  filter(.metric == "rmse") %>%
+  ggplot(aes(degree, mean)) + 
+  geom_point() + 
+  labs(y = "RMSE")
+```
+
