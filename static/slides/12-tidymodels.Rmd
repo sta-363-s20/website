@@ -309,9 +309,9 @@ Auto_test   <- ________
 lm_fit      <- fit(lm_spec, 
                    formula = mpg ~ horsepower, 
                    data = ________)
-price_pred  <- ________ %>% 
+mpg_pred  <- ________ %>% 
   predict(new_data = ________) %>% 
-  mutate(price_truth = ________)
+  mutate(mpg_truth = ________)
 rmse(________, truth = ________, estimate = ________)
 ```
 
