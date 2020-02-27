@@ -39,9 +39,9 @@ library(countdown)
 
 - Go to the [sta-363-s20 GitHub organization](https://github.com/sta-363-s20) and search for `appex-04-tidymodels`
 - Go to RStudio Pro
-  - rstudio.hpc.ar53.wfu.edu:8787
-  - pw: R2D2Star!
-  
+- rstudio.hpc.ar53.wfu.edu:8787
+- pw: R2D2Star!
+
 ---
 
 ## tidymodels
@@ -245,7 +245,7 @@ mpg_pred
 
 ```{r}
 mpg_pred %>%
- rmse(truth = truth, estimate = .pred)
+  rmse(truth = truth, estimate = .pred)
 ```
 
 --
@@ -358,8 +358,8 @@ How do we get the metrics out? With `collect_metrics()`!
 
 ```{r}
 results <- fit_resamples(lm_spec,
-              mpg ~ horsepower,
-              resamples = Auto_cv)
+                         mpg ~ horsepower,
+                         resamples = Auto_cv)
 
 results %>%
   collect_metrics()
@@ -383,8 +383,8 @@ $mpg = \beta_0 + \beta_1 horsepower + \beta_2 horsepower^2+ \epsilon$
 Auto_cv <- vfold_cv(Auto, v = 5)
 
 results <- fit_resamples(lm_spec,
-              ----,
-              resamples = ---)
+                         ----,
+                         resamples = ---)
 
 results %>%
   collect_metrics()
@@ -394,68 +394,165 @@ results %>%
 
 ---
 
-## Okay, but we wanted to look at 3 different models!
+## What if we wanted to do some _preprocessing_
 
-* `workflow()`!
+* For the shrinkage methods we discussed it was important to _scale_ the variables
+
+--
+
+.question[
+What does this mean?
+]
+
+--
+
+.question[
+What would happen if we _scale_ **before** doing cross-validation? Will we get different answers?
+]
+
+---
+
+## What if we wanted to do some _preprocessing_
+
+.small[
+```{r}
+Auto_scaled <- Auto %>%
+  mutate(horsepower = scale(horsepower))
+
+sd(Auto_scaled$horsepower)
+```
+
+
+```{r}
+Auto_cv_scaled <- vfold_cv(Auto_scaled, v = 5)
+
+map_dbl(Auto_cv_scaled$splits,
+        function(x) {
+          dat <- as.data.frame(x)$horsepower
+          sd(dat)
+        })
+```
+
+]
+
+---
+
+## What if we wanted to do some _preprocessing_
+
+* `recipe()`!
+--
+
+* Using the `recipe()` function along with `step_*()` functions, we can specify _preprocessing_ steps and R will automagically apply them to each fold appropriately.
+--
+
+```{r}
+rec <- recipe(mpg ~ horsepower, data = Auto) %>%
+  step_scale(horsepower) #<<
+```
+
+--
+
+* You can find all of the potential preprocessing **steps** here: https://tidymodels.github.io/recipes/reference/index.html
+
+---
+
+## Where do we plug in this recipe?
+
+* The `recipe` gets plugged into the `fit_resamples()` function
 
 --
 
 ```{r}
-wrkflow <- workflow() %>%
-  add_model(lm_spec) %>%
-  add_formula(mpg ~ horsepower)
+Auto_cv <- vfold_cv(Auto, v = 5)
+
+rec <- recipe(mpg ~ horsepower, data = Auto) %>%
+  step_scale(horsepower)
+
+results <- fit_resamples(lm_spec,
+                         preprocessor = rec,
+                         resamples = Auto_cv)
+
+results %>%
+  collect_metrics()
 ```
 
 ---
+class: inverse
 
-```{r}
-wrkflow
-```
+`r countdown::countdown(minutes = 3)`
 
----
+## <i class="fas fa-laptop"></i> `Pre-processing`
 
-## workflow
+* Look through the available steps here: https://tidymodels.github.io/recipes/reference/index.html
+* See if you can find a way to make `horsepower` a 3rd degree polynomial (like in the lab) 
+* Edit the code below to run this model
 
 ```{r, eval = FALSE}
-fit_resamples(wrkflow,
-              resamples = Auto_cv)
+rec <- recipe(mpg ~ horsepower, data = Auto) %>%
+  step_---(horsepower, ---)
 
-wrkflow %>%
-  fit_resamples(Auto_cv)
+results <- fit_resamples(lm_spec,
+                         preprocessor = rec,
+                         resamples = Auto_cv)
+
+results %>%
+  collect_metrics()
 ```
-
 
 ---
 
-## workflow
+## Recipe!
+
+```{r}
+rec <- recipe(mpg ~ horsepower, data = Auto) %>%
+  step_poly(horsepower, degree = 3)
+
+results <- fit_resamples(lm_spec,
+                         preprocessor = rec,
+                         resamples = Auto_cv)
+
+results %>%
+  collect_metrics()
+```
+
+---
+
+## Okay, but we wanted to look at 3 different models!
 
 .small[
-```{r}
-wrkflow %>%
-  fit_resamples(resamples = Auto_cv) %>%
-  collect_metrics()
+```{r, eval = FALSE}
+rec <- recipe(mpg ~ horsepower, data = Auto) %>%
+  step_poly(horsepower, degree = 1)
+
+results <- fit_resamples(lm_spec,
+                         preprocessor = rec,
+                         resamples = Auto_cv)
 ```
 ]
 
 --
 
 .small[
-```{r}
-wrkflow %>%
-  update_formula(mpg ~ poly(horsepower, 2)) %>%
-  fit_resamples(resamples = Auto_cv) %>%
-  collect_metrics()
+```{r, eval = FALSE}
+rec <- recipe(mpg ~ horsepower, data = Auto) %>%
+  step_poly(horsepower, degree = 2)
+
+results <- fit_resamples(lm_spec,
+                         preprocessor = rec,
+                         resamples = Auto_cv)
 ```
 ]
 
 ---
 
 .small[
-```{r}
-wrkflow %>%
-  update_formula(mpg ~ poly(horsepower, 3)) %>%
-  fit_resamples(resamples = Auto_cv) %>%
-  collect_metrics()
+```{r, eval = FALSE}
+rec <- recipe(mpg ~ horsepower, data = Auto) %>%
+  step_poly(horsepower, degree = 3)
+
+results <- fit_resamples(lm_spec,
+                         preprocessor = rec,
+                         resamples = Auto_cv)
 ```
 ]
 
@@ -465,7 +562,7 @@ wrkflow %>%
 
 ---
 
-## workflow + recipe + tune `r emo::ji("notes")`
+## tune `r emo::ji("notes")`
 
 * First, create a recipe with pre-processing steps
 
@@ -479,35 +576,23 @@ rec <- recipe(mpg ~ horsepower, data = Auto) %>%
 
 ---
 
-## workflow + recipe + tune `r emo::ji("notes")`
-
-* Add this recipe to the workflow (notice we got rid of `add_formula()` since the formula is specified in the recipe)
-
-```{r}
-wrkflow <- workflow() %>%
-  add_recipe(rec) %>% #<<
-  add_model(lm_spec)
-```
-
-
----
-
-## workflow + recipe + tune `r emo::ji("notes")`
+##  tune `r emo::ji("notes")`
 
 * Now we need to create a grid of potential degrees of the polynomial that we want to test
 * Instead of `fit_resamples()` we are going to use `tune_grid()`
 
-```{r}
+```{r tune, cache = TRUE}
 grid <- expand_grid(degree = c(1, 2, 3))
 
-results <- tune_grid(wrkflow,
-          grid = grid, #<<
-          resamples = Auto_cv)
+results <- tune_grid(lm_spec,
+                     preprocessor = rec,
+                     grid = grid, #<<
+                     resamples = Auto_cv)
 ```
 
 ---
 
-## workflow + recipe + tune `r emo::ji("notes")`
+## tune `r emo::ji("notes")`
 
 ```{r}
 results %>%
@@ -516,7 +601,7 @@ results %>%
 
 ---
 
-## workflow + recipe + tune `r emo::ji("notes")`
+## Subset results
 
 ```{r}
 results %>%
@@ -525,10 +610,15 @@ results %>%
 ```
 
 * Since this is a data frame, we can do things like filter!
+--
+
+.question[
+Which would you choose?
+]
 
 ---
 
-## workflow + recipe + tune `r emo::ji("notes")`
+##  tune `r emo::ji("notes")`
 
 * We can easily tweak this process to look at more polynomial degrees by adding more numbers to our `grid` data frame.
 
@@ -544,17 +634,14 @@ Edit the code below to look at 1-10 degree polynomials. **Bonus** Try to plot th
 
 ```{r, eval = FALSE}
 rec <- recipe(mpg ~ horsepower, data = Auto) %>%
-  step_poly(horsepower, degree = tune()) 
-
-wrkflow <- workflow() %>%
-  add_recipe(rec) %>% 
-  add_model(lm_spec)
+  step_poly(---) 
 
 grid <- expand_grid(degree = ---)
 
-results <- tune_grid(wrkflow,
-          grid = grid,
-          resamples = Auto_cv)
+results <- tune_grid(lm_spec,
+                     preprocessor = ---,
+                     grid = ---,
+                     resamples = ---)
 
 results %>%
   collect_metrics()
@@ -569,8 +656,8 @@ results %>%
   collect_metrics() %>%
   filter(.metric == "rmse") %>%
   ggplot(aes(degree, mean)) + 
-    geom_point() + 
-    labs(y = RMSE)
+  geom_point() + 
+  labs(y = RMSE)
 ```
 
 ```{r rmse-plot, cache = TRUE, echo = FALSE}
@@ -585,8 +672,8 @@ wrkflow <- workflow() %>%
 grid <- expand_grid(degree = 1:10)
 
 results <- tune_grid(wrkflow,
-          grid = grid,
-          resamples = Auto_cv)
+                     grid = grid,
+                     resamples = Auto_cv)
 
 results %>%
   collect_metrics() %>%
