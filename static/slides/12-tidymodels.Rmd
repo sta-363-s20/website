@@ -35,6 +35,15 @@ library(countdown)
 
 ---
 
+## <i class="fas fa-laptop"></i> `tidymodels`
+
+- Go to the [sta-363-s20 GitHub organization](https://github.com/sta-363-s20) and search for `appex-04-tidymodels`
+- Go to RStudio Pro
+  - rstudio.hpc.ar53.wfu.edu:8787
+  - pw: R2D2Star!
+  
+---
+
 ## tidymodels
 
 .pull-left[
