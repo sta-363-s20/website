@@ -142,7 +142,7 @@ $$RSS + \lambda\sum_{j=1}^p|\beta_j|$$
 
 ---
 
-## Ridge Regression
+## Lasso
 
 .pull-left[
 
