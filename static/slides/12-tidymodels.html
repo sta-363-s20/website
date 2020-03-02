@@ -132,7 +132,7 @@ Write a pipe that creates a model that uses `lm()` to fit a linear regression us
 
 _Hint: you'll need  https://tidymodels.github.io/parsnip/articles/articles/Models.html_
 
-<div class="countdown" id="timer_5e581e57" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5e5d6bf0" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -202,7 +202,7 @@ Does this give the same results as
 lm(mpg ~ horsepower, data = Auto)
 ```
 
-<div class="countdown" id="timer_5e581eb1" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5e5d6add" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
 
@@ -236,44 +236,45 @@ lm_fit %&gt;%
 
 ```r
 lm_fit %&gt;%
-  predict(new_data = Auto)
+  predict(new_data = Auto) %&gt;%
+  bind_cols(Auto)
 ```
 
 ```
-## # A tibble: 392 x 1
-##    .pred
-##    &lt;dbl&gt;
-##  1 19.4 
-##  2 13.9 
-##  3 16.3 
-##  4 16.3 
-##  5 17.8 
-##  6  8.68
-##  7  5.21
-##  8  6.00
-##  9  4.42
-## 10  9.95
-## # … with 382 more rows
+## # A tibble: 392 x 10
+##    .pred   mpg cylinders displacement horsepower weight acceleration  year
+##    &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;
+##  1 19.4     18         8          307        130   3504         12      70
+##  2 13.9     15         8          350        165   3693         11.5    70
+##  3 16.3     18         8          318        150   3436         11      70
+##  4 16.3     16         8          304        150   3433         12      70
+##  5 17.8     17         8          302        140   3449         10.5    70
+##  6  8.68    15         8          429        198   4341         10      70
+##  7  5.21    14         8          454        220   4354          9      70
+##  8  6.00    14         8          440        215   4312          8.5    70
+##  9  4.42    14         8          455        225   4425         10      70
+## 10  9.95    15         8          390        190   3850          8.5    70
+## # … with 382 more rows, and 2 more variables: origin &lt;dbl&gt;, name &lt;fct&gt;
 ```
 
 ---
 
 class: inverse
 
-<div class="countdown" id="timer_5e581e35" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5e5d6ae2" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
 </div>
 
 ## &lt;i class="fas fa-laptop"&gt;&lt;/i&gt; `Get predictions`
 
-Edit the code below to add a column called `truth` that contains the true `mpg` values from the original training data.
+Edit the code below to add the original data to the predicted data.
 
 
 
 ```r
 mpg_pred &lt;- lm_fit %&gt;% 
   predict(new_data = Auto) %&gt;% 
-  mutate(---)
+  ---
 ```
 
 ---
@@ -284,26 +285,26 @@ mpg_pred &lt;- lm_fit %&gt;%
 ```r
 mpg_pred &lt;- lm_fit %&gt;%
   predict(new_data = Auto) %&gt;%
-  mutate(truth = Auto$mpg)
+  bind_cols(Auto)
 
 mpg_pred
 ```
 
 ```
-## # A tibble: 392 x 2
-##    .pred truth
-##    &lt;dbl&gt; &lt;dbl&gt;
-##  1 19.4     18
-##  2 13.9     15
-##  3 16.3     18
-##  4 16.3     16
-##  5 17.8     17
-##  6  8.68    15
-##  7  5.21    14
-##  8  6.00    14
-##  9  4.42    14
-## 10  9.95    15
-## # … with 382 more rows
+## # A tibble: 392 x 10
+##    .pred   mpg cylinders displacement horsepower weight acceleration  year
+##    &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;
+##  1 19.4     18         8          307        130   3504         12      70
+##  2 13.9     15         8          350        165   3693         11.5    70
+##  3 16.3     18         8          318        150   3436         11      70
+##  4 16.3     16         8          304        150   3433         12      70
+##  5 17.8     17         8          302        140   3449         10.5    70
+##  6  8.68    15         8          429        198   4341         10      70
+##  7  5.21    14         8          454        220   4354          9      70
+##  8  6.00    14         8          440        215   4312          8.5    70
+##  9  4.42    14         8          455        225   4425         10      70
+## 10  9.95    15         8          390        190   3850          8.5    70
+## # … with 382 more rows, and 2 more variables: origin &lt;dbl&gt;, name &lt;fct&gt;
 ```
 
 ---
@@ -315,7 +316,7 @@ mpg_pred
 
 ```r
 mpg_pred %&gt;%
-  rmse(truth = truth, estimate = .pred)
+  rmse(truth = mpg, estimate = .pred)
 ```
 
 ```
@@ -375,16 +376,16 @@ Auto_train
 ## # A tibble: 196 x 9
 ##      mpg cylinders displacement horsepower weight acceleration  year origin
 ##    &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
-##  1    15         8          350        165   3693         11.5    70      1
+##  1    18         8          307        130   3504         12      70      1
 ##  2    18         8          318        150   3436         11      70      1
 ##  3    17         8          302        140   3449         10.5    70      1
 ##  4    15         8          429        198   4341         10      70      1
-##  5    14         8          455        225   4425         10      70      1
+##  5    14         8          440        215   4312          8.5    70      1
 ##  6    15         8          390        190   3850          8.5    70      1
-##  7    14         8          340        160   3609          8      70      1
-##  8    21         6          200         85   2587         16      70      1
-##  9    25         4          110         87   2672         17.5    70      2
-## 10    24         4          107         90   2430         14.5    70      2
+##  7    15         8          383        170   3563         10      70      1
+##  8    14         8          340        160   3609          8      70      1
+##  9    15         8          400        150   3761          9.5    70      1
+## 10    14         8          455        225   3086         10      70      1
 ## # … with 186 more rows, and 1 more variable: name &lt;fct&gt;
 ```
 ]
@@ -394,7 +395,7 @@ Auto_train
 
 class: inverse
 
-<div class="countdown" id="timer_5e581e29" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5e5d6bda" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">04</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -413,7 +414,7 @@ lm_fit      &lt;- fit(lm_spec,
                    data = ________)
 mpg_pred  &lt;- ________ %&gt;% 
   predict(new_data = ________) %&gt;% 
-  mutate(mpg_truth = ________)
+  bind_cols(________)
 rmse(________, truth = ________, estimate = ________)
 ```
 
@@ -499,8 +500,8 @@ results %&gt;%
 ## # A tibble: 2 x 5
 ##   .metric .estimator  mean     n std_err
 ##   &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
-## 1 rmse    standard   4.91      5  0.116 
-## 2 rsq     standard   0.609     5  0.0145
+## 1 rmse    standard   4.88      5  0.301 
+## 2 rsq     standard   0.608     5  0.0299
 ```
 
 ---
@@ -508,7 +509,7 @@ results %&gt;%
 
 class: inverse
 
-<div class="countdown" id="timer_5e581c8b" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5e5d6a23" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -582,7 +583,7 @@ map_dbl(Auto_cv_scaled$splits,
 
 ```
 ##         1         2         3         4         5 
-## 1.0198504 0.9617539 1.0223758 1.0193506 0.9753146
+## 1.0515267 0.9903974 1.0165849 1.0130304 0.9169390
 ```
 
 ]
@@ -634,14 +635,14 @@ results %&gt;%
 ## # A tibble: 2 x 5
 ##   .metric .estimator  mean     n std_err
 ##   &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
-## 1 rmse    standard   4.90      5  0.175 
-## 2 rsq     standard   0.606     5  0.0211
+## 1 rmse    standard   4.92      5  0.191 
+## 2 rsq     standard   0.612     5  0.0209
 ```
 
 ---
 class: inverse
 
-<div class="countdown" id="timer_5e581ec1" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5e5d69db" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">03</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -685,8 +686,8 @@ results %&gt;%
 ## # A tibble: 2 x 5
 ##   .metric .estimator  mean     n std_err
 ##   &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
-## 1 rmse    standard   4.39      5  0.117 
-## 2 rsq     standard   0.683     5  0.0200
+## 1 rmse    standard   4.40      5  0.212 
+## 2 rsq     standard   0.689     5  0.0214
 ```
 
 ---
@@ -828,7 +829,7 @@ Which would you choose?
 
 class: inverse
 
-<div class="countdown" id="timer_5e581bb3" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_5e5d692f" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">04</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -867,6 +868,451 @@ results %&gt;%
 ```
 
 ![](12-tidymodels_files/figure-html/rmse-plot-1.png)&lt;!-- --&gt;
+
+---
+
+## Ridge, Lasso, and Elastic net
+
+* When specifying your model, you can indicate whether you would like to use ridge, lasso, or elastic net. We can write a general equation to minimize:
+
+`$$RSS + \lambda\left((1-\alpha)\sum_{i=1}^p\beta_j^2+\alpha\sum_{i=1}^p|\beta_j|\right)$$`
+
+--
+
+
+```r
+lm_spec &lt;- linear_reg() %&gt;%
+* set_engine("glmnet")
+```
+
+* First specify the engine. We'll use `glmnet`
+--
+
+* The `linear_reg()` function has two additional parameters, `penalty` and `mixture`
+--
+
+* `penalty` is `\(\lambda\)` from our equation. 
+--
+
+* `mixture` is a number between 0 and 1 representing `\(\alpha\)`
+
+---
+
+
+## Ridge, Lasso, and Elastic net
+
+
+`$$RSS + \lambda\left((1-\alpha)\sum_{i=1}^p\beta_j^2+\alpha\sum_{i=1}^p|\beta_j|\right)$$`
+
+
+.question[
+What would we set `mixture` to in order to perform Ridge regression?
+]
+
+--
+
+.small[
+
+```r
+*ridge_spec &lt;- linear_reg(penalty = 100, mixture = 0) %&gt;%
+  set_engine("glmnet") 
+```
+]
+
+---
+
+
+class: inverse
+
+<div class="countdown" id="timer_5e5d6896" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+## &lt;i class="fas fa-laptop"&gt;&lt;/i&gt; `Lasso specification`
+
+Set up the model specification to fit a Lasso with a `\(\lambda\)` value of 5. Call this object `lasso_spec`.
+
+
+---
+
+## Ridge, Lasso, and Elastic net
+
+
+`$$RSS + \lambda\left((1-\alpha)\sum_{i=1}^p\beta_j^2+\alpha\sum_{i=1}^p|\beta_j|\right)$$`
+
+.small[
+
+```r
+*ridge_spec &lt;- linear_reg(penalty = 100, mixture = 0) %&gt;%
+  set_engine("glmnet") 
+```
+]
+
+--
+
+.small[
+
+```r
+*lasso_spec &lt;- linear_reg(penalty = 5, mixture = 1) %&gt;%
+  set_engine("glmnet") 
+```
+]
+
+--
+
+.small[
+
+```r
+*enet_spec &lt;- linear_reg(penalty = 60, mixture = 0.7) %&gt;%
+  set_engine("glmnet") 
+```
+]
+
+---
+
+## Motivating example
+
+We want to predict a baseball player's `Salary` on the basis of various statistics
+associated with performance in the previous year.
+
+* We will use the `Hitters` data frame from the **ISLR** package
+--
+
+* This data frame has some missing values. For simplicity, we are going to remove all missing rows (do a **complete case** analysis) using:
+
+.small[
+
+```r
+hitters &lt;- na.omit(Hitters)
+```
+]
+
+_If you do this in practice, be sure to state that explictly_.
+
+---
+
+class: inverse
+
+<div class="countdown" id="timer_5e5d6c31" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+## &lt;i class="fas fa-laptop"&gt;&lt;/i&gt; `Baseball prediction, CV set up`
+
+Set up the 5-fold cross validation by creating an object called `hitters_cv`
+
+
+```r
+library(ISLR)
+hitters &lt;- na.omit(Hitters)
+
+hitters_cv &lt;- -----(hitters, -----)
+```
+
+---
+
+## Baseball prediction cross validation
+
+
+```r
+hitters_cv &lt;- vfold_cv(hitters, v = 5)
+```
+
+---
+
+## Baseball prediction preprocessing
+
+.question[
+How does regression handle categorical (nominal) predictors?
+]
+
+--
+
+* Creates "dummy" variables
+
+--
+
+.pull-left[
+
+
+```
+##      Species
+## 1     setosa
+## 2     setosa
+## 3 versicolor
+## 4  virginica
+```
+
+]
+
+--
+
+.pull-right[
+
+
+```
+## # A tibble: 4 x 2
+##   Species_versicolor Species_virginica
+##                &lt;dbl&gt;             &lt;dbl&gt;
+## 1                  0                 0
+## 2                  0                 0
+## 3                  1                 0
+## 4                  0                 1
+```
+
+]
+
+---
+
+## Baseball prediction preprocessing
+
+* The first preprocessing step we want to do is make all nominal variables **dummy variables**.
+* You can do this by specifying `step_dummy()` in a `recipe`
+--
+
+* Specify the variables you want to be preprocessed by seperating them with commas:
+
+
+```r
+step_dummy(nominal_variable_1, nominal_variable_2, ...)
+```
+
+---
+
+class: inverse
+
+<div class="countdown" id="timer_5e5d6b25" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+## &lt;i class="fas fa-laptop"&gt;&lt;/i&gt; `Baseball prediction, preprocessing`
+
+For this prediction model, we want to predict `Salary` using **all** remaining variables (`Salary ~ .`). Examine the `hitters` data. Find the **nominal variables**. Ammend the code below to create dummy variables for these.
+
+
+```r
+rec &lt;- recipe(Salary ~ ., data = hitters) %&gt;%
+  step_dummy(------)
+```
+
+---
+
+## Baseball prediction preprocessing
+
+_There is an easier way!_ 
+
+--
+
+* Instead of looking for all nominal variables by hand, you can use `all_nominal()`.
+--
+
+
+```r
+rec &lt;- recipe(Salary ~ ., data = Hitters) %&gt;%
+  step_dummy(all_nominal())
+```
+
+---
+
+## Baseball prediction preprocessing
+
+.question[
+What pre-processing step is necessary when doing penalized regression?
+]
+
+--
+
+* Instead of plugging each variable individually into `step_scale()`, you can use the shorthand `all_predictors()`:
+
+.small[
+
+```r
+step_scale(all_predictors())
+```
+]
+
+
+---
+
+class: inverse
+
+<div class="countdown" id="timer_5e5d6bd8" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+## &lt;i class="fas fa-laptop"&gt;&lt;/i&gt; `Baseball prediction, preprocessing`
+
+Ammend the code below to make all nominal variables dummy variables and scale all of the predictors
+
+
+```r
+rec &lt;- recipe(Salary ~ ., data = hitters) %&gt;%
+  step_-----(------) %&gt;%
+  step_-----(------)
+```
+
+---
+
+## Baseball prediction preprocessing
+
+
+```r
+rec &lt;- recipe(Salary ~ ., data = hitters) %&gt;%
+  step_dummy(all_nominal()) %&gt;%
+  step_scale(all_predictors())
+```
+
+---
+
+
+class: inverse
+
+<div class="countdown" id="timer_5e5d6acb" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+## &lt;i class="fas fa-laptop"&gt;&lt;/i&gt; `Baseball prediction, lasso`
+
+Using the recipe you've created `rec`, the cross validation data `hitters_cv`, and the `lasso_spec` fit the resampled data. Output the `rmse` and `rsq` for this model. 
+
+
+```r
+results &lt;- fit_resamples(lasso_spec,
+                         preprocessor = ---,
+                         resamples = ---)
+
+results %&gt;%
+  ---
+```
+
+---
+
+## Ridge, Lasso, and Elastic Net
+
+`$$RSS + \lambda\left((1-\alpha)\sum_{i=1}^p\beta_j^2+\alpha\sum_{i=1}^p|\beta_j|\right)$$`
+
+.question[
+What if I don't want to specify these parameters? How can I specify that I want to use cross validation to choose?
+]
+
+--
+
+* 🎶
+
+--
+
+
+```r
+penalized_spec &lt;- 
+  linear_reg(penalty = tune(),
+             mixture = tune()) %&gt;%
+  set_engine("glmnet")
+
+grid &lt;- expand_grid(penalty = seq(1, 1000, by = 100),
+                         mixture = seq(0, 1, by = 0.2))
+```
+
+---
+
+class: inverse
+
+<div class="countdown" id="timer_5e5d69a0" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+## &lt;i class="fas fa-laptop"&gt;&lt;/i&gt; `Baseball prediction, tuned penalization`
+
+Create a new models specification called `penalized_spec` that tunes the penalty and mixture parameters. Create a grid of potential parameters, with a penalty term that varies from 0 to 100 by 10, and a mixture term that varies from 0 to 1 by 0.1. Using the recipe you've created `rec`and the cross validation data `hitters_cv` fit this model using `tune_grid`. Output the `rmse` and `rsq` for this model. 
+
+
+```r
+penalized_spec &lt;- 
+  linear_reg(penalty = ---,
+             mixture = ---) %&gt;%
+  set_engine("glmnet")
+
+grid &lt;- expand_grid(penalty = ---,
+                         mixture = ---)
+
+results &lt;- tune_grid(penalized_spec,
+                     preprocessor = ---,
+                     grid = ---,
+                     resamples = ---)
+
+results %&gt;%
+  ---
+```
+
+---
+
+## Baseball prediction, tuned penalization
+
+
+
+```r
+penalized_spec &lt;- 
+  linear_reg(penalty = tune(),
+             mixture = tune()) %&gt;%
+  set_engine("glmnet")
+
+grid &lt;- expand_grid(penalty = seq(0, 100, by = 10),
+                         mixture = seq(0, 1, by = 0.1))
+
+results &lt;- tune_grid(penalized_spec,
+                     rec,
+                     grid = grid,
+                     resamples = hitters_cv)
+```
+
+---
+
+
+class: inverse
+
+<div class="countdown" id="timer_5e5d69f0" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">02</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+## &lt;i class="fas fa-laptop"&gt;&lt;/i&gt; `Baseball prediction, choosing penalty and mixture`
+
+Examine the results. Filter the metrics to only include `rmse` and arrange them in order of mean root mean squared error (to choose the smallest). Hint look at `?arrange` if you aren't sure how to sort.
+
+
+```r
+results %&gt;%
+  collect_metrics() %&gt;%
+  filter(---) %&gt;%
+  arrange(---)
+```
+
+---
+
+## Baseball prediction tuning
+
+
+```r
+results %&gt;%
+  collect_metrics() %&gt;%
+  filter(.metric == "rmse") %&gt;%
+  arrange(mean)
+```
+
+```
+## # A tibble: 121 x 7
+##    penalty mixture .metric .estimator  mean     n std_err
+##      &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
+##  1     100     0   rmse    standard    337.     5    40.9
+##  2      80     0.1 rmse    standard    337.     5    40.0
+##  3      70     0.1 rmse    standard    337.     5    39.9
+##  4      90     0.1 rmse    standard    337.     5    40.1
+##  5      90     0   rmse    standard    337.     5    40.9
+##  6     100     0.1 rmse    standard    337.     5    40.1
+##  7      80     0   rmse    standard    337.     5    40.9
+##  8      50     0.2 rmse    standard    337.     5    39.7
+##  9      60     0.2 rmse    standard    338.     5    39.5
+## 10      60     0.1 rmse    standard    338.     5    39.8
+## # … with 111 more rows
+```
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

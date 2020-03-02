@@ -205,7 +205,8 @@ lm_fit %>%
 
 ```{r}
 lm_fit %>%
-  predict(new_data = Auto)
+  predict(new_data = Auto) %>%
+  bind_cols(Auto)
 ```
 
 ---
@@ -216,13 +217,13 @@ class: inverse
 
 ## <i class="fas fa-laptop"></i> `Get predictions`
 
-Edit the code below to add a column called `truth` that contains the true `mpg` values from the original training data.
+Edit the code below to add the original data to the predicted data.
 
 
 ```{r, eval = FALSE}
 mpg_pred <- lm_fit %>% 
   predict(new_data = Auto) %>% 
-  mutate(---)
+  ---
 ```
 
 ---
@@ -232,7 +233,7 @@ mpg_pred <- lm_fit %>%
 ```{r}
 mpg_pred <- lm_fit %>%
   predict(new_data = Auto) %>%
-  mutate(truth = Auto$mpg)
+  bind_cols(Auto)
 
 mpg_pred
 ```
@@ -245,7 +246,7 @@ mpg_pred
 
 ```{r}
 mpg_pred %>%
-  rmse(truth = truth, estimate = .pred)
+  rmse(truth = mpg, estimate = .pred)
 ```
 
 --
@@ -311,7 +312,7 @@ lm_fit      <- fit(lm_spec,
                    data = ________)
 mpg_pred  <- ________ %>% 
   predict(new_data = ________) %>% 
-  mutate(mpg_truth = ________)
+  bind_cols(________)
 rmse(________, truth = ________, estimate = ________)
 ```
 
@@ -682,4 +683,399 @@ results %>%
   geom_point() + 
   labs(y = "RMSE")
 ```
+
+---
+
+## Ridge, Lasso, and Elastic net
+
+* When specifying your model, you can indicate whether you would like to use ridge, lasso, or elastic net. We can write a general equation to minimize:
+
+$$RSS + \lambda\left((1-\alpha)\sum_{i=1}^p\beta_j^2+\alpha\sum_{i=1}^p|\beta_j|\right)$$
+
+--
+
+```{r}
+lm_spec <- linear_reg() %>%
+  set_engine("glmnet") #<<
+```
+
+* First specify the engine. We'll use `glmnet`
+--
+
+* The `linear_reg()` function has two additional parameters, `penalty` and `mixture`
+--
+
+* `penalty` is $\lambda$ from our equation. 
+--
+
+* `mixture` is a number between 0 and 1 representing $\alpha$
+
+---
+
+
+## Ridge, Lasso, and Elastic net
+
+
+$$RSS + \lambda\left((1-\alpha)\sum_{i=1}^p\beta_j^2+\alpha\sum_{i=1}^p|\beta_j|\right)$$
+
+
+.question[
+What would we set `mixture` to in order to perform Ridge regression?
+]
+
+--
+
+.small[
+```{r}
+ridge_spec <- linear_reg(penalty = 100, mixture = 0) %>% #<<
+  set_engine("glmnet") 
+```
+]
+
+---
+
+
+class: inverse
+
+`r countdown::countdown(minutes = 2)`
+
+## <i class="fas fa-laptop"></i> `Lasso specification`
+
+Set up the model specification to fit a Lasso with a $\lambda$ value of 5. Call this object `lasso_spec`.
+
+
+---
+
+## Ridge, Lasso, and Elastic net
+
+
+$$RSS + \lambda\left((1-\alpha)\sum_{i=1}^p\beta_j^2+\alpha\sum_{i=1}^p|\beta_j|\right)$$
+
+.small[
+```{r}
+ridge_spec <- linear_reg(penalty = 100, mixture = 0) %>% #<<
+  set_engine("glmnet") 
+```
+]
+
+--
+
+.small[
+```{r}
+lasso_spec <- linear_reg(penalty = 5, mixture = 1) %>% #<<
+  set_engine("glmnet") 
+```
+]
+
+--
+
+.small[
+```{r}
+enet_spec <- linear_reg(penalty = 60, mixture = 0.7) %>% #<<
+  set_engine("glmnet") 
+```
+]
+
+---
+
+## Motivating example
+
+We want to predict a baseball player's `Salary` on the basis of various statistics
+associated with performance in the previous year.
+
+* We will use the `Hitters` data frame from the **ISLR** package
+--
+
+* This data frame has some missing values. For simplicity, we are going to remove all missing rows (do a **complete case** analysis) using:
+
+.small[
+```{r}
+hitters <- na.omit(Hitters)
+```
+]
+
+_If you do this in practice, be sure to state that explictly_.
+
+---
+
+class: inverse
+
+`r countdown::countdown(minutes = 2)`
+
+## <i class="fas fa-laptop"></i> `Baseball prediction, CV set up`
+
+Set up the 5-fold cross validation by creating an object called `hitters_cv`
+
+```{r, eval = FALSE}
+library(ISLR)
+hitters <- na.omit(Hitters)
+
+hitters_cv <- -----(hitters, -----)
+```
+
+---
+
+## Baseball prediction cross validation
+
+```{r}
+hitters_cv <- vfold_cv(hitters, v = 5)
+```
+
+---
+
+## Baseball prediction preprocessing
+
+.question[
+How does regression handle categorical (nominal) predictors?
+]
+
+--
+
+* Creates "dummy" variables
+
+--
+
+.pull-left[
+
+```{r, echo = FALSE}
+iris %>%
+  slice(c(1, 10, 100, 150)) %>%
+  select(Species)
+```
+
+]
+
+--
+
+.pull-right[
+
+```{r, echo = FALSE}
+iris %>%
+  recipe() %>%
+  step_dummy(Species) %>%
+  prep() %>%
+  juice() %>%
+  select(starts_with("Species")) %>%
+  slice(c(1, 10, 100, 150))
+```
+
+]
+
+---
+
+## Baseball prediction preprocessing
+
+* The first preprocessing step we want to do is make all nominal variables **dummy variables**.
+* You can do this by specifying `step_dummy()` in a `recipe`
+--
+
+* Specify the variables you want to be preprocessed by seperating them with commas:
+
+```{r, eval = FALSE}
+step_dummy(nominal_variable_1, nominal_variable_2, ...)
+```
+
+---
+
+class: inverse
+
+`r countdown::countdown(minutes = 2)`
+
+## <i class="fas fa-laptop"></i> `Baseball prediction, preprocessing`
+
+For this prediction model, we want to predict `Salary` using **all** remaining variables (`Salary ~ .`). Examine the `hitters` data. Find the **nominal variables**. Ammend the code below to create dummy variables for these.
+
+```{r, eval = FALSE}
+rec <- recipe(Salary ~ ., data = hitters) %>%
+  step_dummy(------)
+```
+
+---
+
+## Baseball prediction preprocessing
+
+_There is an easier way!_ 
+
+--
+
+* Instead of looking for all nominal variables by hand, you can use `all_nominal()`.
+--
+
+```{r}
+rec <- recipe(Salary ~ ., data = Hitters) %>%
+  step_dummy(all_nominal())
+```
+
+---
+
+## Baseball prediction preprocessing
+
+.question[
+What pre-processing step is necessary when doing penalized regression?
+]
+
+--
+
+* Instead of plugging each variable individually into `step_scale()`, you can use the shorthand `all_predictors()`:
+
+.small[
+```{r, eval = FALSE}
+step_scale(all_predictors())
+```
+]
+
+
+---
+
+class: inverse
+
+`r countdown::countdown(minutes = 2)`
+
+## <i class="fas fa-laptop"></i> `Baseball prediction, preprocessing`
+
+Ammend the code below to make all nominal variables dummy variables and scale all of the predictors
+
+```{r, eval = FALSE}
+rec <- recipe(Salary ~ ., data = hitters) %>%
+  step_-----(------) %>%
+  step_-----(------)
+```
+
+---
+
+## Baseball prediction preprocessing
+
+```{r}
+rec <- recipe(Salary ~ ., data = hitters) %>%
+  step_dummy(all_nominal()) %>%
+  step_scale(all_predictors())
+```
+
+---
+
+
+class: inverse
+
+`r countdown::countdown(minutes = 2)`
+
+## <i class="fas fa-laptop"></i> `Baseball prediction, lasso`
+
+Using the recipe you've created `rec`, the cross validation data `hitters_cv`, and the `lasso_spec` fit the resampled data. Output the `rmse` and `rsq` for this model. 
+
+```{r, eval = FALSE}
+results <- fit_resamples(lasso_spec,
+                         preprocessor = ---,
+                         resamples = ---)
+
+results %>%
+  ---
+```
+
+---
+
+## Ridge, Lasso, and Elastic Net
+
+$$RSS + \lambda\left((1-\alpha)\sum_{i=1}^p\beta_j^2+\alpha\sum_{i=1}^p|\beta_j|\right)$$
+
+.question[
+What if I don't want to specify these parameters? How can I specify that I want to use cross validation to choose?
+]
+
+--
+
+* `r emo::ji("notes")`
+
+--
+
+```{r}
+penalized_spec <- 
+  linear_reg(penalty = tune(),
+             mixture = tune()) %>%
+  set_engine("glmnet")
+
+grid <- expand_grid(penalty = seq(1, 1000, by = 100),
+                         mixture = seq(0, 1, by = 0.2))
+```
+
+---
+
+class: inverse
+
+`r countdown::countdown(minutes = 5)`
+
+## <i class="fas fa-laptop"></i> `Baseball prediction, tuned penalization`
+
+Create a new models specification called `penalized_spec` that tunes the penalty and mixture parameters. Create a grid of potential parameters, with a penalty term that varies from 0 to 100 by 10, and a mixture term that varies from 0 to 1 by 0.1. Using the recipe you've created `rec`and the cross validation data `hitters_cv` fit this model using `tune_grid`. Output the `rmse` and `rsq` for this model. 
+
+```{r, eval = FALSE}
+penalized_spec <- 
+  linear_reg(penalty = ---,
+             mixture = ---) %>%
+  set_engine("glmnet")
+
+grid <- expand_grid(penalty = ---,
+                         mixture = ---)
+
+results <- tune_grid(penalized_spec,
+                     preprocessor = ---,
+                     grid = ---,
+                     resamples = ---)
+
+results %>%
+  ---
+```
+
+---
+
+## Baseball prediction, tuned penalization
+
+
+```{r penalized, cache = TRUE}
+
+penalized_spec <- 
+  linear_reg(penalty = tune(),
+             mixture = tune()) %>%
+  set_engine("glmnet")
+
+grid <- expand_grid(penalty = seq(0, 100, by = 10),
+                         mixture = seq(0, 1, by = 0.1))
+
+results <- tune_grid(penalized_spec,
+                     rec,
+                     grid = grid,
+                     resamples = hitters_cv)
+
+
+```
+
+---
+
+
+class: inverse
+
+`r countdown::countdown(minutes = 2)`
+
+## <i class="fas fa-laptop"></i> `Baseball prediction, choosing penalty and mixture`
+
+Examine the results. Filter the metrics to only include `rmse` and arrange them in order of mean root mean squared error (to choose the smallest). Hint look at `?arrange` if you aren't sure how to sort.
+
+```{r, eval = FALSE}
+results %>%
+  collect_metrics() %>%
+  filter(---) %>%
+  arrange(---)
+```
+
+---
+
+## Baseball prediction tuning
+
+```{r}
+results %>%
+  collect_metrics() %>%
+  filter(.metric == "rmse") %>%
+  arrange(mean)
+```
+
+
 
