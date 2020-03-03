@@ -77,6 +77,7 @@ lessons:
   - date: "Tues, Mar 3"
     title: "tidymodels (Part 2)"
   - title: "Polynomial Regression and Splines"
+    slides: "13-non-linear.html"
   - date: "Thur, Mar 5"
     title: "Lab 04: High dimensional data"
     lab: "coming-soon.html"
