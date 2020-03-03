@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Non-linearity</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. D’Agostino McGowan" />
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link href="libs/countdown/countdown.css" rel="stylesheet" />
+    <script src="libs/countdown/countdown.js"></script>
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Non-linearity
+### Dr. D’Agostino McGowan
+
+---
+
+
+
+
+
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+Dr. Lucy D'Agostino McGowan &lt;i&gt; adapted from Alison Hill's Introduction to ML with the Tidyverse&lt;/i&gt;
+&lt;/span&gt;
+&lt;/div&gt; 
+
+
+
+---
+
+## Non-linear relationships
+
+.question[
+What have we used so far to deal with non-linear relationships?
+]
+--
+
+* Hint: What did you use in Lab 03?
+--
+
+* Polynomials!
+
+---
+
+## Polynomials
+
+`$$y_i = \beta_0 + \beta_1x_i + \beta_2x_i^2+\beta_3x_i^3 \dots + \beta_dx_i^d+\epsilon_i$$`
+
+
+![](13-non-linear_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+
+--
+
+* This is data from the Columbia World Fertility Survey (1975-76) to examine household compositions
+--
+
+* Fit here with a 4th degree polynomial 
+
+---
+
+## How is it done?
+
+* New variables are created ( `\(X_1 = X\)`, `\(X_2 = X^2\)`, `\(X_3 = X^3\)`, etc) and treated as multiple linear regression
+--
+
+* We are _not_ interested in the individual coefficients, we are interested in how a _specific_ `\(x\)` value behaves
+
+`$$\hat{f}(x_0) = \hat\beta_0 + \hat\beta_1x_0 + \hat\beta_2x_0^2 + \hat\beta_3x_0^3 + \hat\beta_4x_0^4$$`
+
+--
+
+* _or more often a change between two values_, `\(a\)` and `\(b\)`
+
+`$$\hat{f}(b) -\hat{f}(a) = \hat\beta_1b + \hat\beta_2b^2 + \hat\beta_3b^3 + \hat\beta_4b^4 - \hat\beta_1a - \hat\beta_2a^2 - \hat\beta_3a^3 -\hat\beta_4a^4$$`
+
+--
+
+`$$\hat{f}(b) -\hat{f}(a) =\hat\beta_1(b-a) + \hat\beta_2(b^2-a^2)+\hat\beta_3(b^3-a^3)+\hat\beta_4(b^4-a^4)$$`
+
+---
+
+## Polynomial Regression 
+
+`$$\hat{f}(b) -\hat{f}(a) =\hat\beta_1(b-a) + \hat\beta_2(b^2-a^2)+\hat\beta_3(b^3-a^3)+\hat\beta_4(b^4-a^4)$$`
+
+.question[
+How do you pick `\(a\)` and `\(b\)`?
+]
+
+--
+
+* If given no other information, a sensible choice may be the 25th and 75th percentiles of `\(x\)`
+
+---
+
+&lt;!-- class: inverse --&gt;
+
+&lt;!-- <div class="countdown" id="timer_5e5e7229" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">01</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">30</span></code>
+</div> --&gt;
+
+&lt;!-- ## &lt;i class="fas fa-laptop"&gt;&lt;/i&gt; `Quantiles` --&gt;
+
+&lt;!-- Edit the code below to calculate the 0.25 and 0.75 quantile for `horsepower` in the `Auto` data frame. _Not sure what arguments `quantile()` takes? Try `?quantile` in the Console_. --&gt;
+
+&lt;!-- ```{r, eval = FALSE} --&gt;
+&lt;!-- library(ISLR) --&gt;
+
+&lt;!-- Auto %&gt;% --&gt;
+&lt;!--   summarise(pct_25 = quantile(---, ---), --&gt;
+&lt;!--             pct_75 = quantile(---, ---)) --&gt;
+&lt;!-- ``` --&gt;
+
+&lt;!-- --- --&gt;
+
+
+
+
+
+---
+
+## Polynomial Regression 
+
+![](13-non-linear_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
+---
+
+
+class: inverse
+
+<div class="countdown" id="timer_5e5e709e" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">03</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+## &lt;i class="fas fa-laptop"&gt;&lt;/i&gt; `Polynomial Regression`
+
+`$$pop = \beta_0 + \beta_1age + \beta_2age^2 + \beta_3age^3 +\beta_4age^4+ \epsilon$$`
+
+Using the information below, write out the equation to predicted change in population from a change in age from the 25th percentile (24.5) to a 75th percentile (73.5).
+
+
+```r
+lm(pop ~ age + I(age^2) + I(age^3) + I(age^4), data = co) %&gt;%
+  tidy() %&gt;%
+  knitr::kable(digits = 4)
+```
+
+
+
+term            estimate   std.error   statistic   p.value
+------------  ----------  ----------  ----------  --------
+(Intercept)    1672.0854     64.5606     25.8995    0.0000
+age             -10.6429      9.2268     -1.1535    0.2516
+I(age^2)         -1.1427      0.3857     -2.9627    0.0039
+I(age^3)          0.0216      0.0059      3.6498    0.0004
+I(age^4)         -0.0001      0.0000     -3.6540    0.0004
+
+&lt;!-- ## Polynomial Regression  --&gt;
+
+&lt;!-- .small[ --&gt;
+&lt;!-- ```{r} --&gt;
+&lt;!-- model &lt;- lm(mpg ~ poly(horsepower, 3), data = Auto) --&gt;
+&lt;!-- model --&gt;
+
+&lt;!-- new_data &lt;- data.frame(horsepower = c(75, 126)) --&gt;
+&lt;!-- p &lt;- predict(model, newdata = new_data) --&gt;
+&lt;!-- p[2] - p[1] --&gt;
+&lt;!-- ``` --&gt;
+&lt;!-- ] --&gt;
+
+---
+
+## Choosing `\(d\)`
+
+`$$y_i = \beta_0 + \beta_1x_i + \beta_2x_i^2+\beta_3x_i^3 \dots + \beta_dx_i^d+\epsilon_i$$`
+
+## Either:
+
+* Pre-specify `\(d\)` (before looking 👀 at your data!)
+* Use cross-validation to pick `\(d\)`
+
+--
+
+.question[
+Why?
+]
+
+---
+
+## Polynomial Regression
+
+* polynomials have notoriously bad tail behavior (so they can be bad for extrapolation)
+
+--
+
+.question[
+What does this mean?
+]
+
+---
+
+## Step functions
+
+* Another way to create a transformation is to cut the variable into distinct regions
+
+`$$C_1(X) = I(X &lt; 35), C_2(X) = I(35\leq X&lt;65), C_3(X) = I(X \geq 65)$$`
+
+![](13-non-linear_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

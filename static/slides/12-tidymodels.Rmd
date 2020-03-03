@@ -809,6 +809,7 @@ Set up the 5-fold cross validation by creating an object called `hitters_cv`
 ```{r, eval = FALSE}
 library(ISLR)
 hitters <- na.omit(Hitters)
+set.seed(1)
 
 hitters_cv <- -----(hitters, -----)
 ```
@@ -818,6 +819,7 @@ hitters_cv <- -----(hitters, -----)
 ## Baseball prediction cross validation
 
 ```{r}
+set.seed(1)
 hitters_cv <- vfold_cv(hitters, v = 5)
 ```
 
@@ -835,8 +837,7 @@ How does regression handle categorical (nominal) predictors?
 
 --
 
-.pull-left[
-
+.small[
 ```{r, echo = FALSE}
 iris %>%
   slice(c(1, 10, 100, 150)) %>%
@@ -847,8 +848,7 @@ iris %>%
 
 --
 
-.pull-right[
-
+.small[
 ```{r, echo = FALSE}
 iris %>%
   recipe() %>%
@@ -858,8 +858,10 @@ iris %>%
   select(starts_with("Species")) %>%
   slice(c(1, 10, 100, 150))
 ```
-
 ]
+
+
+--
 
 ---
 
@@ -901,8 +903,8 @@ _There is an easier way!_
 * Instead of looking for all nominal variables by hand, you can use `all_nominal()`.
 --
 
-```{r}
-rec <- recipe(Salary ~ ., data = Hitters) %>%
+```{r, eval = FALSE}
+rec <- recipe(Salary ~ ., data = hitters) %>%
   step_dummy(all_nominal())
 ```
 
@@ -987,7 +989,7 @@ What if I don't want to specify these parameters? How can I specify that I want 
 
 --
 
-```{r}
+```{r, eval = FALSE}
 penalized_spec <- 
   linear_reg(penalty = tune(),
              mixture = tune()) %>%
@@ -1007,14 +1009,14 @@ class: inverse
 
 Create a new models specification called `penalized_spec` that tunes the penalty and mixture parameters. Create a grid of potential parameters, with a penalty term that varies from 0 to 100 by 10, and a mixture term that varies from 0 to 1 by 0.1. Using the recipe you've created `rec`and the cross validation data `hitters_cv` fit this model using `tune_grid`. Output the `rmse` and `rsq` for this model. 
 
+.small[
 ```{r, eval = FALSE}
-penalized_spec <- 
-  linear_reg(penalty = ---,
-             mixture = ---) %>%
-  set_engine("glmnet")
+penalized_spec <- linear_reg(penalty = ---,
+                             mixture = ---) %>%
+                  set_engine("glmnet")
 
 grid <- expand_grid(penalty = ---,
-                         mixture = ---)
+                    mixture = ---)
 
 results <- tune_grid(penalized_spec,
                      preprocessor = ---,
@@ -1024,6 +1026,7 @@ results <- tune_grid(penalized_spec,
 results %>%
   ---
 ```
+]
 
 ---
 
@@ -1031,7 +1034,6 @@ results %>%
 
 
 ```{r penalized, cache = TRUE}
-
 penalized_spec <- 
   linear_reg(penalty = tune(),
              mixture = tune()) %>%
@@ -1044,8 +1046,6 @@ results <- tune_grid(penalized_spec,
                      rec,
                      grid = grid,
                      resamples = hitters_cv)
-
-
 ```
 
 ---

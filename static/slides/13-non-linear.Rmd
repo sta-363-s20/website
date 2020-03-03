@@ -1,0 +1,219 @@
+---
+title: "Non-linearity"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan <i> adapted from Alison Hill's Introduction to ML with the Tidyverse</i>
+</span>
+</div> 
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+library(countdown)
+library(ISLR)
+library(tidymodels)
+co <- read.table("http://data.princeton.edu/eco572/datasets/cohhpop.dat",
+                 col.names=c("age","pop"), header=FALSE)
+
+```
+
+---
+
+## Non-linear relationships
+
+.question[
+What have we used so far to deal with non-linear relationships?
+]
+--
+
+* Hint: What did you use in Lab 03?
+--
+
+* Polynomials!
+
+---
+
+## Polynomials
+
+$$y_i = \beta_0 + \beta_1x_i + \beta_2x_i^2+\beta_3x_i^3 \dots + \beta_dx_i^d+\epsilon_i$$
+
+
+```{r, echo = FALSE}
+ggplot(co, aes(age, pop)) + 
+  geom_point() + 
+  geom_smooth(formula = y ~ poly(x, 4), method = "lm")
+```
+
+--
+
+* This is data from the Columbia World Fertility Survey (1975-76) to examine household compositions
+--
+
+* Fit here with a 4th degree polynomial 
+
+---
+
+## How is it done?
+
+* New variables are created ( $X_1 = X$, $X_2 = X^2$, $X_3 = X^3$, etc) and treated as multiple linear regression
+--
+
+* We are _not_ interested in the individual coefficients, we are interested in how a _specific_ $x$ value behaves
+
+$$\hat{f}(x_0) = \hat\beta_0 + \hat\beta_1x_0 + \hat\beta_2x_0^2 + \hat\beta_3x_0^3 + \hat\beta_4x_0^4$$
+
+--
+
+* _or more often a change between two values_, $a$ and $b$
+
+$$\hat{f}(b) -\hat{f}(a) = \hat\beta_1b + \hat\beta_2b^2 + \hat\beta_3b^3 + \hat\beta_4b^4 - \hat\beta_1a - \hat\beta_2a^2 - \hat\beta_3a^3 -\hat\beta_4a^4$$
+
+--
+
+$$\hat{f}(b) -\hat{f}(a) =\hat\beta_1(b-a) + \hat\beta_2(b^2-a^2)+\hat\beta_3(b^3-a^3)+\hat\beta_4(b^4-a^4)$$
+
+---
+
+## Polynomial Regression 
+
+$$\hat{f}(b) -\hat{f}(a) =\hat\beta_1(b-a) + \hat\beta_2(b^2-a^2)+\hat\beta_3(b^3-a^3)+\hat\beta_4(b^4-a^4)$$
+
+.question[
+How do you pick $a$ and $b$?
+]
+
+--
+
+* If given no other information, a sensible choice may be the 25th and 75th percentiles of $x$
+
+---
+
+<!-- class: inverse -->
+
+<!-- `r countdown::countdown(minutes = 1.5)` -->
+
+<!-- ## <i class="fas fa-laptop"></i> `Quantiles` -->
+
+<!-- Edit the code below to calculate the 0.25 and 0.75 quantile for `horsepower` in the `Auto` data frame. _Not sure what arguments `quantile()` takes? Try `?quantile` in the Console_. -->
+
+<!-- ```{r, eval = FALSE} -->
+<!-- library(ISLR) -->
+
+<!-- Auto %>% -->
+<!--   summarise(pct_25 = quantile(---, ---), -->
+<!--             pct_75 = quantile(---, ---)) -->
+<!-- ``` -->
+
+<!-- --- -->
+
+
+
+
+
+---
+
+## Polynomial Regression 
+
+```{r, echo = FALSE}
+ggplot(co, aes(x = age, y = pop)) + 
+  geom_point() + 
+  geom_smooth(formula = y ~ poly(x, 4), method = "lm") + 
+  geom_vline(xintercept = c(24.5, 73.5), lty = 2)
+```
+
+---
+
+
+class: inverse
+
+`r countdown::countdown(minutes = 3)`
+
+## <i class="fas fa-laptop"></i> `Polynomial Regression`
+
+$$pop = \beta_0 + \beta_1age + \beta_2age^2 + \beta_3age^3 +\beta_4age^4+ \epsilon$$
+
+Using the information below, write out the equation to predicted change in population from a change in age from the 25th percentile (24.5) to a 75th percentile (73.5).
+
+```{r}
+lm(pop ~ age + I(age^2) + I(age^3) + I(age^4), data = co) %>%
+  tidy() %>%
+  knitr::kable(digits = 4)
+```
+
+<!-- ## Polynomial Regression  -->
+
+<!-- .small[ -->
+<!-- ```{r} -->
+<!-- model <- lm(mpg ~ poly(horsepower, 3), data = Auto) -->
+<!-- model -->
+
+<!-- new_data <- data.frame(horsepower = c(75, 126)) -->
+<!-- p <- predict(model, newdata = new_data) -->
+<!-- p[2] - p[1] -->
+<!-- ``` -->
+<!-- ] -->
+
+---
+
+## Choosing $d$
+
+$$y_i = \beta_0 + \beta_1x_i + \beta_2x_i^2+\beta_3x_i^3 \dots + \beta_dx_i^d+\epsilon_i$$
+
+## Either:
+
+* Pre-specify $d$ (before looking `r emo::ji("eyes")` at your data!)
+* Use cross-validation to pick $d$
+
+--
+
+.question[
+Why?
+]
+
+---
+
+## Polynomial Regression
+
+* polynomials have notoriously bad tail behavior (so they can be bad for extrapolation)
+
+--
+
+.question[
+What does this mean?
+]
+
+---
+
+## Step functions
+
+* Another way to create a transformation is to cut the variable into distinct regions
+
+$$C_1(X) = I(X < 35), C_2(X) = I(35\leq X<65), C_3(X) = I(X \geq 65)$$
+
+```{r, echo = FALSE}
+mod <- lm(pop ~ I(age < 35) + I(age >=35 & age < 65) + I(age >= 65), data = co)
+p <- predict(mod)
+ggplot(co, aes(x = age, y = pop)) +
+  geom_point() +
+  geom_line(aes(x = age, y = p), color = "blue")
+```
+
+
