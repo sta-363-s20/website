@@ -106,30 +106,6 @@ How do you pick $a$ and $b$?
 
 ---
 
-<!-- class: inverse -->
-
-<!-- `r countdown::countdown(minutes = 1.5)` -->
-
-<!-- ## <i class="fas fa-laptop"></i> `Quantiles` -->
-
-<!-- Edit the code below to calculate the 0.25 and 0.75 quantile for `horsepower` in the `Auto` data frame. _Not sure what arguments `quantile()` takes? Try `?quantile` in the Console_. -->
-
-<!-- ```{r, eval = FALSE} -->
-<!-- library(ISLR) -->
-
-<!-- Auto %>% -->
-<!--   summarise(pct_25 = quantile(---, ---), -->
-<!--             pct_75 = quantile(---, ---)) -->
-<!-- ``` -->
-
-<!-- --- -->
-
-
-
-
-
----
-
 ## Polynomial Regression 
 
 ```{r, echo = FALSE}
@@ -152,24 +128,11 @@ $$pop = \beta_0 + \beta_1age + \beta_2age^2 + \beta_3age^3 +\beta_4age^4+ \epsil
 
 Using the information below, write out the equation to predicted change in population from a change in age from the 25th percentile (24.5) to a 75th percentile (73.5).
 
-```{r}
+```{r, echo = FALSE, results = "asis"}
 lm(pop ~ age + I(age^2) + I(age^3) + I(age^4), data = co) %>%
   tidy() %>%
-  knitr::kable(digits = 4)
+  knitr::kable(digits = 4, format = "markdown")
 ```
-
-<!-- ## Polynomial Regression  -->
-
-<!-- .small[ -->
-<!-- ```{r} -->
-<!-- model <- lm(mpg ~ poly(horsepower, 3), data = Auto) -->
-<!-- model -->
-
-<!-- new_data <- data.frame(horsepower = c(75, 126)) -->
-<!-- p <- predict(model, newdata = new_data) -->
-<!-- p[2] - p[1] -->
-<!-- ``` -->
-<!-- ] -->
 
 ---
 
@@ -216,4 +179,152 @@ ggplot(co, aes(x = age, y = pop)) +
   geom_line(aes(x = age, y = p), color = "blue")
 ```
 
+
+---
+
+## Step functions
+
+* Create dummy variables for each group
+--
+
+* Include each of these variables in multiple regression
+--
+
+* The choice of cutpoints or **knots** can be problematic (and make a big difference!)
+
+---
+
+## Step functions
+
+
+$$C_1(X) = I(X < 35), C_2(X) = I(35\leq X<65), C_3(X) = I(X \geq 65)$$
+
+```{r, echo = FALSE, fig.height = 1.5}
+mod <- lm(pop ~ I(age < 35) + I(age >=35 & age < 65) + I(age >= 65), data = co)
+p <- predict(mod)
+ggplot(co, aes(x = age, y = pop)) +
+  geom_point() +
+  geom_line(aes(x = age, y = p), color = "blue")
+```
+
+--
+
+$$C_1(X) = I(X < 15), C_2(X) = I(15\leq X<65), C_3(X) = I(X \geq 65)$$
+
+```{r, echo = FALSE, fig.height = 1.5}
+mod <- lm(pop ~ I(age < 15) + I(age >=15 & age < 65) + I(age >= 65), data = co)
+p <- predict(mod)
+ggplot(co, aes(x = age, y = pop)) +
+  geom_point() +
+  geom_line(aes(x = age, y = p), color = "blue")
+```
+
+---
+
+## Piecewise polynomials
+
+* Instead of a single polynomial in $X$ over it's whole domain, we can use different polynomials in regions defined by knots
+
+$$y_i = \begin{cases}\beta_{01}+\beta_{11}x_i + \beta_{21}x^2_i+\beta_{31}x^3_i+\epsilon_i& \textrm{if } x_i < c\\ \beta_{02}+\beta_{12}x_i + \beta_{22}x_i^2 + \beta_{32}x_{i}^3+\epsilon_i&\textrm{if }x_i\geq c\end{cases}$$
+
+--
+
+.question[
+What could go wrong here?
+]
+
+--
+
+* It would be nice to have constraints (like continuity!)
+--
+
+* Insert **splines!**
+
+---
+
+![](img/13/splines.png)
+
+---
+
+## Linear Splines
+
+_A linear spline with knots at $\xi_k$, $k = 1,\dots, K$ is a piecewise linear polynomial continuous at each knot_
+
+--
+
+$$y_i = \beta_0 + \beta_1b_1(x_i)+\beta_2b_2(x_i)+\dots+\beta_{K+3}b_{K+3}(x_i)+\epsilon_i$$
+
+--
+
+* $b_k$ are **basis functions**
+
+$$\begin{align}b_1(x_i)&=x_i\\ b_{k+1}(x_i)&=(x_i-\xi_k)_+,k=1,\dots,K\end{align}$$
+
+--
+
+Here $()_+$ means the **positive part**
+
+$$(x_i-\xi_k)_+=\begin{cases}x_i-\xi_k & \textrm{if } x_i>\xi_k\\0&\textrm{otherwise}\end{cases}$$
+
+---
+
+![](img/13/basis.png)
+
+---
+
+## Cubic Splines
+
+_A cubic spliens with knots at $\xi_i, k = 1, \dots, K$ is a piecewise cubic polynomial with continuous derivatives up to order 2 at each knot._
+
+--
+
+Again we can represent this model with truncated power functions
+
+$$y_i = \beta_0 + \beta_1b_1(x_i)+\beta_2b_2(x_i)+\dots+\beta_{K+3}b_{K+3}(x_i) + \epsilon_i$$
+
+$$\begin{align}b_1(x_i)&=x_i\\b_2(x_i)&=x_i^2\\b_3(x_i)&=x_i^3\\b_{k+3}(x_i)&=(x_i-\xi_k)^3_+, k = 1,\dots,K\end{align}$$
+
+--
+
+where
+
+$$(x_i-\xi_k)^{3}_+=\begin{cases}(x_i-\xi_k)^3&\textrm{if }x_i>\xi_k\\0&\textrm{otherwise}\end{cases}$$
+
+---
+
+![](img/13/cubic.png)
+
+---
+
+## Natural cubic splines
+
+_A natural cubic spline extrapolates linearly beyond the boundary knots_
+
+--
+
+* This adds 4 extra constraints and allows us to put **more** internal knots for the same degrees of freedom as a regular cubic spline
+
+<img src="img/13/natural.png" height=400></img>
+
+---
+
+## Knot placement
+
+* One strategy is to decide $K$ (the number of knots) in advance and then place them at appropriate quantiles of the observed $X$
+--
+
+* A cubic spline with $K$ knots has $K+4$ parameters (or degrees of freedom!)
+--
+
+* A natural spline with $K$ knots has $K$ degrees of freedom
+
+---
+
+## Knot placement
+
+* Here is a comparision of a degree-14 polynomial and natural cubic spline (both have 15 degrees of freedom)
+
+![](img/13/knots.png)
+
+---
 
