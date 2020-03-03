@@ -252,7 +252,7 @@ _A linear spline with knots at $\xi_k$, $k = 1,\dots, K$ is a piecewise linear p
 
 --
 
-$$y_i = \beta_0 + \beta_1b_1(x_i)+\beta_2b_2(x_i)+\dots+\beta_{K+3}b_{K+3}(x_i)+\epsilon_i$$
+$$y_i = \beta_0 + \beta_1b_1(x_i)+\beta_2b_2(x_i)+\dots+\beta_{K+1}b_{K+1}(x_i)+\epsilon_i$$
 
 --
 
