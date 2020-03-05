@@ -794,12 +794,18 @@ tuning %>%
   collect_metrics() %>%
   filter(.metric == "rmse") %>%
   arrange(mean)
+```
+]
 
+## Putting it all together
+
+.small[
+```{r}
 final_spec <- linear_reg(penalty = 0, mixture = 0) %>%
   set_engine("glmnet")
-fit <- last_fit(final_spec,
+fit <- last_fit(final_spec, #<<
                 rec,
-                split = auto_split)
+                split = auto_split) #<<
 fit %>%
   collect_metrics()
 ```
