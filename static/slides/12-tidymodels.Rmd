@@ -744,7 +744,7 @@ results %>%
 
 ---
 
-```{r mtcars, cache = TRUE, message = FALSE, warning = FALSE}
+```{r mtcars, echo = FALSE, cache = TRUE, message = FALSE, warning = FALSE}
 mtcars_cv <- vfold_cv(mtcars, v = 5)
 rec <- recipe(mpg ~ ., mtcars) %>%
   step_dummy(all_nominal()) %>%
