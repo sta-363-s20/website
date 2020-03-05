@@ -80,7 +80,7 @@ lessons:
     slides: "13-non-linear.html"
   - date: "Thur, Mar 5"
     title: "Lab 04: High dimensional data"
-    lab: "coming-soon.html"
+    lab: "04-ridge-lasso-elastic.html"
   - title: "Week 09"
   - date: "Tues, Mar 10"
     title: "No Class: Spring Break"
