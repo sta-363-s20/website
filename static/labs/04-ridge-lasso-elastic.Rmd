@@ -1,0 +1,131 @@
+---
+title: "Lab 04 - Ridge Lasso Elastic Net"
+output: 
+  tufte::tufte_html:
+    tufte_variant: "envisioned"
+    highlight: pygments
+    css: lab.css
+link-citations: yes
+---
+
+```{r include=FALSE}
+library(tidyverse)
+library(tidymodels)
+library(ISLR)
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  show.signif.stars = FALSE     # for regression output
+)
+```
+
+**Due:** Monday 2020-03-16 at 11:59pm
+
+# Introduction
+
+In this lab we are going to practice cross validation. A few reminders:
+
+* Remember to label your chunks
+* Write out your answers in full sentences, do not just rely on the R output
+* Knit, commit, and push regularly (at least after every exercise)
+
+# Getting started
+
+- Go to our class's GitHub organization [sta-363-s20](https://github.com/sta-363-s20)
+- Find the GitHub repository (which we'll refer to as "repo" going forward) for this lab, `lab-04-ridge-lasso-elastic-YOUR-GITHUB-HANDLE`. This repo contains a template you can build on to complete your assignment.
+- On GitHub, click on the green **Clone or download** button, select **Use HTTPS**. Click on the clipboard icon to copy the repo URL.
+- If using RStudio Cloud, go to RStudio Cloud and into the course workspace. Create a **New Project from Git Repo**. You will need to click on the down arrow next to the **New Project** button to see this option.
+- If using RStudio Pro, create a new project by clicking **File > New Project** Then click **Version Control** and **Git/Github**.
+- Copy and paste the URL of your assignment repo into the dialog box.
+- Hit OK, and you're good to go!
+
+# Packages
+
+In this lab we will work with two packages: `tidyverse` which is a collection of packages for doing data analysis in a "tidy" way and `tidymodels` for statistial modeling.
+
+Now that the necessary packages are installed, you should be able to Knit your document and see the results.
+
+If you'd like to run your code in the Console as well you'll also need to load the packages there. To do so, run the following in the console. 
+
+```{r eval = FALSE}
+library(tidyverse) 
+library(tidymodels)
+```
+
+Note that the packages are also loaded with the same commands in your R Markdown document.
+
+# Housekeeping
+
+## Git configuration
+
+```{marginfigure}
+Your email address is the address tied to your GitHub account and your name should be first and last name.
+```
+
+- Go to the *Terminal* pane
+- Type the following two lines of code, replacing the information in the quotation marks with your info:
+
+```{bash eval=FALSE}
+git config --global user.email "your email"
+git config --global user.name "your name"
+```
+
+To confirm that the changes have been implemented, run the following
+
+```{bash eval=FALSE}
+git config --global user.email
+git config --global user.name
+```
+
+## Password caching
+
+If you would like your git password cached for a week for this project, type the following in the Terminal:
+
+```{bash eval=FALSE}
+git config --global credential.helper 'cache --timeout 604800'
+```
+
+## Project name: 
+
+Currently your project is called *Untitled Project*. Update the name of your project to be "Lab 04 - Ridge, Lasso, and Elastic Net".
+
+# Warm up
+
+Before we introduce the data, let's warm up with some simple exercises.
+
+## YAML: 
+
+Open the R Markdown (Rmd) file in your project, change the author name to your name, and knit the document.
+
+## Commiting and pushing changes:
+
+- Go to the **Git** pane in your RStudio. 
+- View the **Diff** and confirm that you are happy with the changes.
+- Add a commit message like "Update team name" in the **Commit message** box and hit **Commit**.
+- Click on **Push**. This will prompt a dialogue box where you first need to enter your user name, and then your password.
+
+# Data
+
+For this lab, we are using a data frame currently in `music.csv`. This data frame includes 72 predictors that are components of audio files and one outcome, `lat`, the latitude of where the music originated. We are trying to predict the location of the music's origin using audio components of the music.
+
+# Exercises
+
+1. Set a seed of `7`. Split the `music` data into a training and test set with 50% of the data in the training and 50% in the testing. Call your training set `music_train` and your testing set `music_test`. Describe these data sets (how many observations, how many variables).
+
+
+```{r split}
+music <- read_csv("music.csv")
+```
+
+
+2. We are interested in predicting the latitude (`lat`) of the music's origin from all other variables. Fit a linear model using least squares on the training set. Report the test root mean squared error obtained.
+
+3.  Fit a ridge regression model on the training set with $\lambda$ chosen using 10-fold cross valiation. Report the $\lambda$ chosen and explain why. Report the test root mean squared error obtained using testing portion of the initially split data frame.
+
+
+4. Fit a lasso model on the training set with $\lambda$ chosen using cross valiation. Report the $\lambda$ chosen and explain why. Report the test root mean squared error obtained using testing portion of the initially split data frame.
+
+
+5. Fit an elastic net model on the training set with $\lambda$ and $\alpha$ chosen using cross valiation. Report the $\lambda$ chosen and explain why. Report the test root mean squared error obtained using testing portion of the initially split data frame.
+
+
+6. Comment on the results obtained. How accurately can we predict the latitude of where the music originated? Is there much difference among the test errors resulting from these four approaches?

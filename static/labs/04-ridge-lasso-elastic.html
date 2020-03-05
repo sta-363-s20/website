@@ -13,7 +13,7 @@
 
 
 
-<title>Homework 2</title>
+<title>Lab 04 - Ridge Lasso Elastic Net</title>
 
 <style type="text/css">
 @charset "UTF-8";
@@ -202,6 +202,94 @@ color: #222;
 </style>
 
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
 
 
 
@@ -379,64 +467,105 @@ color: #333333;
 
 
 
-<h1 class="title toc-ignore">Homework 2</h1>
+<h1 class="title toc-ignore">Lab 04 - Ridge Lasso Elastic Net</h1>
 
 
 
-<p><strong>Due:</strong> Wednesday 2020-03-04 at 11:59pm</p>
+<p><strong>Due:</strong> Monday 2020-03-16 at 11:59pm</p>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>In this lab we are going to practice cross validation. A few reminders:</p>
+<ul>
+<li>Remember to label your chunks</li>
+<li>Write out your answers in full sentences, do not just rely on the R output</li>
+<li>Knit, commit, and push regularly (at least after every exercise)</li>
+</ul>
+</div>
 <div id="getting-started" class="section level1">
 <h1>Getting started</h1>
 <ul>
-<li><p>Go to the course organization on GitHub: <a href="https://github.com/sta-363-s20" class="uri">https://github.com/sta-363-s20</a>.</p></li>
-<li><p>Find the repo starting with <code>hw-02</code> and that has your team name at the end (this should be the only <code>hw-02</code> repo available to you).</p></li>
-<li><p>In the repo, click on the green <strong>Clone or download</strong> button, select <strong>Use HTTPS</strong>. Click on the clipboard icon to copy the repo URL.</p></li>
-<li><p>If using RStudio Cloud, go to RStudio Cloud and into the course workspace. Create a <strong>New Project from Git Repo</strong>. You will need to click on the down arrow next to the <strong>New Project</strong> button to see this option.</p></li>
-<li><p>If using RStudio Pro, create a new project by clicking <strong>File &gt; New Project</strong> Then click <strong>Version Control</strong> and <strong>Git/Github</strong>.</p></li>
-<li><p>Copy and paste the URL of your assignment repo into the dialog box.</p></li>
-<li><p>Hit OK, and you’re good to go!</p></li>
+<li>Go to our class’s GitHub organization <a href="https://github.com/sta-363-s20">sta-363-s20</a></li>
+<li>Find the GitHub repository (which we’ll refer to as “repo” going forward) for this lab, <code>lab-04-ridge-lasso-elastic-YOUR-GITHUB-HANDLE</code>. This repo contains a template you can build on to complete your assignment.</li>
+<li>On GitHub, click on the green <strong>Clone or download</strong> button, select <strong>Use HTTPS</strong>. Click on the clipboard icon to copy the repo URL.</li>
+<li>If using RStudio Cloud, go to RStudio Cloud and into the course workspace. Create a <strong>New Project from Git Repo</strong>. You will need to click on the down arrow next to the <strong>New Project</strong> button to see this option.</li>
+<li>If using RStudio Pro, create a new project by clicking <strong>File &gt; New Project</strong> Then click <strong>Version Control</strong> and <strong>Git/Github</strong>.</li>
+<li>Copy and paste the URL of your assignment repo into the dialog box.</li>
+<li>Hit OK, and you’re good to go!</li>
 </ul>
+</div>
+<div id="packages" class="section level1">
+<h1>Packages</h1>
+<p>In this lab we will work with two packages: <code>tidyverse</code> which is a collection of packages for doing data analysis in a “tidy” way and <code>tidymodels</code> for statistial modeling.</p>
+<p>Now that the necessary packages are installed, you should be able to Knit your document and see the results.</p>
+<p>If you’d like to run your code in the Console as well you’ll also need to load the packages there. To do so, run the following in the console.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse) </a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(tidymodels)</a></code></pre></div>
+<p>Note that the packages are also loaded with the same commands in your R Markdown document.</p>
+</div>
+<div id="housekeeping" class="section level1">
+<h1>Housekeeping</h1>
+<div id="git-configuration" class="section level2">
+<h2>Git configuration</h2>
+<p><label for="tufte-mn-1" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle"><span class="marginnote"><span style="display: block;">Your email address is the address tied to your GitHub account and your name should be first and last name.</span></span></p>
+<ul>
+<li>Go to the <em>Terminal</em> pane</li>
+<li>Type the following two lines of code, replacing the information in the quotation marks with your info:</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="fu">git</span> config --global user.email <span class="st">&quot;your email&quot;</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="fu">git</span> config --global user.name <span class="st">&quot;your name&quot;</span></a></code></pre></div>
+<p>To confirm that the changes have been implemented, run the following</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="fu">git</span> config --global user.email</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="fu">git</span> config --global user.name</a></code></pre></div>
+</div>
+<div id="password-caching" class="section level2">
+<h2>Password caching</h2>
+<p>If you would like your git password cached for a week for this project, type the following in the Terminal:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="fu">git</span> config --global credential.helper <span class="st">'cache --timeout 604800'</span></a></code></pre></div>
+</div>
+<div id="project-name" class="section level2">
+<h2>Project name:</h2>
+<p>Currently your project is called <em>Untitled Project</em>. Update the name of your project to be “Lab 04 - Ridge, Lasso, and Elastic Net”.</p>
+</div>
+</div>
+<div id="warm-up" class="section level1">
+<h1>Warm up</h1>
+<p>Before we introduce the data, let’s warm up with some simple exercises.</p>
+<div id="yaml" class="section level2">
+<h2>YAML:</h2>
+<p>Open the R Markdown (Rmd) file in your project, change the author name to your name, and knit the document.</p>
+</div>
+<div id="commiting-and-pushing-changes" class="section level2">
+<h2>Commiting and pushing changes:</h2>
+<ul>
+<li>Go to the <strong>Git</strong> pane in your RStudio.</li>
+<li>View the <strong>Diff</strong> and confirm that you are happy with the changes.</li>
+<li>Add a commit message like “Update team name” in the <strong>Commit message</strong> box and hit <strong>Commit</strong>.</li>
+<li>Click on <strong>Push</strong>. This will prompt a dialogue box where you first need to enter your user name, and then your password.</li>
+</ul>
+</div>
+</div>
+<div id="data" class="section level1">
+<h1>Data</h1>
+<p>For this lab, we are using a data frame currently in <code>music.csv</code>. This data frame includes 72 predictors that are components of audio files and one outcome, <code>lat</code>, the latitude of where the music originated. We are trying to predict the location of the music’s origin using audio components of the music.</p>
+</div>
+<div id="exercises" class="section level1">
+<h1>Exercises</h1>
 <ol style="list-style-type: decimal">
-<li>For parts (a) and (b), indicate which of i. through iv. is correct. Justify your answer.</li>
+<li>Set a seed of <code>7</code>. Split the <code>music</code> data into a training and test set with 50% of the data in the training and 50% in the testing. Call your training set <code>music_train</code> and your testing set <code>music_test</code>. Describe these data sets (how many observations, how many variables).</li>
 </ol>
-<p>(a.) The lasso, relative to least squares, is:</p>
-<p>(i.) More flexible and hence will give improved prediction accuracy when its increase in bias is less than its decrease in variance.<br />
-(ii.) More flexible and hence will give improved prediction accuracy when its increase in variance is less than its decrease in bias.<br />
-(iii.) Less flexible and hence will give improved prediction accuracy when its increase in bias is less than its decrease in variance.<br />
-(iv.) Less flexible and hence will give improved prediction accuracy when its increase in variance is less than its decrease in bias.</p>
-<p>(b.) Repeat (a) for ridge regression relative to least squares.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">music &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;music.csv&quot;</span>)</a></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
 <ol start="2" style="list-style-type: decimal">
-<li>Suppose we estimate the regression coefficients in a linear regression model by minimizing</li>
+<li><p>We are interested in predicting the latitude (<code>lat</code>) of the music’s origin from all other variables. Fit a linear model using least squares on the training set. Report the test root mean squared error obtained.</p></li>
+<li><p>Fit a ridge regression model on the training set with <span class="math inline">\(\lambda\)</span> chosen using 10-fold cross valiation. Report the <span class="math inline">\(\lambda\)</span> chosen and explain why. Report the test root mean squared error obtained using testing portion of the initially split data frame.</p></li>
+<li><p>Fit a lasso model on the training set with <span class="math inline">\(\lambda\)</span> chosen using cross valiation. Report the <span class="math inline">\(\lambda\)</span> chosen and explain why. Report the test root mean squared error obtained using testing portion of the initially split data frame.</p></li>
+<li><p>Fit an elastic net model on the training set with <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\alpha\)</span> chosen using cross valiation. Report the <span class="math inline">\(\lambda\)</span> chosen and explain why. Report the test root mean squared error obtained using testing portion of the initially split data frame.</p></li>
+<li><p>Comment on the results obtained. How accurately can we predict the latitude of where the music originated? Is there much difference among the test errors resulting from these four approaches?</p></li>
 </ol>
-<p><span class="math display">\[\sum_{i=1}^n\left(y_i-\beta_0 -\sum_{j=1}^p\beta_jx_{ij}\right)^2 \textrm{ subject to } \sum_{j=1}^p|\beta_j|\leq s\]</span></p>
-<p>for a particular value of <span class="math inline">\(s\)</span>. For parts (a) through (e), indicate which of i. through v. is correct. Justify your answer.</p>
-<p>(a.) As we increase <span class="math inline">\(s\)</span> from 0, the training RSS will:</p>
-<p>(i.) Increase initially, and then eventually start decreasing in an inverted U shape.<br />
-(ii.) Decrease initially, and then eventually start increasing in a U shape.<br />
-(iii.) Steadily increase.<br />
-(iv.) Steadily decrease. (v.) Remain constant.</p>
-<p>(b.) Repeat (a) for test RSS.</p>
-<p>(c.) Repeat (a) for variance.</p>
-<p>(d.) Repeat (a) for (squared) bias.</p>
-<p>(e.) Repeat (a) for the irreducible error.</p>
-<ol start="3" style="list-style-type: decimal">
-<li>Suppose we estimate the regression coefficients in a linear regression model by minimizing</li>
-</ol>
-<p><span class="math display">\[\sum_{i=1}^n\left(y_i-\beta_0-\sum_{j=1}^p\beta_jx_ij\right)^2+\lambda\sum_{j=1}^p\beta_j^2\]</span></p>
-<p>for a particular value of <span class="math inline">\(\lambda\)</span>. For parts (a) through (e), indicate which of i. through v. is correct. Justify your answer.</p>
-<p>(a.) As we increase <span class="math inline">\(\lambda\)</span> from 0, the training RSS will:</p>
-<p>(i.) Increase initially, and then eventually start decreasing in an inverted U shape.<br />
-(ii.) Decrease initially, and then eventually start increasing in a U shape.<br />
-(iii.) Steadily increase.<br />
-(iv.) Steadily decrease. (v.) Remain constant.</p>
-<p>(b.) Repeat (a) for test RSS.</p>
-<p>(c.) Repeat (a) for variance.</p>
-<p>(d.) Repeat (a) for (squared) bias.</p>
-<p>(e.) Repeat (a) for the irreducible error.</p>
-<ol start="4" style="list-style-type: decimal">
-<li><p>Which is better for feature (variable) section, Ridge Regression or Lasso? Justify your answer.</p></li>
-<li><p>Write the equation that is being minimized for an Elastic Net. Explain how this is related to Ridge Regression and Lasso.</p></li>
-</ol>
-<p>You will need to use <em>math mode</em> in your .Rmd file to do this. This <em>math mode</em> renders most <span class="math inline">\(\LaTeX\)</span> commands. If you don’t know how to add math expressions to your .Rmd file, you can read about it <a href="https://bookdown.org/yihui/rmarkdown/markdown-syntax.html#math-expressions">here</a>. If you are unfamiliar with <span class="math inline">\(\LaTeX\)</span>, here is a <a href="https://wch.github.io/latexsheet/">cheatsheet</a>.</p>
 </div>
 
 

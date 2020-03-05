@@ -145,7 +145,7 @@ lm_spec
 
 ```{r}
 fit(lm_spec,
-    formula = mpg ~ horsepower,
+    mpg ~ horsepower,
     data = Auto)
 ```
 
@@ -160,7 +160,7 @@ Fit the model:
 ```{r, eval = FALSE}
 library(ISLR)
 lm_fit <- fit(lm_spec,
-              formula = mpg ~ horsepower,
+              mpg ~ horsepower,
               data = Auto)
 lm_fit
 ```
@@ -177,7 +177,7 @@ lm(mpg ~ horsepower, data = Auto)
 
 ```{r, echo = FALSE}
 lm_fit <- fit(lm_spec,
-              formula = mpg ~ horsepower,
+              mpg ~ horsepower,
               data = Auto)
 ```
 
@@ -308,12 +308,32 @@ Auto_split  <- ________
 Auto_train  <- ________
 Auto_test   <- ________
 lm_fit      <- fit(lm_spec, 
-                   formula = mpg ~ horsepower, 
+                   mpg ~ horsepower, 
                    data = ________)
 mpg_pred  <- ________ %>% 
   predict(new_data = ________) %>% 
   bind_cols(________)
 rmse(________, truth = ________, estimate = ________)
+```
+
+---
+
+## A faster way!
+
+* You can use `last_fit()` and specify the split
+* This will automatically train the data on the `train` data from the split
+* Instead of specifying which metric to calculate (with `rmse` as before) you can just use `collect_metrics()` and it will automatically calculate the metrics on the `test` data from the split
+
+```{r}
+set.seed(100)
+
+Auto_split <- initial_split(Auto, prop = 0.5)
+lm_fit <- last_fit(lm_spec,
+                   mpg ~ horsepower,
+                   split = Auto_split) #<<
+
+lm_fit %>%
+  collect_metrics() #<<
 ```
 
 ---
@@ -332,9 +352,9 @@ Auto_cv
 --
 
 ```{r, eval = FALSE}
-fit_resamples(lm_spec,
+fit_resamples(lm_spec, #<<
               mpg ~ horsepower,
-              resamples = Auto_cv)
+              resamples = Auto_cv) #<<
 ```
 
 ---
@@ -352,7 +372,7 @@ fit_resamples(lm_spec,
 ## What about cross validation?
 
 .question[
-How do we get the metrics out? With `collect_metrics()`!
+How do we get the metrics out? With `collect_metrics()` again!
 ]
 
 --
@@ -478,19 +498,28 @@ results %>%
 ```
 
 ---
-class: inverse
 
-`r countdown::countdown(minutes = 3)`
+## What if we want to predict mpg with more variables
 
-## <i class="fas fa-laptop"></i> `Pre-processing`
+* Now we still want to add a step to _scale_ predictors
+* We could either write out all predictors individually to scale them
+--
 
-* Look through the available steps here: https://tidymodels.github.io/recipes/reference/index.html
-* See if you can find a way to make `horsepower` a 3rd degree polynomial (like in the lab) 
-* Edit the code below to run this model
+* OR we could use the `all_predictors()` short hand.
+--
 
-```{r, eval = FALSE}
-rec <- recipe(mpg ~ horsepower, data = Auto) %>%
-  step_---(horsepower, ---)
+```{r}
+rec <- recipe(mpg ~ horsepower + displacement + weight, data = Auto) %>%
+  step_scale(all_predictors())
+```
+
+---
+
+## Putting it together 
+
+```{r}
+rec <- recipe(mpg ~ horsepower + displacement + weight, data = Auto) %>%
+  step_scale(all_predictors())
 
 results <- fit_resamples(lm_spec,
                          preprocessor = rec,
@@ -498,190 +527,6 @@ results <- fit_resamples(lm_spec,
 
 results %>%
   collect_metrics()
-```
-
----
-
-## Recipe!
-
-```{r}
-rec <- recipe(mpg ~ horsepower, data = Auto) %>%
-  step_poly(horsepower, degree = 3)
-
-results <- fit_resamples(lm_spec,
-                         preprocessor = rec,
-                         resamples = Auto_cv)
-
-results %>%
-  collect_metrics()
-```
-
----
-
-## Okay, but we wanted to look at 3 different models!
-
-.small[
-```{r, eval = FALSE}
-rec <- recipe(mpg ~ horsepower, data = Auto) %>%
-  step_poly(horsepower, degree = 1)
-
-results <- fit_resamples(lm_spec,
-                         preprocessor = rec,
-                         resamples = Auto_cv)
-```
-]
-
---
-
-.small[
-```{r, eval = FALSE}
-rec <- recipe(mpg ~ horsepower, data = Auto) %>%
-  step_poly(horsepower, degree = 2)
-
-results <- fit_resamples(lm_spec,
-                         preprocessor = rec,
-                         resamples = Auto_cv)
-```
-]
-
----
-
-.small[
-```{r, eval = FALSE}
-rec <- recipe(mpg ~ horsepower, data = Auto) %>%
-  step_poly(horsepower, degree = 3)
-
-results <- fit_resamples(lm_spec,
-                         preprocessor = rec,
-                         resamples = Auto_cv)
-```
-]
-
---
-
-* `r emo::ji("scream")` this looks like copy + pasting!
-
----
-
-## tune `r emo::ji("notes")`
-
-* First, create a recipe with pre-processing steps
-
-```{r}
-rec <- recipe(mpg ~ horsepower, data = Auto) %>%
-  step_poly(horsepower, degree = tune()) #<<
-```
-
---
-* Notice the code above has `tune()` for the degree of the polynomial. That is the thing we want to vary!
-
----
-
-##  tune `r emo::ji("notes")`
-
-* Now we need to create a grid of potential degrees of the polynomial that we want to test
-* Instead of `fit_resamples()` we are going to use `tune_grid()`
-
-```{r tune, cache = TRUE}
-grid <- expand_grid(degree = c(1, 2, 3))
-
-results <- tune_grid(lm_spec,
-                     preprocessor = rec,
-                     grid = grid, #<<
-                     resamples = Auto_cv)
-```
-
----
-
-## tune `r emo::ji("notes")`
-
-```{r}
-results %>%
-  collect_metrics()
-```
-
----
-
-## Subset results
-
-```{r}
-results %>%
-  collect_metrics() %>%
-  filter(.metric == "rmse")
-```
-
-* Since this is a data frame, we can do things like filter!
---
-
-.question[
-Which would you choose?
-]
-
----
-
-##  tune `r emo::ji("notes")`
-
-* We can easily tweak this process to look at more polynomial degrees by adding more numbers to our `grid` data frame.
-
----
-
-class: inverse
-
-`r countdown::countdown(minutes = 4)`
-
-## <i class="fas fa-laptop"></i> `K-fold cross validation`
-
-Edit the code below to look at 1-10 degree polynomials. **Bonus** Try to plot the RMSE by degree
-
-```{r, eval = FALSE}
-rec <- recipe(mpg ~ horsepower, data = Auto) %>%
-  step_poly(---) 
-
-grid <- expand_grid(degree = ---)
-
-results <- tune_grid(lm_spec,
-                     preprocessor = ---,
-                     grid = ---,
-                     resamples = ---)
-
-results %>%
-  collect_metrics()
-```
-
-
----
-
-
-```{r, eval = FALSE}
-results %>%
-  collect_metrics() %>%
-  filter(.metric == "rmse") %>%
-  ggplot(aes(degree, mean)) + 
-  geom_point() + 
-  labs(y = RMSE)
-```
-
-```{r rmse-plot, cache = TRUE, echo = FALSE}
-set.seed(1)
-rec <- recipe(mpg ~ horsepower, data = Auto) %>%
-  step_poly(horsepower, degree = tune()) 
-
-wrkflow <- workflow() %>%
-  add_recipe(rec) %>% 
-  add_model(lm_spec)
-
-grid <- expand_grid(degree = 1:10)
-
-results <- tune_grid(wrkflow,
-                     grid = grid,
-                     resamples = Auto_cv)
-
-results %>%
-  collect_metrics() %>%
-  filter(.metric == "rmse") %>%
-  ggplot(aes(degree, mean)) + 
-  geom_point() + 
-  labs(y = "RMSE")
 ```
 
 ---
@@ -778,297 +623,95 @@ enet_spec <- linear_reg(penalty = 60, mixture = 0.7) %>% #<<
 
 ---
 
-## Motivating example
 
-We want to predict a baseball player's `Salary` on the basis of various statistics
-associated with performance in the previous year.
-
-* We will use the `Hitters` data frame from the **ISLR** package
---
-
-* This data frame has some missing values. For simplicity, we are going to remove all missing rows (do a **complete case** analysis) using:
+## Okay, but we wanted to look at 3 different models!
 
 .small[
-```{r}
-hitters <- na.omit(Hitters)
-```
-]
-
-_If you do this in practice, be sure to state that explictly_.
-
----
-
-class: inverse
-
-`r countdown::countdown(minutes = 2)`
-
-## <i class="fas fa-laptop"></i> `Baseball prediction, CV set up`
-
-Set up the 5-fold cross validation by creating an object called `hitters_cv`
-
 ```{r, eval = FALSE}
-library(ISLR)
-hitters <- na.omit(Hitters)
-set.seed(1)
+ridge_spec <- linear_reg(penalty = 100, mixture = 0) %>%
+  set_engine("glmnet") 
 
-hitters_cv <- -----(hitters, -----)
+results <- fit_resamples(ridge_spec,
+                         preprocessor = rec,
+                         resamples = Auto_cv)
 ```
-
----
-
-## Baseball prediction cross validation
-
-```{r}
-set.seed(1)
-hitters_cv <- vfold_cv(hitters, v = 5)
-```
-
----
-
-## Baseball prediction preprocessing
-
-.question[
-How does regression handle categorical (nominal) predictors?
 ]
 
---
 
-* Creates "dummy" variables
 
 --
 
 .small[
-```{r, echo = FALSE}
-iris %>%
-  slice(c(1, 10, 100, 150)) %>%
-  select(Species)
-```
-
-]
-
---
-
-.small[
-```{r, echo = FALSE}
-iris %>%
-  recipe() %>%
-  step_dummy(Species) %>%
-  prep() %>%
-  juice() %>%
-  select(starts_with("Species")) %>%
-  slice(c(1, 10, 100, 150))
-```
-]
-
-
---
-
----
-
-## Baseball prediction preprocessing
-
-* The first preprocessing step we want to do is make all nominal variables **dummy variables**.
-* You can do this by specifying `step_dummy()` in a `recipe`
---
-
-* Specify the variables you want to be preprocessed by seperating them with commas:
-
 ```{r, eval = FALSE}
-step_dummy(nominal_variable_1, nominal_variable_2, ...)
-```
+lasso_spec <- linear_reg(penalty = 5, mixture = 1) %>%
+  set_engine("glmnet") 
 
----
-
-class: inverse
-
-`r countdown::countdown(minutes = 2)`
-
-## <i class="fas fa-laptop"></i> `Baseball prediction, preprocessing`
-
-For this prediction model, we want to predict `Salary` using **all** remaining variables (`Salary ~ .`). Examine the `hitters` data. Find the **nominal variables**. Ammend the code below to create dummy variables for these.
-
-```{r, eval = FALSE}
-rec <- recipe(Salary ~ ., data = hitters) %>%
-  step_dummy(------)
-```
-
----
-
-## Baseball prediction preprocessing
-
-_There is an easier way!_ 
-
---
-
-* Instead of looking for all nominal variables by hand, you can use `all_nominal()`.
---
-
-```{r, eval = FALSE}
-rec <- recipe(Salary ~ ., data = hitters) %>%
-  step_dummy(all_nominal())
-```
-
----
-
-## Baseball prediction preprocessing
-
-.question[
-What pre-processing step is necessary when doing penalized regression?
-]
-
---
-
-* Instead of plugging each variable individually into `step_scale()`, you can use the shorthand `all_predictors()`:
-
-.small[
-```{r, eval = FALSE}
-step_scale(all_predictors())
-```
-]
-
-
----
-
-class: inverse
-
-`r countdown::countdown(minutes = 2)`
-
-## <i class="fas fa-laptop"></i> `Baseball prediction, preprocessing`
-
-Ammend the code below to make all nominal variables dummy variables and scale all of the predictors
-
-```{r, eval = FALSE}
-rec <- recipe(Salary ~ ., data = hitters) %>%
-  step_-----(------) %>%
-  step_-----(------)
-```
-
----
-
-## Baseball prediction preprocessing
-
-```{r}
-rec <- recipe(Salary ~ ., data = hitters) %>%
-  step_dummy(all_nominal()) %>%
-  step_scale(all_predictors())
-```
-
----
-
-
-class: inverse
-
-`r countdown::countdown(minutes = 2)`
-
-## <i class="fas fa-laptop"></i> `Baseball prediction, lasso`
-
-Using the recipe you've created `rec`, the cross validation data `hitters_cv`, and the `lasso_spec` fit the resampled data. Output the `rmse` and `rsq` for this model. 
-
-```{r, eval = FALSE}
 results <- fit_resamples(lasso_spec,
-                         preprocessor = ---,
-                         resamples = ---)
-
-results %>%
-  ---
+                         preprocessor = rec,
+                         resamples = Auto_cv)
 ```
-
----
-
-## Ridge, Lasso, and Elastic Net
-
-$$RSS + \lambda\left((1-\alpha)\sum_{i=1}^p\beta_j^2+\alpha\sum_{i=1}^p|\beta_j|\right)$$
-
-.question[
-What if I don't want to specify these parameters? How can I specify that I want to use cross validation to choose?
 ]
 
---
-
-* `r emo::ji("notes")`
-
---
-
-```{r, eval = FALSE}
-penalized_spec <- 
-  linear_reg(penalty = tune(),
-             mixture = tune()) %>%
-  set_engine("glmnet")
-
-grid <- expand_grid(penalty = seq(1, 1000, by = 100),
-                         mixture = seq(0, 1, by = 0.2))
-```
-
 ---
 
-class: inverse
-
-`r countdown::countdown(minutes = 5)`
-
-## <i class="fas fa-laptop"></i> `Baseball prediction, tuned penalization`
-
-Create a new models specification called `penalized_spec` that tunes the penalty and mixture parameters. Create a grid of potential parameters, with a penalty term that varies from 0 to 100 by 10, and a mixture term that varies from 0 to 1 by 0.1. Using the recipe you've created `rec`and the cross validation data `hitters_cv` fit this model using `tune_grid`. Output the `rmse` and `rsq` for this model. 
 
 .small[
 ```{r, eval = FALSE}
-penalized_spec <- linear_reg(penalty = ---,
-                             mixture = ---) %>%
-                  set_engine("glmnet")
+elastic_spec <- linear_reg(penalty = 60, mixture = 0.7) %>%
+  set_engine("glmnet") 
 
-grid <- expand_grid(penalty = ---,
-                    mixture = ---)
-
-results <- tune_grid(penalized_spec,
-                     preprocessor = ---,
-                     grid = ---,
-                     resamples = ---)
-
-results %>%
-  ---
+results <- fit_resamples(elastic_spec,
+                         preprocessor = rec,
+                         resamples = Auto_cv)
 ```
 ]
 
+--
+
+* `r emo::ji("scream")` this looks like copy + pasting!
+
 ---
 
-## Baseball prediction, tuned penalization
+## tune `r emo::ji("notes")`
 
 
-```{r penalized, cache = TRUE}
-penalized_spec <- 
-  linear_reg(penalty = tune(),
-             mixture = tune()) %>%
-  set_engine("glmnet")
+```{r}
+penalty_spec <- linear_reg(penalty = tune(), mixture = tune()) %>% #<<
+  set_engine("glmnet") 
+```
 
+
+* Notice the code above has `tune()` for the the penalty and the mixture. Those are the things we want to vary!
+
+---
+
+##  tune `r emo::ji("notes")`
+
+* Now we need to create a grid of potential penalties ( $\lambda$ ) and mixtures ( $\alpha$ ) that we want to test
+* Instead of `fit_resamples()` we are going to use `tune_grid()`
+
+```{r tune, cache = TRUE, message = FALSE, warning = FALSE}
 grid <- expand_grid(penalty = seq(0, 100, by = 10),
-                         mixture = seq(0, 1, by = 0.1))
+                    mixture = seq(0, 1, by = 0.2))
 
-results <- tune_grid(penalized_spec,
-                     rec,
-                     grid = grid,
-                     resamples = hitters_cv)
+results <- tune_grid(penalty_spec,
+                     preprocessor = rec,
+                     grid = grid, #<<
+                     resamples = Auto_cv)
 ```
 
 ---
 
+## tune `r emo::ji("notes")`
 
-class: inverse
-
-`r countdown::countdown(minutes = 2)`
-
-## <i class="fas fa-laptop"></i> `Baseball prediction, choosing penalty and mixture`
-
-Examine the results. Filter the metrics to only include `rmse` and arrange them in order of mean root mean squared error (to choose the smallest). Hint look at `?arrange` if you aren't sure how to sort.
-
-```{r, eval = FALSE}
+```{r}
 results %>%
-  collect_metrics() %>%
-  filter(---) %>%
-  arrange(---)
+  collect_metrics()
 ```
 
 ---
 
-## Baseball prediction tuning
+## Subset results
 
 ```{r}
 results %>%
@@ -1077,5 +720,88 @@ results %>%
   arrange(mean)
 ```
 
+* Since this is a data frame, we can do things like filter and arrange!
 
+--
+
+.question[
+Which would you choose?
+]
+
+
+---
+
+
+```{r}
+results %>%
+  collect_metrics() %>%
+  filter(.metric == "rmse") %>%
+  ggplot(aes(penalty, mean, color = factor(mixture), group = factor(mixture))) +
+  geom_line() +
+  geom_point() + 
+  labs(y = "RMSE")
+```
+
+---
+
+```{r mtcars, cache = TRUE, message = FALSE, warning = FALSE}
+mtcars_cv <- vfold_cv(mtcars, v = 5)
+rec <- recipe(mpg ~ ., mtcars) %>%
+  step_dummy(all_nominal()) %>%
+  step_scale(all_predictors())
+results <- tune_grid(penalty_spec,
+                     rec,
+                     grid = grid,
+                     resamples = mtcars_cv)
+results %>%
+  collect_metrics() %>%
+  filter(.metric == "rmse") %>%
+  ggplot(aes(penalty, mean, color = factor(mixture), group = factor(mixture))) +
+  geom_line() +
+  geom_point() + 
+  labs(y = "RMSE")
+```
+
+
+---
+
+## Putting it all together
+
+* Often we can use a combination of all of these tools together
+* First split our data
+* Do cross validation on _just the training data_ to tune the parameters
+* Use `last_fit()` with the selected parameters, specifying the split data so that it is evaluated on the left out test sample
+
+---
+
+## Putting it all together
+
+.small[
+```{r all, cache = TRUE, message = FALSE, warning = FALSE}
+auto_split <- initial_split(Auto, prop = 0.5)
+auto_train <- training(auto_split)
+auto_cv <- vfold_cv(auto_train, v = 5)
+
+rec <- recipe(mpg ~ horsepower + displacement + weight, data = auto_train) %>%
+  step_scale(all_predictors())
+
+tuning <- tune_grid(penalty_spec,
+                     rec,
+                     grid = grid,
+                     resamples = auto_cv)
+
+tuning %>%
+  collect_metrics() %>%
+  filter(.metric == "rmse") %>%
+  arrange(mean)
+
+final_spec <- linear_reg(penalty = 0, mixture = 0) %>%
+  set_engine("glmnet")
+fit <- last_fit(final_spec,
+                rec,
+                split = auto_split)
+fit %>%
+  collect_metrics()
+```
+]
 
