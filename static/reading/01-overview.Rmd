@@ -1,0 +1,18 @@
+---
+title: "March 24 Overview"
+output: 
+  html_document:
+    css: overview.css
+---
+
+
+<center>
+![](https://media.giphy.com/media/kMM3vtBEgSsLu/giphy.gif)
+</center>
+
+1. Be sure to finish up Lab 04 and push your final commits to GitHub no later than 11:59pm on March 24
+2. Watch the [Welcome back]() lecture
+2. Join Gitter & reply to my welcome message [![Gitter](https://badges.gitter.im/sta-363-s20/community.svg)](https://gitter.im/sta-363-s20/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+3. Complete the [Welcome back]() assessment
+4. Watch the [Lab 05: Non-linear models]()
+5. Complete Lab 05 by Thursday, March 26 at 11:59pm

@@ -1,0 +1,116 @@
+---
+title: "Lab 05 - Nonlinear Models"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+## Recall
+
+* Polynomials
+--
+
+* Step functions
+--
+
+* Linear splines
+--
+
+* Cubic Splines
+--
+
+* Natural Splines
+
+---
+
+![](img/13/splines.png)
+
+---
+
+```{r, message = FALSE, warning = FALSE, echo = FALSE}
+library(tidymodels)
+```
+
+## Natural cubic splines
+
+_A natural cubic spline extrapolates linearly beyond the boundary knots_
+
+--
+
+* This adds 4 extra constraints and allows us to put **more** internal knots for the same degrees of freedom as a regular cubic spline
+
+<img src="img/13/natural.png" height=400></img>
+
+---
+
+## It's really easy to do this in R!
+
+--
+
+* You can transform any continuous (numeric) variable into a _natural spline_ by using the `step_ns()` function in a `recipe`. 
+--
+
+* You specify the _degrees of freedom_ that you would like to use for that variable using the `deg_free` parameter
+
+--
+
+```{r, message = FALSE, warning = FALSE}
+library(ISLR)
+auto_rec <- Auto %>%
+  recipe(mpg ~ horsepower) %>%
+  step_ns(horsepower, deg_free = 2)
+```
+
+--
+
+.question[
+How many degrees of freedom did I allocate to the horsepower variable?
+]
+
+---
+
+## It's really easy to do this in R!
+
+
+* You can transform any continuous (numeric) variable into a _natural spline_ by using the `step_ns()` function in a `recipe`. 
+* You specify the _degrees of freedom_ that you would like to use for that variable using the `deg_free` parameter
+* Instead of specifying `deg_free` you could use `tune()` to tune this.
+
+--
+
+```{r}
+auto_rec <- Auto %>%
+  recipe(mpg ~ horsepower) %>%
+  step_ns(horsepower, deg_free = tune())
+```
+
+---
+
+class: inverse
+
+## <i class="fas fa-laptop"></i> `Lab 05 - Non-linear Models`
+
+* Find Lab 05 on our website
+* Pull your starter files from GitHub into RStudio
+* **Note the due date** I have intentionally made this lab short so that it can be completed by Thursday

@@ -1,0 +1,122 @@
+---
+title: "Lab 05 - Nonlinear models"
+output: 
+  tufte::tufte_html:
+    tufte_variant: "envisioned"
+    highlight: pygments
+    css: lab.css
+link-citations: yes
+---
+
+```{r include=FALSE}
+library(tidyverse)
+library(tidymodels)
+library(ISLR)
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  show.signif.stars = FALSE     # for regression output
+)
+```
+
+**Due:** Thursday 2020-03-26 at 11:59pm
+
+# Introduction
+
+In this lab we are going to practice fitting nonlinear models. A few reminders:
+
+* Remember to label your chunks
+* Write out your answers in full sentences, do not just rely on the R output
+* Knit, commit, and push regularly (at least after every exercise)
+
+# Getting started
+
+- Go to our class's GitHub organization [sta-363-s20](https://github.com/sta-363-s20)
+- Find the GitHub repository (which we'll refer to as "repo" going forward) for this lab, `lab-05-non-linear-YOUR-GITHUB-HANDLE`. This repo contains a template you can build on to complete your assignment.
+- On GitHub, click on the green **Clone or download** button, select **Use HTTPS**. Click on the clipboard icon to copy the repo URL.
+- If using RStudio Cloud, go to RStudio Cloud and into the course workspace. Create a **New Project from Git Repo**. You will need to click on the down arrow next to the **New Project** button to see this option.
+- If using RStudio Pro, create a new project by clicking **File > New Project** Then click **Version Control** and **Git/Github**.
+- Copy and paste the URL of your assignment repo into the dialog box.
+- Hit OK, and you're good to go!
+
+# Packages
+
+In this lab we will work with three packages: `ISLR` for the data, `tidyverse` which is a collection of packages for doing data analysis in a "tidy" way and `tidymodels` for statistial modeling.
+
+Now that the necessary packages are installed, you should be able to Knit your document and see the results.
+
+If you'd like to run your code in the Console as well you'll also need to load the packages there. To do so, run the following in the console. 
+
+```{r eval = FALSE}
+library(tidyverse) 
+library(tidymodels)
+library(ISLR)
+```
+
+Note that the packages are also loaded with the same commands in your R Markdown document.
+
+# Housekeeping
+
+## Git configuration
+
+```{marginfigure}
+Your email address is the address tied to your GitHub account and your name should be first and last name.
+```
+
+- Go to the *Terminal* pane
+- Type the following two lines of code, replacing the information in the quotation marks with your info:
+
+```{bash eval=FALSE}
+git config --global user.email "your email"
+git config --global user.name "your name"
+```
+
+To confirm that the changes have been implemented, run the following
+
+```{bash eval=FALSE}
+git config --global user.email
+git config --global user.name
+```
+
+## Password caching
+
+If you would like your git password cached for a week for this project, type the following in the Terminal:
+
+```{bash eval=FALSE}
+git config --global credential.helper 'cache --timeout 604800'
+```
+
+## Project name: 
+
+Currently your project is called *Untitled Project*. Update the name of your project to be "Lab 05 - Nonlinear models".
+
+# Warm up
+
+Before we introduce the data, let's warm up with some simple exercises.
+
+## YAML: 
+
+Open the R Markdown (Rmd) file in your project, change the author name to your name, and knit the document.
+
+## Commiting and pushing changes:
+
+- Go to the **Git** pane in your RStudio. 
+- View the **Diff** and confirm that you are happy with the changes.
+- Add a commit message like "Update team name" in the **Commit message** box and hit **Commit**.
+- Click on **Push**. This will prompt a dialogue box where you first need to enter your user name, and then your password.
+
+# Data
+
+For this lab, we are using `Wage` data from the `ISLR` package.
+
+# Exercises
+
+1. Examine the `Wage` data set from the `ISLR` package. What are the variables? How many observations are there?
+
+2. Create a linear model specification, setting the engine to `lm`. Call this model specification `linear_spec`.
+
+3. Create a recipe using the `Wage` data from the `ISLR` package. We want to predict the variable `wage` from `age`, `health_ins`, `jobclass`, `education`, and `race`. Fit age using a natural spline. Use `tune()` to decide how many degrees of freedom to use for the `age` variable.
+
+4. Use `tune_grid()` to fit the linear model specified in Exercise 2 with the recipe created in Exercise 3 using 10-fold cross validation, similar to Lab 04. Choose the model with the lowest RMSE. How many degrees of freedom were used for the age natural spline for this best model? Report the RMSE for this model as well as the chosen degrees of freedom.
+
+
+
