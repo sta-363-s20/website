@@ -98,7 +98,7 @@ lessons:
     reading: "01-overview.html"
   - title: "Lab 05: Non-linear models"
     lab: "05-non-linear.html"
-    slides: "coming-soon.html"
+    slides: "05-non-linear-lab-overview.html"
   - date: "Thur, Mar 26"
     title: "Coding best practices & Report Building"
   - title: "Week 12"
