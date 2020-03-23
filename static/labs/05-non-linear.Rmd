@@ -37,7 +37,7 @@ In this lab we are going to practice fitting nonlinear models. A few reminders:
 - If using RStudio Pro, create a new project by clicking **File > New Project** Then click **Version Control** and **Git/Github**.
 - Copy and paste the URL of your assignment repo into the dialog box.
 - Hit OK, and you're good to go!
-
+ 
 # Packages
 
 In this lab we will work with three packages: `ISLR` for the data, `tidyverse` which is a collection of packages for doing data analysis in a "tidy" way and `tidymodels` for statistial modeling.
