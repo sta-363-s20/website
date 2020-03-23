@@ -19,9 +19,9 @@ markup: "mmark"
 {.table .table-condensed .table-striped .text-left}
 <span></span>     | <span></span>     | <span></span>    | <span></span>    |  <span></span>      
 ------------------|-------------------|------------------|------------------|------------------ 
-Instructor        | [Lucy D'Agostino McGowan](http://lucymcgowan.com) | <a href="mailto:mcgowald@wfu.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/LucyMcGowan" title="GitHub"><i class="fa fa-github"></i></a> &nbsp; <a href="https://twitter.com/LucyStats" title="Twitter"><i class="fa fa-twitter"></i></a> | Tuesday 3:30p - 4:00p <br> Wednesday 10:00a - 11:00a <br> Thursday 10:00a - 11:00a| Manchester 342
-TA               | Sarah Renfrow| <a href="mailto:renfsl16@wfu.edu " title="email"><i class="fa fa-envelope"></i></a> | Study Session Monday 7-9p| Manchester 122
-                  | [Math & Stats Center](https://mathandstatscenter.wfu.edu/) | <a href="mailto:mathandstatscenter@wfu.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; | By appointment | Kirby Hall 117
+Instructor        | [Lucy D'Agostino McGowan](http://lucymcgowan.com) | <a href="mailto:mcgowald@wfu.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/LucyMcGowan" title="GitHub"><i class="fa fa-github"></i></a> &nbsp; <a href="https://twitter.com/LucyStats" title="Twitter"><i class="fa fa-twitter"></i></a> | Tuesday 3:30p - 4:00p <br> Wednesday 10:00a - 11:00a <br> Thursday 10:00a - 11:00a| [![Gitter](https://badges.gitter.im/sta-363-s20/community.svg)](https://gitter.im/sta-363-s20/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+TA               | Sarah Renfrow| <a href="mailto:renfsl16@wfu.edu " title="email"><i class="fa fa-envelope"></i></a> | Study Session Monday 7-9p| [bit.ly/sta-363-s20-study-session](http://bit.ly/sta-363-s20-study-session)
+                  | [Math & Stats Center](https://mathandstatscenter.wfu.edu/) | <a href="mailto:mathandstatscenter@wfu.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; | By appointment | 
                   
 
 ### Texts
