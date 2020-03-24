@@ -94,7 +94,7 @@ lessons:
   - title: "Week 11"
   - date: "Tues, Mar 24"
     title: "Welcome back!"
-    slides: "coming-soon.html"
+    slides: "14-welcome.html"
     reading: "01-overview.html"
   - title: "Lab 05: Non-linear models"
     lab: "05-non-linear.html"
