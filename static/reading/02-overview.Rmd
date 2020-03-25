@@ -1,0 +1,17 @@
+---
+title: "March 26 Overview"
+output: 
+  html_document:
+    css: overview.css
+---
+
+
+<center>
+![](https://media.giphy.com/media/H6c8NXAkx4M54iOwji/giphy.gif)
+</center>
+
+1. Be sure to finish up Lab 05 and push your final commits to GitHub no later than 11:59pm on March 26
+2. Watch the [Midterm 02 Review](https://sta-363-s20.lucymcgowan.com/slides/15-review-lecture.html) lecture
+3. Post questions on our [GitHub Community site](https://github.com/sta-363-s20/community)
+4. Tell me some good news [gitter](https://gitter.im/sta-363-s20/good-news)!
+4. Attend our virtual study session with Sarah on Monday from 7-9p [bit.ly/sta-363-s20-study-session](http://bit.ly/sta-363-s20-study-session)
