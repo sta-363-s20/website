@@ -1,0 +1,24 @@
+---
+title: "Midterm 02"
+output: 
+  html_document:
+    css: overview.css
+---
+
+1. Take a deep breath! I am so proud of how all of you are doing in this class, I hope you are enjoying it so far. 
+2. This exam is intended to take no more than 75 minutes (I expect it may take even less time), you will have 2 hours from when you begin the exam to turn it in. The exam **must** be turned in by Wednesday, April 1, at 12pm Eastern.
+3. You can find the exam on Canvas under "Quizzes"
+4. You should complete this exam in Google Chrome.
+
+This exam is open book. Open book exams are defined as follows: 
+
+* Any course materials, including books, videos, and notes, may be used for the exam. 
+* Students may not communicate in any way with other students or individuals during the exam period. This includes chatting, videos, photos, phone calls, and all other forms of communication. 
+* Students may not share answers, hints, questions, or any information relating to the exam online in any format. This includes, but is not limited to, any websites or online communication platforms.  
+* All submitted work must be the student’s work, and must be submitted in the student’s own words. 
+* All exams must be submitted on Canvas by the noon on April 1. Late exams will not be accepted. 
+* Any violation of this Honor Code will be reported to the Wake Forest Honor Council, and will result in, at a minimum, a zero on the exam. 
+
+If you _do not_ see the Math-type equations, be sure you are using an appropriate browswer (I suggest using Google Chrome, as I know that works).
+
+Good luck!
