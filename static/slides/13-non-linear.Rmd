@@ -21,7 +21,7 @@ layout: true
 
 <div class="my-footer">
 <span>
-Dr. Lucy D'Agostino McGowan <i> adapted from Alison Hill's Introduction to ML with the Tidyverse</i>
+Dr. Lucy D'Agostino McGowan <i>adapted from slides by Hastie & Tibshirani</i>
 </span>
 </div> 
 
