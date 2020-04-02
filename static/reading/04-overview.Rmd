@@ -1,0 +1,17 @@
+---
+title: "April 2 Overview"
+output: 
+  html_document:
+    css: overview.css
+---
+
+
+<center>
+![](https://media.tenor.com/images/56b34689af61e287a1b396d2d33155ec/tenor.gif)
+</center>
+
+1. Watch the [Decision Trees - Introduction to Regression Trees](https://sta-363-s20.lucymcgowan.com/slides/16-decision-trees-reg-lecture.html) lecture
+2. Watch the [Decision Trees - Building Regression Trees](https://sta-363-s20.lucymcgowan.com/slides/16-decision-trees-reg-building-lecture.html) lecture
+3. Watch the [Decision Trees - Pruning Regression Trees](https://sta-363-s20.lucymcgowan.com/slides/16-decision-trees-reg-pruning-lecture.html) lecture
+4. Watch the [Decision Trees - Regression Tree Example](https://sta-363-s20.lucymcgowan.com/slides/16-decision-trees-reg-example-lecture.html) lecture
+5. Complete the `Application Exercise` detailed at the end of the [Decision Trees - Regression Tree Example](https://sta-363-s20.lucymcgowan.com/slides/16-decision-trees-reg-example-lecture.html) lecture. Be sure to push this to GitHub by **April 3 at noon eastern**

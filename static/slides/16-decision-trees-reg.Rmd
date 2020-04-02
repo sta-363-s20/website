@@ -1,0 +1,226 @@
+---
+title: "Decision trees - Intro + Regression trees"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan <i>adapted from slides by Hastie & Tibshirani</i>
+</span>
+</div> 
+
+```{r, include = FALSE}
+library(tidyverse)
+library(ISLR)
+library(tidymodels)
+set.seed(1)
+```
+---
+
+## Decision trees
+
+* Can be applied to **regression** problems
+--
+
+* Can be applied to **classification** problems
+
+.question[
+What is the difference?
+]
+
+---
+
+class: center, middle 
+
+## Regression trees
+---
+
+## Decision tree - Baseball Salary Example
+
+```{r, echo = FALSE}
+Hitters %>%
+  filter(!is.na(Salary)) %>%
+  ggplot(aes(x = Years, y = Hits, color = Salary)) +
+  geom_point() + 
+  scale_colour_viridis_c(option = "plasma") +
+  theme_classic()
+```
+
+--
+
+.question[
+How would you stratify this?
+]
+
+---
+
+## Decision tree - Baseball Salary Example
+
+```{r, echo = FALSE}
+dt_model <- decision_tree(tree_depth = 2, mode = "regression") %>%
+  set_engine("rpart") %>% 
+  fit(Salary ~ Years + Hits, data = Hitters)
+rpart.plot::rpart.plot(dt_model$fit, roundint = FALSE)
+```
+
+---
+
+## Let's walk through the figure
+
+* This is using the `Hitters` data from the `ISLR` `r emo::ji("package")`
+--
+
+* I fit a **regression tree** predicting the salary of a baseball player from:
+* Number of years they played in the major leagues
+* Number of hits they made in the previous year
+--
+
+* At each **node** the label (e.g., $X_j < t_k$ ) indicates that the _left_ branch that comes from that split. The _right_ branch is the opposite, e.g. $X_j \geq t_k$.
+--
+
+* For example, the first **internal node** indicates that those to the left have less than 4.5 years in the major league, on the right have $\geq$ 4.5 years.
+--
+
+* The number on the _top_ of the **nodes** indicates the predicted Salary, for example before doing _any_ splitting, the average Salary for the whole dataset is 536 thousand dollars.
+--
+
+* This tree has **two internal nodes** and **three termninal nodes**
+
+---
+
+## Decision tree - Baseball Salary Example
+
+```{r, echo = FALSE}
+dt_model <- decision_tree(tree_depth = 2, mode = "regression") %>%
+  set_engine("rpart") %>% 
+  fit(Salary ~ Years + Hits, data = Hitters)
+rpart.plot::rpart.plot(dt_model$fit, roundint = FALSE)
+```
+
+---
+
+## Decision tree - Baseball Salary Example
+
+```{r, echo = FALSE}
+Hitters %>%
+  filter(!is.na(Salary)) %>%
+  mutate(color = case_when(
+    Years < 4.5 ~ 1,
+    Hits < 118 ~ 2,
+    TRUE ~ 3
+  )) %>%
+  ggplot(aes(x = Years, y = Hits, color = color)) +
+  geom_point() + 
+  theme_classic() +
+  theme(legend.position = "none") +
+  geom_vline(xintercept = 4.5) + 
+  geom_segment(aes(x = 4.5, xend = 25, y = 118, yend = 118), color = "black")
+```
+
+---
+
+## Decision tree - Baseball Salary Example
+
+```{r, echo = FALSE}
+Hitters %>%
+  filter(!is.na(Salary)) %>%
+  mutate(color = case_when(
+    Years < 4.5 ~ 1,
+    Hits < 118 ~ 2,
+    TRUE ~ 3
+  )) %>%
+  ggplot(aes(x = Years, y = Hits, color = color)) +
+  geom_point() + 
+  theme_classic() +
+  theme(legend.position = "none") +
+  geom_vline(xintercept = 4.5) + 
+  geom_segment(aes(x = 4.5, xend = 25, y = 118, yend = 118), color = "black") + 
+  geom_text(label = "R1", aes(x = 3, y = 200), color = "orange", size = 10)
+```
+
+---
+
+## Decision tree - Baseball Salary Example
+
+```{r, echo = FALSE}
+Hitters %>%
+  filter(!is.na(Salary)) %>%
+  mutate(color = case_when(
+    Years < 4.5 ~ 1,
+    Hits < 118 ~ 2,
+    TRUE ~ 3
+  )) %>%
+  ggplot(aes(x = Years, y = Hits, color = color)) +
+  geom_point() + 
+  theme_classic() +
+  theme(legend.position = "none") +
+  geom_vline(xintercept = 4.5) + 
+  geom_segment(aes(x = 4.5, xend = 25, y = 118, yend = 118), color = "black") + 
+  geom_text(label = "R1", aes(x = 3, y = 200), color = "orange", size = 10) + 
+  geom_text(label = "R2", aes(x = 15, y = 15), color = "orange", size = 10) + 
+  geom_text(label = "R3", aes(x = 15, y = 200), color = "orange", size = 10) 
+
+```
+
+---
+
+## Terminology
+
+`r emo::ji("tree")` The final regions, $R_1, R_2, R_3$ are called **terminal nodes**
+
+--
+
+`r emo::ji("tree")` You can think of the trees as _upside down_, the **leaves** are at the bottom
+
+--
+
+`r emo::ji("tree")` The splits are called **internal nodes**
+
+---
+
+## Interpretation of results
+
+* `Years` is the most important factor in determining `Salary`; players with less experience earn lower salaries
+--
+
+* Given that a player is less experienced, the number of `Hits` seems to play little role in the `Salary`
+--
+
+* Among players who have been in the major leagues for 4.5 years or more, the number of `Hits` made in the previous year **does** affect `Salary`, players with more `Hits` tend to have higher salaries
+--
+
+* This is probably an oversimplification, but see how easy it is to interpret!
+
+---
+
+class: inverse
+
+`r countdown::countdown(minutes = 2, bottom = 9)`
+
+## <i class="fas fa-edit"></i> `Interpreting decision trees`
+
+* How many internal nodes does this plot have? How many terminal nodes?
+* What is the average Salary for players who have more than 6.5 years in the major leagues but less than 118 Hits? What % of the dataset fall in this category?
+
+```{r, echo = FALSE, fig.height = 2}
+dt_model <- decision_tree(tree_depth = 3, mode = "regression") %>%
+  set_engine("rpart") %>% 
+  fit(Salary ~ Years + Hits, data = Hitters)
+rpart.plot::rpart.plot(dt_model$fit, roundint = FALSE)
+```

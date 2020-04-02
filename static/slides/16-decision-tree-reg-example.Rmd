@@ -1,0 +1,199 @@
+---
+title: "Decision trees - Regression tree example"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan <i>adapted from slides by Hastie & Tibshirani</i>
+</span>
+</div> 
+
+```{r, include = FALSE}
+library(tidyverse)
+library(ISLR)
+library(tidymodels)
+set.seed(1)
+```
+
+---
+
+class: center, middle
+
+## The baseball example
+
+---
+
+## 1. Randomly divide the data in half, 132 training observations, 131 testing
+
+```{r, echo = FALSE}
+baseball <- Hitters[!is.na(Hitters$Salary), ]
+```
+
+```{r}
+set.seed(77)
+baseball_split <- initial_split(baseball, prop = 0.5)
+baseball_train <- training(baseball_split)
+```
+
+---
+
+## 2. Create cross-validation object for 6-fold cross validation
+
+```{r}
+baseball_cv <- vfold_cv(baseball_train, v = 6)
+```
+
+---
+
+## 3. Create a model specification that tunes based on complexity, $\alpha$
+
+```{r}
+tree_spec <- decision_tree(
+  cost_complexity = tune(), 
+  tree_depth = 10,
+  mode = "regression") %>%
+  set_engine("rpart")
+```
+
+--
+
+.question[
+What is my tree depth for my "large" tree?
+]
+
+---
+
+## 4. Fit the model on the cross validation set
+
+.small[ 
+```{r, cache = TRUE}
+grid <- expand_grid(cost_complexity = seq(0.01, 0.05, by = 0.01))
+model <- tune_grid(tree_spec,
+                   Salary ~ Hits + Years + PutOuts + RBI + Walks + Runs,
+                   grid = grid,
+                   resamples = baseball_cv)
+```
+]
+
+--
+
+.question[
+What $\alpha$s am I trying?
+]
+
+---
+
+## 5. Choose $\alpha$ that minimizes the RMSE
+
+```{r}
+model %>%
+  collect_metrics() %>%
+  filter(.metric == "rmse") %>%
+  arrange(mean)
+```
+
+---
+
+## 5. Choose $\alpha$ that minimizes the RMSE
+
+```{r, eval = FALSE}
+model %>%
+  collect_metrics() %>%
+  filter(.metric == "rmse") %>%
+  arrange(mean)
+```
+
+```{r}
+model %>%
+  select_best(metric = "rmse") #<<
+```
+
+---
+
+## 5. Choose $\alpha$ that minimizes the RMSE
+
+```{r, eval = FALSE}
+model %>%
+  collect_metrics() %>%
+  filter(.metric == "rmse") %>%
+  arrange(mean)
+```
+
+```{r}
+final_complexity <- model %>%
+  select_best(metric = "rmse") %>%
+  pull() #<<
+```
+
+---
+
+## 6. Fit the final model
+
+.small[
+```{r}
+final_spec <- decision_tree(
+  cost_complexity = final_complexity,
+  tree_depth = 10,
+  mode = "regression") %>%
+  set_engine("rpart")
+
+final_model <- fit(final_spec,
+                   Salary ~ Hits + Years + PutOuts + RBI + Walks + Runs,
+                   data = baseball_train)
+```
+]
+
+---
+
+## Final tree
+
+```{r, echo = FALSE}
+rpart.plot::rpart.plot(final_model$fit, roundint = FALSE)
+```
+
+--
+
+.question[
+How many terminal nodes does this tree have?
+]
+
+---
+
+## Calculate RMSE on the test data
+
+```{r}
+baseball_test <- testing(baseball_split)
+final_model %>%
+  predict(new_data = baseball_test) %>%
+  bind_cols(baseball_test) %>%
+  metrics(truth = Salary, estimate = .pred)
+```
+
+---
+
+class: inverse
+
+`r countdown::countdown(minutes = 10)`
+
+## <i class="fas fa-laptop"></i> `AE 05 - Regression trees`
+
+1. Find starter files, beginning with `appex-05-regression-trees` on GitHub and pull into RStudio
+2. Complete the exercises
+3. Knit, Commit, Push frequently. Be sure to have the final results pushed to GitHub by **April 3 at noon**

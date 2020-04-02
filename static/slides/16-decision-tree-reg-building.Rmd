@@ -1,0 +1,98 @@
+---
+title: "Decision trees - Regression tree building"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan <i>adapted from slides by Hastie & Tibshirani</i>
+</span>
+</div> 
+
+```{r, include = FALSE}
+library(tidyverse)
+library(ISLR)
+library(tidymodels)
+set.seed(1)
+```
+
+
+---
+
+## The tree building process
+
+* Divide the predictor space (the set of possible values for $X_1, X_2, \dots, X_p$ ) into $J$ distinct non-overlapping regions, $R_1, R_2, \dots R_j$
+--
+
+* For every observation that falls into the region $R_j$, we make the same prediction, the **mean response value** for the training observations in $R_j$
+
+---
+
+## The tree building process
+
+* The regions could have any shape, but we choose to divide the predictor space into high-dimensional **boxes** for simplicity and ease of interpretation
+--
+
+* The goal is to find boxes, $R_1, \dots, R_j$ that minimize the RSS, given by
+
+$$\sum_{j=1}^J\sum_{i\in R_j}(y_i-\hat{y}_{R_j})^2$$
+where $\hat{y}_{R_j}$ is the mean response for the training observations within the $j$th box.
+
+---
+
+## The tree building process
+
+* It is often computationally infeasible to consider every possible partition of the feature space into $J$ boxes
+--
+
+* Therefore, we take a **top-down, greedy** approach known as recursive binary splitting
+--
+
+* This is **top-down** because it begins at the top of the tree and then splits the predictor space successively into two branches at a time
+--
+
+* It is **greedy** because at each step the **best** split is made at that step (instead of looking forward and picking a split that may result in a better tree in a future step)
+
+---
+
+## The tree building process
+
+* First select the predictor $X_j$ and the cutpoint $s$ such that splitting the predictor space into $\{X|X_j < s\}$ and $\{X|X_k\geq s\}$ leads to the _greatest possible reduction in RSS_
+--
+
+* We repeat this process, looking for the best predictor and cutpoint to split the data within each of the resulting regions
+* Now instead of splitting the _entire_ predictor space, we split one of the two previously identified regions, now we have _three_ regions
+--
+
+* Then we look to split one of these three regions to minimize the RSS
+--
+
+* This process continues until some stopping criteria are met. 
+`r emo::ji("stop_sign")` e.g., we could stop when we have created a fixed number of regions, or we could keep going until no region contains more than 5 observations, etc.
+
+---
+
+
+class: inverse
+
+`r countdown::countdown(minutes = 5)`
+
+## <i class="fas fa-edit"></i> `Draw a partition`
+
+Draw an example of a parition of a two-dimensional feature space that could result from recursive binary splitting with six regions. Label your figure with the regions, $R_1, \dots, R_6$ as well as the cutpoints $t_1, t_2, \dots$. Draw a decision tree corresponding to this partition. 
+
+---

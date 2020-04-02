@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Decision trees - Regression tree prediction and pruning</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. D’Agostino McGowan" />
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Decision trees - Regression tree prediction and pruning
+### Dr. D’Agostino McGowan
+
+---
+
+
+
+
+
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+Dr. Lucy D'Agostino McGowan &lt;i&gt;adapted from slides by Hastie &amp; Tibshirani&lt;/i&gt;
+&lt;/span&gt;
+&lt;/div&gt; 
+
+
+
+---
+
+## Decision tree predictions
+
+* Predict the response for a _test observation_ using the mean of the _training observations_ in the region that the _test observation_ belongs to
+--
+
+.question[
+What could potentially go wrong with what we have described so far?
+]
+
+--
+* The process may produce good predictions on the _training_ set but is likely to **overfit!**
+
+---
+
+## Pruning a tree
+
+_Do you love the tree puns? I DO!_
+
+* A smaller tree (with fewer splits, that is fewer regions `\(R_1,\dots, R_j\)` ) may lead to **lower variance** and better interpretation at the cost of a little **bias**
+--
+
+* A good strategy is to _grow_ a very large tree, `\(T_0\)`, and then **prune** it back to obtain a **subtree**
+--
+
+* For this, we use **cost complexity pruning** (also known as **weakest link** 🔗 **pruning**)
+--
+
+* Consider a sequence of trees indexed by a nonnegative tuning parameter, `\(\alpha\)`. For each `\(\alpha\)` there is a subtree `\(T \subset T_0\)` such that
+
+`$$\sum_{m=1}^{|T|}\sum_{i:x_i\in R_m}(y_i-\hat{y}_{R_m})^2+\alpha|T|$$`
+
+is as small as possible. 
+
+---
+
+## Pruning
+
+`$$\sum_{m=1}^{|T|}\sum_{i:x_i\in R_m}(y_i-\hat{y}_{R_m})^2+\alpha|T|$$`
+
+* `\(|T|\)` indicates the number of terminal nodes of the tree `\(T\)`
+--
+
+* `\(R_m\)` is the box (the subset of the predictor space) corresponding to the `\(m\)`th terminal node
+--
+
+* `\(\hat{y}_{R_m}\)` is the mean of the training observations in `\(R_m\)`
+
+---
+
+## Choosing the best subtree
+
+* The _tuning parameter_, `\(\alpha\)`, controls the trade-off between the subtree's _complexity_ and its _fit_ to the training data
+--
+
+.question[
+How do you think you could select `\(\alpha\)`?
+]
+
+--
+* You can select an optimal value, `\(\hat{\alpha}\)` using **cross-validation**!
+--
+
+* Then return to the full dataset and obtain the subtree using `\(\hat{\alpha}\)`
+
+---
+
+## Summary regression tree algorithm
+
+* Use **recursive binary splitting** to grow a large tree on the training data, stop when you reach some stopping criteria
+--
+
+* Apply **cost complexity pruning** to the larger tree to obtain a sequence of best subtrees, as a function of `\(\alpha\)`
+--
+
+* Use K-fold cross-validation to choose `\(\alpha\)`. Pick `\(\alpha\)` to minimize the average error
+--
+
+* Return the subtree that corresponds to the chosen `\(\alpha\)` 
+
+---
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
