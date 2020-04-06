@@ -12,5 +12,5 @@ output:
 
 1. Complete the **06 Assessment** on Canvas by **April 8 at noon**
 2. Watch the [Plotting Decision Trees Lecture](https://sta-363-s20.lucymcgowan.com/slides/17-decision-tree-plot-lecture.html) lecture
-3. Complete the `Application Exercise` detailed at the end of [Plotting Decision Trees Lecture](https://sta-363-s20.lucymcgowan.com/slides/17-decision-plot-lecture.html) by **April 8 at noon**
+3. Complete the `Application Exercise` detailed at the end of [Plotting Decision Trees Lecture](https://sta-363-s20.lucymcgowan.com/slides/17-decision-tree-plot-lecture.html) by **April 8 at noon**
 4. Watch the [Classification Trees](https://sta-363-s20.lucymcgowan.com/slides/17-decision-tree-classification-lecture.html) lecture
