@@ -48,7 +48,7 @@ set.seed(1)
 * We use **recursive binary splitting** to grow the tree
 --
 
-* Instead of RSS, we can one of two measures:
+* Instead of RSS, we can use:
 --
 
 * **Gini index**:

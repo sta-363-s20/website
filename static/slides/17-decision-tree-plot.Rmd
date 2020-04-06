@@ -1,0 +1,186 @@
+---
+title: "Plotting Decision trees"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+class: center, middle
+
+`r countdown::countdown(minutes = 5)`
+
+## `r emo::ji("book")` Take 06 Assessment in Canvas
+
+---
+
+## Plotting decision trees
+
+There are several R packages that assist with tree plotting
+
+* `rpart.plot`
+* `partykit`
+* `rattle`
+
+---
+
+## Where to find out more about packages
+
+1. Vignettes
+2. Journal Article (R Journal is great)
+3. Rstudio Community
+4. StackOverflow
+5. Twitter
+
+---
+
+
+class: inverse
+
+`r countdown::countdown(minutes = 5)`
+
+## <i class="fas fa-laptop"></i> `Learn about partykit`
+
+Google `partykit` to find out how more about it (hint: use key words like `rstats` and `decision tree plots`)
+
+---
+
+## `rpart.plot`
+
+We're going to focus on `rpart.plot`, but feel free to try the others!
+
+--
+
+```{r, eval = FALSE}
+install.packages("rpart.plot")
+```
+
+--
+
+```{r, message = FALSE, warning = FALSE}
+library(rpart.plot)
+```
+
+---
+
+## `rpart.plot`
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(ISLR)
+library(tidymodels)
+baseball <- Hitters[!is.na(Hitters$Salary), ]
+```
+
+.small[
+```{r}
+tree_spec <- decision_tree(
+  cost_complexity = 0.1,
+  tree_depth = 10,
+  mode = "regression") %>%
+  set_engine("rpart")
+
+model <- fit(tree_spec,
+                   Salary ~ Hits + Years + PutOuts + RBI + Walks + Runs,
+                   data = baseball)
+```
+]
+
+--
+
+```{r, eval = FALSE}
+rpart.plot(model$fit,
+           roundint = FALSE)
+```
+
+---
+
+## `rpart.plot`
+
+
+.small[
+```{r}
+tree_spec <- decision_tree(
+  cost_complexity = 0.1,
+  tree_depth = 10,
+  mode = "regression") %>%
+  set_engine("rpart")
+
+model <- fit(tree_spec,
+                   Salary ~ Hits + Years + PutOuts + RBI + Walks + Runs,
+                   data = baseball)
+```
+]
+
+```{r, eval = FALSE}
+rpart.plot(model$fit, #<<
+           roundint = FALSE)
+```
+
+---
+
+## `rpart.plot`
+
+
+.small[
+```{r}
+tree_spec <- decision_tree(
+  cost_complexity = 0.1,
+  tree_depth = 10,
+  mode = "regression") %>%
+  set_engine("rpart")
+
+model <- fit(tree_spec,
+                   Salary ~ Hits + Years + PutOuts + RBI + Walks + Runs,
+                   data = baseball)
+```
+]
+
+```{r, eval = FALSE}
+rpart.plot(model$fit, 
+           roundint = FALSE) #<<
+```
+
+---
+
+## `rpart.plot`
+
+```{r}
+rpart.plot(model$fit, 
+           roundint = FALSE) #<<
+```
+
+---
+
+
+class: inverse
+
+`r countdown::countdown(minutes = 10)`
+
+## <i class="fas fa-laptop"></i> `AE 05 - Regression trees`
+
+1. Open your application exercise (05) from last week
+2. Install `rpart.plot`
+3. Create a plot from your final decision tree
+3. Knit, Commit, Push. Be sure to have the final results pushed to GitHub by **April 8 at noon**
+
