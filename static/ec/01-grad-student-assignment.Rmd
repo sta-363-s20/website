@@ -20,6 +20,8 @@ knitr::opts_chunk$set(eval = FALSE)
 
 - Create your **own** GitHub repository. (Don't know how to do this? check out [happygitwithr.com](https://happygitwithr.com/new-github-first.html))
 
+- Add me (@LucyMcGowan) as a collaborator to your respository. To do this once you have created your repo, on GitHub click **Settings**, then **Manage Access** on the left bar. Then click the green button that says **Invite teams or people**. Type @LucyMcGowan in the dialogue box to add me.
+
 - Pull this project into RStudio
 
   - In the repo, click on the green **Clone or download** button, select **Use HTTPS**. Click on the clipboard icon to copy the repo URL.
