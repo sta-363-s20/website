@@ -1,0 +1,46 @@
+---
+title: "Graduate Student Project"
+output: 
+  tufte::tufte_html:
+    tufte_variant: "envisioned"
+    highlight: pygments
+    css: ../labs/lab.css
+link-citations: yes
+---
+
+_This assignment is required for graduate students and will count as extra credit for undergraduate students. For undergraduate students it will count as an extra homework grade_.
+
+**Due:** Friday 2020-04-24 at 11:59pm
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+# Getting started
+
+- Create your **own** GitHub repository. (Don't know how to do this? check out [happygitwithr.com](https://happygitwithr.com/new-github-first.html))
+
+- Pull this project into RStudio
+
+  - In the repo, click on the green **Clone or download** button, select **Use HTTPS**. Click on the clipboard icon to copy the repo URL.
+
+  - If using RStudio Cloud, go to RStudio Cloud and into the course workspace. Create a **New Project from Git Repo**. You will need to click on the down arrow next to the **New Project** button to see this option.
+
+  - If using RStudio Pro, create a new project by clicking **File > New Project** Then click **Version Control** and **Git/Github**.
+
+  - Copy and paste the URL of your assignment repo into the dialog box.
+
+  - Hit OK, and you're good to go!
+  
+- Create your starter files. You should start with at least a .Rmd file to do your assignment.
+
+# Prompt
+
+Find a dataset that interests you (Kaggle is a good resource to find some data!). Come up with a _prediction_ question. Apply one of the techniques we have learned in this class to this dataset to answer your question. Your analysis should include:
+
+* A clear research question
+* Fitting a model
+* Tuning at least one parameter
+* Evaluating your model
+
+Complete this assignment in a .Rmd file that includes all code. In addition, write a paragraph describing your methods and what you found. 
