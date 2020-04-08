@@ -1,0 +1,17 @@
+---
+title: "April 9 Overview"
+output: 
+  html_document:
+    css: overview.css
+---
+
+
+<center>
+![](https://media.giphy.com/media/TdQtqjp28oXNjkEct4/giphy.gif)
+</center>
+
+1. Watch the [Follow Up](https://sta-363-s20.lucymcgowan.com/slides/18-follow-up.html) video
+1. Watch the [Bagging Decision Trees](https://sta-363-s20.lucymcgowan.com/slides/18-bagging-lecture.html) lecture
+2. Watch the [Random Forest](https://sta-363-s20.lucymcgowan.com/slides/18-random-forest-lecture.html) lecture
+3. Watch the [Random Forests in R](https://sta-363-s20.lucymcgowan.com/slides/18-random-forest-in-r-lecture.html) lecture
+4. Complete the `Application Exercise` detailed in the [Random Forests in R](https://sta-363-s20.lucymcgowan.com/slides/18-random-forest-in-r-lecture.html) lecture by **April 10th at noon**.

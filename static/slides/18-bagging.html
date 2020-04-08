@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Bagging Decision Trees</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. D’Agostino McGowan" />
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link href="libs/countdown/countdown.css" rel="stylesheet" />
+    <script src="libs/countdown/countdown.js"></script>
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Bagging Decision Trees
+### Dr. D’Agostino McGowan
+
+---
+
+
+
+
+
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+Dr. Lucy D'Agostino McGowan &lt;i&gt;adapted from slides by Hastie &amp; Tibshirani&lt;/i&gt;
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+## Decision trees
+
+.pull-left[
+
+### Pros
+
+* simple
+* easy to interpret
+]
+
+--
+
+.pull-right[
+
+### Cons
+
+* not often competitive in terms of predictive accuracy
+* we will discuss how to combine _multiple_ trees to improve accuracy
+* _Ensemble methods_
+
+]
+
+---
+
+## Bagging
+
+* **bagging** is a general-purpose procedure for reducing the variance of a statistical learning method (outside of just trees)
+--
+
+* It is particularly useful and frequently used in the context of decision trees
+--
+
+* Also called **bootstrap aggregation**
+---
+
+## Bagging
+
+* Mathematically, why does this work? Let's go back to intro to stat!
+--
+
+* If you have a set of$n$ independent observations: `\(Z_1, \dots, Z_n\)`, each with a variance of `\(\sigma^2\)`, what would the variance of the _mean_, `\(\bar{Z}\)` be?
+--
+
+* The variance of `\(\bar{Z}\)` is `\(\sigma^2/n\)`
+--
+
+* In other words, **averaging a set of observations reduces the variance**.
+--
+
+* This is generally not practical because we generally do not have multiple training sets
+
+---
+
+## Bagging
+
+* **Averaging a set of observations reduces the variance**. This is generally not practical because we generally do not have multiple training sets.
+
+.question[
+What can we do?
+]
+--
+
+* Bootstrap! We can take repeated samples from the single training data set.
+
+---
+
+## Bagging process
+
+* generate `\(B\)` different bootstrapped training sets
+--
+
+* Train our method on the `\(b\)`th bootstrapped training set to get `\(\hat{f}^{*b}(x)\)`, the prediction at point `\(x\)`
+--
+
+* Average all predictions to get:
+
+`$$\hat{f}_{bag}(x)=\frac{1}{B}\sum_{b=1}^B\hat{f}^{*b}(x)$$`
+
+--
+* This is **bagging**!
+
+---
+
+## Bagging regression trees
+
+* generate `\(B\)` different bootstrapped training sets
+* Fit a regression tree on the `\(b\)`th bootstrapped training set to get `\(\hat{f}^{*b}(x)\)`, the prediction at point `\(x\)`
+* Average all predictions to get:
+
+`$$\hat{f}_{bag}(x)=\frac{1}{B}\sum_{b=1}^B\hat{f}^{*b}(x)$$`
+
+---
+
+## Bagging classification trees
+
+* for each test observation,  record the class predicted by the `\(B\)` trees
+--
+
+* Take a **majority** vote - the overall prediction is the most commonly occuring class among the `\(B\)` predictions
+
+---
+
+## Out-of-bag Error Estimation
+
+* You can estimate the **test error** of a bagged model
+--
+
+* The key to bagging is that trees are repeatedly fit to bootstrapped subsets of the observations
+--
+
+* On average, each bagged tree makes use of about 2/3 of the observations (you can prove this if you'd like!, not required for this course though)
+--
+
+* The remaining 1/3 of observations _not_ used to fit a given bagged tree are the **out-of-bag** (OOB) observations
+
+---
+
+## Out-of-bag Error Estimation
+
+* You can predict the response for the `\(i\)`th observation using each of the trees in which that observation was OOB
+
+--
+
+.question[
+How many predictions do you think this will yield for the `\(i\)`th observation?
+]
+
+--
+
+* This will yield `\(B/3\)` preditions for the `\(i\)`th observations. We can _average_ this!
+
+--
+
+* This estimate is essentially the LOOCV error for bagging as long as `\(B\)` is large 🎉
+
+---
+
+class: inverse
+
+<div class="countdown" id="timer_5e8df7fc" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+
+## &lt;i class="fas fa-edit"&gt;&lt;/i&gt; `Describing Bagging`
+
+See if you can _draw a diagram_ to describe the bagging process to someone who has never heard of this before.
+
+---
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

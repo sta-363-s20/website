@@ -1,0 +1,176 @@
+---
+title: "Bagging Decision Trees"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan <i>adapted from slides by Hastie & Tibshirani</i>
+</span>
+</div> 
+
+---
+
+## Decision trees
+
+.pull-left[
+
+### Pros
+
+* simple
+* easy to interpret
+]
+
+--
+
+.pull-right[
+
+### Cons
+
+* not often competitive in terms of predictive accuracy
+* we will discuss how to combine _multiple_ trees to improve accuracy
+* _Ensemble methods_
+
+]
+
+---
+
+## Bagging
+
+* **bagging** is a general-purpose procedure for reducing the variance of a statistical learning method (outside of just trees)
+--
+
+* It is particularly useful and frequently used in the context of decision trees
+--
+
+* Also called **bootstrap aggregation**
+---
+
+## Bagging
+
+* Mathematically, why does this work? Let's go back to intro to stat!
+--
+
+* If you have a set of$n$ independent observations: $Z_1, \dots, Z_n$, each with a variance of $\sigma^2$, what would the variance of the _mean_, $\bar{Z}$ be?
+--
+
+* The variance of $\bar{Z}$ is $\sigma^2/n$
+--
+
+* In other words, **averaging a set of observations reduces the variance**.
+--
+
+* This is generally not practical because we generally do not have multiple training sets
+
+---
+
+## Bagging
+
+* **Averaging a set of observations reduces the variance**. This is generally not practical because we generally do not have multiple training sets.
+
+.question[
+What can we do?
+]
+--
+
+* Bootstrap! We can take repeated samples from the single training data set.
+
+---
+
+## Bagging process
+
+* generate $B$ different bootstrapped training sets
+--
+
+* Train our method on the $b$th bootstrapped training set to get $\hat{f}^{*b}(x)$, the prediction at point $x$
+--
+
+* Average all predictions to get:
+
+$$\hat{f}_{bag}(x)=\frac{1}{B}\sum_{b=1}^B\hat{f}^{*b}(x)$$
+
+--
+* This is **bagging**!
+
+---
+
+## Bagging regression trees
+
+* generate $B$ different bootstrapped training sets
+* Fit a regression tree on the $b$th bootstrapped training set to get $\hat{f}^{*b}(x)$, the prediction at point $x$
+* Average all predictions to get:
+
+$$\hat{f}_{bag}(x)=\frac{1}{B}\sum_{b=1}^B\hat{f}^{*b}(x)$$
+
+---
+
+## Bagging classification trees
+
+* for each test observation,  record the class predicted by the $B$ trees
+--
+
+* Take a **majority** vote - the overall prediction is the most commonly occuring class among the $B$ predictions
+
+---
+
+## Out-of-bag Error Estimation
+
+* You can estimate the **test error** of a bagged model
+--
+
+* The key to bagging is that trees are repeatedly fit to bootstrapped subsets of the observations
+--
+
+* On average, each bagged tree makes use of about 2/3 of the observations (you can prove this if you'd like!, not required for this course though)
+--
+
+* The remaining 1/3 of observations _not_ used to fit a given bagged tree are the **out-of-bag** (OOB) observations
+
+---
+
+## Out-of-bag Error Estimation
+
+* You can predict the response for the $i$th observation using each of the trees in which that observation was OOB
+
+--
+
+.question[
+How many predictions do you think this will yield for the $i$th observation?
+]
+
+--
+
+* This will yield $B/3$ preditions for the $i$th observations. We can _average_ this!
+
+--
+
+* This estimate is essentially the LOOCV error for bagging as long as $B$ is large `r emo::ji("tada")`
+
+---
+
+class: inverse
+
+`r countdown::countdown(minutes = 5)`
+
+## <i class="fas fa-edit"></i> `Describing Bagging`
+
+See if you can _draw a diagram_ to describe the bagging process to someone who has never heard of this before.
+
+---
+

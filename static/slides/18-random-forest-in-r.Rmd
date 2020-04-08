@@ -1,0 +1,146 @@
+---
+title: "Random Forests"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan <i>adapted from slides by Hastie & Tibshirani</i>
+</span>
+</div> 
+
+```{r, include = FALSE}
+library(tidyverse)
+library(ISLR)
+library(tidymodels)
+set.seed(1)
+```
+
+---
+
+
+class: center, middle
+
+## The heart disease example
+
+_Recall that we are predicting whether a patient has heart disease from 13 predictors_
+---
+
+## 1. Randomly divide the data in half, 149 training observations, 148 testing
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+heart <- read_csv("data/heart.csv")
+heart$HD <- as.factor(heart$AHD)
+heart <- heart[complete.cases(heart), ]
+```
+
+```{r}
+set.seed(77)
+heart_split <- initial_split(heart, prop = 0.5)
+heart_train <- training(heart_split)
+```
+
+---
+
+## 2. Create model specification
+
+```{r, eval = FALSE}
+model_spec <- rand_forest(
+  mode = "classification",
+  mtry = ---
+) %>% 
+  set_engine("ranger")
+```
+
+.question[
+`mtry` here is `m`. If we are doing _bagging_ what do you think we set this to? 
+]
+
+---
+
+## 2. Create bagging specification
+
+```{r, eval = FALSE}
+bagging_spec <- rand_forest(
+  mode = "classification",
+  mtry = 13 #<<
+) %>% 
+  set_engine("ranger")
+```
+
+--
+
+.question[
+What would we change `mtry` to if we are doing a random forest?
+]
+
+---
+
+## 2. Create Random Forest specification
+
+```{r}
+rf_spec <- rand_forest(
+  mode = "classification",
+  mtry = 3 #<<
+) %>% 
+  set_engine("ranger")
+```
+
+--
+
+* The default for `rand_forest` is `floor(sqrt(# predictors))` (so 3 in this case)
+
+---
+
+## 3. Fit the model
+
+```{r}
+model <- fit(rf_spec,
+             HD ~ Age + Sex + ChestPain + RestBP + Chol + Fbs + 
+               RestECG + MaxHR + ExAng + Oldpeak + Slope + Ca + Thal,               
+             data = heart_train)
+```
+
+---
+
+## 4. Examine how it looks in the test data
+
+```{r}
+heart_test <- testing(heart_split)
+model %>%
+  predict(new_data = heart_test) %>%
+  bind_cols(heart_test) %>%
+  conf_mat(truth = HD, estimate = .pred_class) %>%
+  autoplot(type = "heatmap")
+```
+
+
+---
+
+class: inverse
+
+`r countdown::countdown(minutes = 10)`
+
+## <i class="fas fa-laptop"></i> `AE 05 - Random Forests`
+
+1. Open your application exercise (05) from last class
+2. Refit your model as a _random forest_
+3. Knit, Commit, Push. Be sure to have the final results pushed to GitHub by **April 10 at noon**
+
+

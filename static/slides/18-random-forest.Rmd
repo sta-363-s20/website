@@ -1,0 +1,68 @@
+---
+title: "Random Forests"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan <i>adapted from slides by Hastie & Tibshirani</i>
+</span>
+</div> 
+
+---
+
+## Random forests
+
+_Do you_ `r emo::ji("red_heart")` _all of the tree puns?_
+
+* Random forests provide an improvement over bagged trees
+by way of a small tweak that _decorrelates_ the trees
+--
+
+* By _decorrelating_ the trees, this reduces the variance even more when we average the trees!
+
+---
+
+## Random Forest process
+
+* Like bagging, build a number of decision trees on
+bootstrapped training samples
+--
+
+* Each time the tree is split, instead of considering _all predictors_ (like bagging), **a random selection of** $m$ **predictors** is chosen as split candidates from the full set of $p$ predictors
+* The split is allowed to use only one of those $m$ predictors
+--
+
+* A fresh selection of $m$ predictors is taken at each split 
+--
+
+* typically we choose $m \approx \sqrt{p}$
+
+---
+
+
+class: inverse
+
+`r countdown::countdown(minutes = 1)`
+
+## <i class="fas fa-edit"></i> `Choosing m for Random Forest`
+
+Let's say you have a dataset with 100 observations and 9 variables, if you were fitting a random forest, what would a good $m$ be?
+
+

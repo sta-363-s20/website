@@ -1,0 +1,9 @@
+## Lecture
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/8ZuvoTHnMJ8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+[Slides](https://sta-363-s20.lucymcgowan.com/slides/18-bagging.html#1)
+
+## Bagging Diagram Example
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/O8fH0RhUIcQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
