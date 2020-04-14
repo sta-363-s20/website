@@ -10,6 +10,8 @@ output:
 ![](https://media1.tenor.com/images/c1693658983ad8ebcc8611ae794489d2/tenor.gif?itemid=14999248)
 </center>
 
+_I set up an email list for folks interested in getting email reminders before class. If you did not receive an email and wish you had, please let me know._
+
 1. Watch the [Boosting Decision Trees: The Algorithm](https://sta-363-s20.lucymcgowan.com/slides/19-boosting-lecture.html) lecture
 2. Watch the [Boosting Decision Trees: Tuning](https://sta-363-s20.lucymcgowan.com/slides/19-boosting-tuning-lecture.html) lecture
 3. Watch the [Boosting Decision Trees in R](https://sta-363-s20.lucymcgowan.com/slides/19-boosted-in-r-lecture.html) lecture
