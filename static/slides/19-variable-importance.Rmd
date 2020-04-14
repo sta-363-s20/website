@@ -1,0 +1,153 @@
+---
+title: "Variable Importance"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan <i>adapted from slides by Hastie & Tibshirani</i>
+</span>
+</div> 
+
+---
+
+## Variable importance
+
+* For bagged or random forest _regression trees_, we can record the _total RSS_ that is decreased due to splits of a given predictor $X_i$ averaged over all $B$ trees
+
+--
+* A large value would indicate that that variable is _important_
+
+---
+
+## Variable importance
+
+* For bagged or random forest _classification trees_ we can add up the total amount that the Gini Index is decreased by splits of a given predictor, $X_i$, averaged over $B$ trees
+
+---
+
+## Variable importance in R
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidymodels)
+library(tidyverse)
+heart <- read_csv("data/heart.csv")
+heart$HD <- as.factor(heart$AHD)
+heart <- heart[complete.cases(heart), ]
+```
+
+.small[
+```{r}
+rf_spec <- rand_forest(
+  mode = "classification",
+  mtry = 3
+) %>% 
+  set_engine(
+    "ranger",
+    importance = "impurity") #<<
+
+model <- fit(rf_spec,
+             HD ~ Age + Sex + ChestPain + RestBP + Chol + Fbs + 
+               RestECG + MaxHR + ExAng + Oldpeak + Slope + Ca + Thal,               
+             data = heart)
+```
+]
+
+```{r}
+ranger::importance(model$fit)
+```
+
+---
+
+## Variable importance
+
+.small[
+```{r}
+library(ranger)
+importance(model$fit)
+```
+]
+
+--
+
+.small[
+```{r}
+var_imp <- ranger::importance(model$fit)
+```
+]
+
+---
+
+## Plotting variable importance
+
+.small[
+```{r, fig.height = 1.5}
+var_imp_df <- data.frame(
+  variable = names(var_imp),
+  importance = var_imp
+  )
+
+var_imp_df %>%
+ggplot(aes(x = variable, y = importance)) +
+  geom_col()
+```
+]
+
+--
+
+.question[
+How could we make this plot better?
+]
+
+---
+
+## Plotting variable importance
+
+.small[
+```{r}
+var_imp_df %>%
+ggplot(aes(x = variable, y = importance)) +
+  geom_col() + 
+  coord_flip()
+```
+]
+
+.question[
+How could we make this plot better?
+]
+
+---
+
+
+## Plotting variable importance
+
+.small[
+```{r}
+var_imp_df %>%
+  mutate(variable = factor(variable, 
+   levels = variable[order(var_imp_df$importance)])) %>%
+ggplot(aes(x = variable, y = importance)) +
+  geom_col() + 
+  coord_flip()
+```
+]
+
+---
+
+

@@ -1,0 +1,122 @@
+---
+title: "Boosting Decision Trees: The Algorithm"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan <i>adapted from slides by Hastie & Tibshirani</i>
+</span>
+</div> 
+
+---
+
+## Boosting
+
+* Like **bagging**, **boosting** is an approach that can be applied to many statistical learning methods
+--
+
+* We will discuss how to use **boosting** for decision trees
+
+---
+
+## Boosting
+
+.question[
+Refresher: What does bagging do?
+]
+
+--
+
+* **Bagging** involves:
+  * resampling from the original training data to make many bootstrapped training data sets 
+  * fitting a separate decision tree to each bootstrapped training data set
+  * combining all trees to make one predictive model
+--
+
+* `r emo::ji("index_pointing_up")` Note, each tree is built on a bootstrap dataset, independent of the other trees
+--
+
+* **Boosting** is similar, except the trees are grown _sequentially_, using information from the previously grown trees
+
+---
+
+## Boosting algorithm for regression trees
+
+### Step 1
+
+* Set $\hat{f}(x)= 0$ and $r_i= y_i$ for all $i$ in the training set
+
+---
+
+## Boosting algorithm for regression trees
+
+### Step 2 For $b = 1, 2, \dots, B$ repeat:
+
+* Fit a tree $\hat{f}^b$ with $d$ splits ( $d$ + 1 terminal nodes) to the training data ( $X, r$ )
+* Update $\hat{f}$ by adding in a shrunken version of the new tree: 
+  
+$$\hat{f}(x)\leftarrow \hat{f}(x)+\lambda \hat{f}^b(x)$$  
+
+* Update the residuals:
+
+$$r_i \leftarrow r_i - \lambda \hat{f}^b(x_i)$$
+---
+## Boosting algorithm for regression trees
+
+### Step 3
+
+* Output the boosted model
+
+$$\hat{f}(x)\sum_{b = 1}^B\lambda\hat{f}^b(x)$$
+---
+
+## Big picture
+
+* Given the current model, we are fitting a decision tree to the _residuals_
+--
+
+* We then add this new decision tree into the fitted function to update the residuals
+--
+
+* Each of these trees can be small (just a few terminal nodes), determined by $d$
+--
+
+* Instead of fitting a single large decision tree, which could result in overfitting, boosting _learns slowly_
+
+---
+
+## Big Picture
+
+
+* By fitting small trees to the _residuals_ we _slowly_ improve $\hat{f}$ in areas where it does not perform well
+--
+
+* The shrinkage parameter $\lambda$ slows the process down even more allowing more and different shaped trees to try to minimize those residuals
+
+---
+
+## Boosting for classification
+
+* Boosting for classification is similar, but a bit more complex
+--
+
+* `tidymodels` will handle this for us, but if you are interested in learning more, you can check out [Chapter 10 of Elements of Statistical Learning](https://web.stanford.edu/~hastie/Papers/ESLII.pdf)
+
+---

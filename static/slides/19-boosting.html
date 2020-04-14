@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Boosting Decision Trees: The Algorithm</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. D’Agostino McGowan" />
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Boosting Decision Trees: The Algorithm
+### Dr. D’Agostino McGowan
+
+---
+
+
+
+
+
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+Dr. Lucy D'Agostino McGowan &lt;i&gt;adapted from slides by Hastie &amp; Tibshirani&lt;/i&gt;
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+## Boosting
+
+* Like **bagging**, **boosting** is an approach that can be applied to many statistical learning methods
+--
+
+* We will discuss how to use **boosting** for decision trees
+
+---
+
+## Boosting
+
+.question[
+Refresher: What does bagging do?
+]
+
+--
+
+* **Bagging** involves:
+  * resampling from the original training data to make many bootstrapped training data sets 
+  * fitting a separate decision tree to each bootstrapped training data set
+  * combining all trees to make one predictive model
+--
+
+* ☝️ Note, each tree is built on a bootstrap dataset, independent of the other trees
+--
+
+* **Boosting** is similar, except the trees are grown _sequentially_, using information from the previously grown trees
+
+---
+
+## Boosting algorithm for regression trees
+
+### Step 1
+
+* Set `\(\hat{f}(x)= 0\)` and `\(r_i= y_i\)` for all `\(i\)` in the training set
+
+---
+
+## Boosting algorithm for regression trees
+
+### Step 2 For `\(b = 1, 2, \dots, B\)` repeat:
+
+* Fit a tree `\(\hat{f}^b\)` with `\(d\)` splits ( `\(d\)` + 1 terminal nodes) to the training data ( `\(X, r\)` )
+* Update `\(\hat{f}\)` by adding in a shrunken version of the new tree: 
+  
+`$$\hat{f}(x)\leftarrow \hat{f}(x)+\lambda \hat{f}^b(x)$$`  
+
+* Update the residuals:
+
+`$$r_i \leftarrow r_i - \lambda \hat{f}^b(x_i)$$`
+---
+## Boosting algorithm for regression trees
+
+### Step 3
+
+* Output the boosted model
+
+`$$\hat{f}(x)\sum_{b = 1}^B\lambda\hat{f}^b(x)$$`
+---
+
+## Big picture
+
+* Given the current model, we are fitting a decision tree to the _residuals_
+--
+
+* We then add this new decision tree into the fitted function to update the residuals
+--
+
+* Each of these trees can be small (just a few terminal nodes), determined by `\(d\)`
+--
+
+* Instead of fitting a single large decision tree, which could result in overfitting, boosting _learns slowly_
+
+---
+
+## Big Picture
+
+
+* By fitting small trees to the _residuals_ we _slowly_ improve `\(\hat{f}\)` in areas where it does not perform well
+--
+
+* The shrinkage parameter `\(\lambda\)` slows the process down even more allowing more and different shaped trees to try to minimize those residuals
+
+---
+
+## Boosting for classification
+
+* Boosting for classification is similar, but a bit more complex
+--
+
+* `tidymodels` will handle this for us, but if you are interested in learning more, you can check out [Chapter 10 of Elements of Statistical Learning](https://web.stanford.edu/~hastie/Papers/ESLII.pdf)
+
+---
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

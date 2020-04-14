@@ -1,0 +1,171 @@
+---
+title: "Boosted Trees in R"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+## Boosted trees in R
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(tidymodels)
+library(tidyverse)
+heart <- read_csv("data/heart.csv")
+heart$HD <- as.factor(heart$AHD)
+heart <- heart[complete.cases(heart), ]
+```
+
+```{r, eval = FALSE}
+library(tidymodels)
+```
+
+```{r}
+boost_spec <- boost_tree(  #<<
+  mode = "classification", 
+  tree_depth = 1, 
+  trees = 1000, 
+  learn_rate = 0.001, 
+) %>% 
+  set_engine("xgboost")  #<<
+```
+
+---
+
+## Boosted trees in R
+
+
+```{r, eval = FALSE}
+library(tidymodels)
+```
+
+```{r}
+boost_spec <- boost_tree( 
+  mode = "classification", #<<
+  tree_depth = 1, 
+  trees = 1000, 
+  learn_rate = 0.001, 
+) %>% 
+  set_engine("xgboost") 
+```
+
+* Set the `mode` as you would with a bagged tree or random forest
+
+---
+
+## Boosted trees in R
+
+
+```{r, eval = FALSE}
+library(tidymodels)
+```
+
+```{r}
+boost_spec <- boost_tree( 
+  mode = "classification", 
+  tree_depth = 1, #<<
+  trees = 1000,
+  learn_rate = 0.001,
+) %>% 
+  set_engine("xgboost") 
+```
+
+* `tree_depth` here is the depth of each tree, let's set that to 1  
+
+---
+
+
+## Boosted trees in R
+
+
+```{r, eval = FALSE}
+library(tidymodels)
+```
+
+```{r}
+boost_spec <- boost_tree( 
+  mode = "classification", 
+  tree_depth = 1, 
+  trees = 1000, #<<
+  learn_rate = 0.001,
+) %>% 
+  set_engine("xgboost") 
+```
+
+* `trees` is the number of trees that are fit, this is equivalent to `B`
+
+---
+
+
+## Boosted trees in R
+
+
+```{r, eval = FALSE}
+library(tidymodels)
+```
+
+```{r}
+boost_spec <- boost_tree( 
+  mode = "classification", 
+  tree_depth = 1, 
+  trees = 1000, 
+  learn_rate = 0.001, #<<
+) %>% 
+  set_engine("xgboost") 
+```
+
+* `learn_rate` is $\lambda$
+
+---
+
+## Fit the model
+
+```{r}
+model <- fit(boost_spec,
+             HD ~ Age + Sex + ChestPain + RestBP + Chol + Fbs + 
+               RestECG + MaxHR + ExAng + Oldpeak + Slope + Ca + Thal,               
+             data = heart)
+```
+
+
+---
+
+class: inverse
+
+`r countdown::countdown(minutes = 3)`
+
+## <i class="fas fa-laptop"></i> `Boosting`
+
+How would this code change if I wanted to tune `B` the number of bootstrapped training samples?
+
+```{r}
+boost_spec <- boost_tree( 
+  mode = "classification", 
+  tree_depth = 1, 
+  trees = 1000, 
+  learn_rate = 0.001, 
+) %>% 
+  set_engine("xgboost") 
+```
+

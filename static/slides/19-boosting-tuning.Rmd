@@ -1,0 +1,113 @@
+---
+title: "Boosting Decision Trees: Tuning"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan <i>adapted from slides by Hastie & Tibshirani</i>
+</span>
+</div> 
+
+---
+
+## Tuning parameters
+
+.question[
+With **bagging** what could we tune?
+]
+
+--
+
+* The depth of the tree (`tree_depth`)
+* $B$, the number of bootstrapped training samples (the number of decision trees fit)
+--
+
+* It is more efficient to just pick something very large instead of tuning `tree_depth`
+* For $B$, you don't really risk overfitting if you pick something too big
+
+--
+
+.question[
+With **random forest** what could we tune?
+]
+--
+
+* The depth of the tree, $B$, and `m` the number of predictors to try 
+--
+
+* The default is $\sqrt{p}$, and this does pretty well
+
+---
+
+## Tuning parameters for boosting
+
+
+* $B$ the number of bootstraps
+* $\lambda$ the shrinkage parameter
+* $d$ the number of splits in each tree
+
+---
+
+## Tuning parameters for boosting
+
+* Unlike **bagging** and **random forest** with **boosting** you can overfit if $B$ is too large
+--
+
+.question[
+What do you think you can use to pick $B$?
+]
+
+--
+* Cross-validation, of course!
+
+---
+
+## Tuning parameters for boosting
+
+* The _shrinkage parameter_ $\lambda$ controls the rate at which boosting learn
+--
+
+* $\lambda$ is a small, positive number, typically 0.01 or 0.001
+--
+
+* It depends on the problem, but typically a very small $\lambda$ can require a very large $B$ for good performance
+
+---
+
+## Tuning parameters for boosting
+
+* _The number of splits_, $d$, in each tree controls the _complexity_ of the boosted ensemble
+--
+
+* Often $d=1$ is a good default
+--
+
+_brace yourself for another tree pun!_
+
+--
+* In this case we call the tree a _stump_ meaning it just has a single split
+--
+
+* This results in an _additive model_
+--
+
+* You can think of $d$ as the _interaction depth_ it controls the interaction order of the boosted model, since $d$ splits can involve at most $d$ variables
+
+---
