@@ -14,3 +14,5 @@ output:
 2. Watch the [Boosting Decision Trees: Tuning](https://sta-363-s20.lucymcgowan.com/slides/19-boosting-tuning-lecture.html) lecture
 3. Watch the [Boosting Decision Trees in R](https://sta-363-s20.lucymcgowan.com/slides/19-boosted-in-r-lecture.html) lecture
 4. Watch the [Variable Importance](https://sta-363-s20.lucymcgowan.com/slides/19-variable-importance-lecture.html) lecture
+
+_Optional: I have made a short video describing how the [Gini Index works when creating a Classification Tree](https://youtu.be/O0LmGpKnfTQ), feel free to take a look. The content here will **not** be on the exam, just for those interested_
