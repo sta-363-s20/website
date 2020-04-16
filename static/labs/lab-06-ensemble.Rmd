@@ -1,0 +1,144 @@
+---
+title: "Lab 06 - Ensemble models"
+output: 
+  tufte::tufte_html:
+    tufte_variant: "envisioned"
+    highlight: pygments
+    css: lab.css
+link-citations: yes
+---
+
+```{r include=FALSE}
+library(tidyverse)
+library(tidymodels)
+library(ISLR)
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  show.signif.stars = FALSE     # for regression output
+)
+```
+
+**Due:** Wednesday 2020-04-22 at 11:59pm
+
+# Introduction
+
+In this lab we are going to practice fitting ensemble models. A few reminders:
+
+* Remember to label your chunks
+* Write out your answers in full sentences, do not just rely on the R output
+* Knit, commit, and push regularly (at least after every exercise)
+
+# Getting started
+
+- Go to our class's GitHub organization [sta-363-s20](https://github.com/sta-363-s20)
+- Find the GitHub repository (which we'll refer to as "repo" going forward) for this lab, `lab-06-ensemble-YOUR-GITHUB-HANDLE`. This repo contains a template you can build on to complete your assignment.
+- On GitHub, click on the green **Clone or download** button, select **Use HTTPS**. Click on the clipboard icon to copy the repo URL.
+- If using RStudio Cloud, go to RStudio Cloud and into the course workspace. Create a **New Project from Git Repo**. You will need to click on the down arrow next to the **New Project** button to see this option.
+- If using RStudio Pro, create a new project by clicking **File > New Project** Then click **Version Control** and **Git/Github**.
+- Copy and paste the URL of your assignment repo into the dialog box.
+- Hit OK, and you're good to go!
+ 
+# Packages
+
+In this lab we will work with three packages: `ISLR` for the data, `tidyverse` which is a collection of packages for doing data analysis in a "tidy" way and `tidymodels` for statistial modeling.
+
+Now that the necessary packages are installed, you should be able to Knit your document and see the results.
+
+If you'd like to run your code in the Console as well you'll also need to load the packages there. To do so, run the following in the console. 
+
+```{r eval = FALSE}
+library(tidyverse) 
+library(tidymodels)
+library(ISLR)
+```
+
+Note that the packages are also loaded with the same commands in your R Markdown document. 
+
+If you are working in RStudio Pro, you may need to install the package to perform boosting. You can do this by running the following **once** in the console:
+
+```{r, eval = FALSE}
+install.packages("xgboost")
+```
+
+
+# Housekeeping
+
+## Git configuration
+
+```{marginfigure}
+Your email address is the address tied to your GitHub account and your name should be first and last name.
+```
+
+- Go to the *Terminal* pane
+- Type the following two lines of code, replacing the information in the quotation marks with your info:
+
+```{bash eval=FALSE}
+git config --global user.email "your email"
+git config --global user.name "your name"
+```
+
+To confirm that the changes have been implemented, run the following
+
+```{bash eval=FALSE}
+git config --global user.email
+git config --global user.name
+```
+
+## Password caching
+
+If you would like your git password cached for a week for this project, type the following in the Terminal:
+
+```{bash eval=FALSE}
+git config --global credential.helper 'cache --timeout 604800'
+```
+
+## Project name: 
+
+Currently your project is called *Untitled Project*. Update the name of your project to be "Lab 06 - Ensemble models".
+
+# Warm up
+
+Before we introduce the data, let's warm up with some simple exercises.
+
+## YAML: 
+
+Open the R Markdown (Rmd) file in your project, change the author name to your name, and knit the document.
+
+## Commiting and pushing changes:
+
+- Go to the **Git** pane in your RStudio. 
+- View the **Diff** and confirm that you are happy with the changes.
+- Add a commit message like "Update team name" in the **Commit message** box and hit **Commit**.
+- Click on **Push**. This will prompt a dialogue box where you first need to enter your user name, and then your password.
+
+# Data
+
+For this lab, we are using `Carseats` data from the `ISLR` package.
+
+# Exercises
+
+
+1. Set a seed to `7`. Fit a **bagged** decision tree estimating the carseat `Sales` using the remaining 10 variables. You may specify the parameters in any way that you'd like, but **tune** the number of trees (`trees`), examining 10, 25, 50, 100, 200, and 300 trees.
+
+2. Collect the metrics from the bagged tree and filter them to only include the root mean squared error. Fill in the code below to plot these results. Describe what you see.
+
+
+```{r, eval = FALSE}
+ggplot(---, aes(x = trees, y = mean)) + 
+  geom_point() + 
+  geom_line() + 
+  labs(y = ---)
+```
+
+
+3. Set a seed to `7`. Fit a **random forest** estimating the carseat `Sales` using the remaining 10 variables. You may specify the parameters in any way that you'd like, but **tune** the number of trees (`trees`), examining 10, 25, 50, 100, 200, and 300 trees.
+
+4. Collect the metrics from the random forest tree and filter them to only include the root mean squared error. Using similar code as in Exercise 2, plot these results. Describe what you see.
+
+5. Set a seed to `7`. Fit a **boosted tree** estimating the carseat `Sales` using the remaining 10 variables. Specify the tree depth to be 1 and **tune** the number of trees (`trees`), examining 1, 25, 50, 100, 200, and 300 trees.
+
+6. Collect the metrics from the boosted tree and filter them to only include the root mean squared error. Using similar code as in Exercise 2, plot these results. Describe what you see.
+
+7. Based on the exercises above and the number of trees attempted, which method would you prefer? What seems to be the optimal number of trees?
+
+8. **Extra Credit:** Combine the results from the previous exercises into a single plot to describe the relationship.
