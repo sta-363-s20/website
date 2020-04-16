@@ -1,0 +1,16 @@
+---
+title: "April 16 Overview"
+output: 
+  html_document:
+    css: overview.css
+---
+
+
+<center>
+![](https://media.giphy.com/media/xUPOqC59wwaLiQ4QeI/giphy.gif)
+</center>
+
+_I set up an email list for folks interested in getting email reminders before class. If you did not receive an email and wish you had, please let me know._
+
+1. Watch the [Lab 06 - Ensemble Models](https://sta-363-s20.lucymcgowan.com/slides/20-ensemble-lab.html) lecture
+2. Complete [Lab 06 - Ensemble Models](https://sta-363-s20.lucymcgowan.com/labs/lab-06-ensemble.html) by Wednesday April 22 at 11:59PM
