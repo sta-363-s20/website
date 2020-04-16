@@ -84,7 +84,7 @@ $$r_i \leftarrow r_i - \lambda \hat{f}^b(x_i)$$
 
 * Output the boosted model
 
-$$\hat{f}(x)\sum_{b = 1}^B\lambda\hat{f}^b(x)$$
+$$\hat{f}(x)=\sum_{b = 1}^B\lambda\hat{f}^b(x)$$
 ---
 
 ## Big picture
