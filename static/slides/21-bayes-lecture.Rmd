@@ -1,0 +1,4 @@
+<iframe width="560" height="315" src="https://www.youtube.com/embed/A_WcbN4vGpg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+* Try to replicate the results I discuss here using Bayes' Theorem. 
+* Then try to calculate what the probability that someone had COVID-19 given they tested positive would be if the prevalence of COVID-19 is 1%. * Then calculate what the probability that someone had COVID-19 given they tested positive would be if the prevalence of COVID-19 is 95%.

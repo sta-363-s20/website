@@ -1,0 +1,108 @@
+---
+title: "Midterm Review"
+author: "Dr. D'Agostino McGowan"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    logo: img/icon.png
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+
+```{r child = "setup.Rmd"}
+```
+
+layout: true
+
+<div class="my-footer">
+<span>
+Dr. Lucy D'Agostino McGowan
+</span>
+</div> 
+
+---
+
+## Midterm 03
+
+The midterm will have two parts:
+
+* Part 1: Similar to Midterm 02, via Canvas on material covered since April 2nd
+--
+
+* Part 2: Analysis
+--
+
+* Both parts are open book/open note
+---
+
+## Midterm 03
+
+Open book exams are defined as follows:
+
+* Any course materials, including books, videos, and notes, may be used for the exam.
+* Students may not communicate in any way with other students or individuals during the exam period. This includes chatting, videos, photos, phone calls, and all other forms of communication.
+* Students may not share answers, hints, questions, or any information relating to the exam online in any format. This includes, but is not limited to, any websites or online communication platforms.
+* All submitted work must be the student’s work, and must be submitted in the student’s own words.
+* Any violation of this Honor Code will be reported to the Wake Forest Honor Council, and will result in, at a minimum, a zero on the exam.
+
+---
+
+## Part 1
+
+* Regression Decision Trees
+--
+
+* Classification Decision Trees
+--
+
+* Bagging Decision Trees
+--
+
+* Random Forests
+--
+
+* Boosted Decision Trees
+--
+
+* Variable Importance
+
+---
+
+## Part 1
+
+_Types of questions may include:_
+--
+
+* Algorithm
+--
+
+* Bias/Variance trade off
+--
+
+* Plot interpretation
+
+---
+
+## Part 2
+
+* I will provide you with some training data
+* You can use anything we've learned so far to fit a model to this data
+* I have _held out_ some testing data 
+* I will see how well your model runs on my testing data
+
+---
+
+## Part 2
+
+* Cumulative (can use any methods we have covered so far)
+--
+
+* You will be evaluated based on:
+  * How well the model performs on the test data
+  * Is the method appropriate for the type of outcome?
+* Be cognizant of overfitting (Remember, you won't have the test data, so you don't want the model to be overfit to the training data!)
