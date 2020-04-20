@@ -1,3 +1,3 @@
 <iframe width="560" height="315" src="https://www.youtube.com/embed/_IqBlwrzXdg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-[Slides](https://sta-363-s20.lucymcgowan.com/slides/20-midterm-review.html#1)
+[Slides](https://sta-363-s20.lucymcgowan.com/slides/21-midterm-review.html#1)
