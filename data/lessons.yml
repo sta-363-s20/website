@@ -165,9 +165,13 @@ lessons:
     slides: "21-reproduce-lecture.html"
   - date: "Thur, Apr 23"
     title: "Midterm 03 handed out"
+    reading: "10-overview.html"
+    slides: "../reading/10-overview.html"
   - title: "Week 16"
   - date: "Tues, Apr 28"
     title: "Midterm 03 due"
-    exam: "coming-soon.html"
+    reading: "10-overview.html"
+    slides: "../reading/10-overview.html"
+    exam: "../reading/10-overview.html"
 
 
